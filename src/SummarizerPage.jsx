@@ -299,7 +299,16 @@ ${noteText}`
         </div>
 
         <div className="studio-section">
-          <button className="studio-link" type="button" onClick={() => navigate('/summarizer')}>
+          <button
+            className="studio-link"
+            type="button"
+            onClick={() => {
+              setActiveSpace(null)
+              const activeSpaceKey = displayName ? `activeSpace:${displayName}` : 'activeSpace:anon'
+              localStorage.removeItem(activeSpaceKey)
+              navigate('/summarizer')
+            }}
+          >
             <span className="studio-icon">⌂</span>
             <span className="studio-text">Dashboard</span>
           </button>
@@ -570,38 +579,19 @@ ${noteText}`
               <h2>Create Space</h2>
               <button className="close-btn" onClick={() => setShowCreateSpace(false)}>×</button>
             </div>
-            <div style={{ padding: '20px' }}>
+            <div className="create-space-body">
               <input
                 type="text"
                 placeholder="Space name (e.g., Computer Science, History)"
                 value={newSpaceName}
                 onChange={(e) => setNewSpaceName(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && createSpace()}
-                style={{
-                  width: '100%',
-                  padding: '14px',
-                  border: '1px solid #e5e5e5',
-                  borderRadius: '8px',
-                  fontSize: '15px',
-                  outline: 'none'
-                }}
+                className="create-space-input"
               />
               <button
                 onClick={createSpace}
                 disabled={!newSpaceName.trim()}
-                style={{
-                  width: '100%',
-                  marginTop: '16px',
-                  padding: '14px',
-                  background: '#1a1a1a',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '8px',
-                  fontSize: '15px',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  opacity: !newSpaceName.trim() ? 0.5 : 1
-                }}
+                className="create-space-submit"
               >
                 Create Space
               </button>

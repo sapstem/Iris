@@ -763,6 +763,10 @@
   overflow: hidden;
 }
 
+.studio-shell.theme-dark .create-space-modal {
+  background: #151a20;
+}
+
 .create-space-modal .modal-header {
   padding: 20px;
   border-bottom: 1px solid #e5e5e5;
@@ -771,11 +775,19 @@
   align-items: center;
 }
 
+.studio-shell.theme-dark .create-space-modal .modal-header {
+  border-bottom-color: #232a33;
+}
+
 .create-space-modal h2 {
   font-size: 18px;
   font-weight: 600;
   color: #1a1a1a;
   margin: 0;
+}
+
+.studio-shell.theme-dark .create-space-modal h2 {
+  color: #f5f6f8;
 }
 
 .close-btn {
@@ -794,6 +806,66 @@
 
 .close-btn:hover {
   color: #666;
+}
+
+.studio-shell.theme-dark .close-btn {
+  color: #7c8796;
+}
+
+.studio-shell.theme-dark .close-btn:hover {
+  color: #c1c7d2;
+}
+
+.create-space-body {
+  padding: 20px;
+}
+
+.create-space-input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  background: #ffffff;
+  color: #1a1a1a;
+}
+
+.create-space-input::placeholder {
+  color: #9aa0a6;
+}
+
+.studio-shell.theme-dark .create-space-input {
+  background: #1a1f26;
+  border-color: #2b3440;
+  color: #f5f6f8;
+}
+
+.studio-shell.theme-dark .create-space-input::placeholder {
+  color: #7c8796;
+}
+
+.create-space-submit {
+  width: 100%;
+  margin-top: 16px;
+  padding: 14px;
+  background: #1a1a1a;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.create-space-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.studio-shell.theme-dark .create-space-submit {
+  background: #f5f6f8;
+  color: #101419;
 }
 
 .space-preview {
