@@ -283,6 +283,7 @@ ${noteText}`
       }`}
     >
       <aside className={`studio-rail ${sidebarCollapsed ? 'collapsed' : ''}`}>
+        <div className="studio-rail-scroll">
         <div className="studio-header">
           <button className="logo-button" type="button" onClick={() => navigate('/summarizer')}>
             <div className="logo-mark">S</div>
@@ -375,6 +376,7 @@ ${noteText}`
           )}
         </div>
 
+        </div>
         <div className="user-profile" ref={userMenuRef}>
           <button
             className="user-profile-button"
