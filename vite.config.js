@@ -3,5 +3,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  envDir: './server', // This tells Vite to look inside the server folder for .env
+  envDir: '.', // Load .env from project root so VITE_* vars are available
 })

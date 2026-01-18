@@ -12,7 +12,12 @@ import { createClient } from '@supabase/supabase-js'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 // Looks for .env in the same folder as index.js
-dotenv.config({ path: path.join(__dirname, '.env') })
+dotenv.config({ path: path.resolve(__dirname, '../.env') })
+
+
+console.log("Checking Environment Variables...")
+console.log("Supabase URL exists:", !!process.env.SUPABASE_URL)
+console.log("Port:", process.env.PORT)
 
 // 1. Initialize Supabase with Service Role Key (Bypasses RLS for backend tasks)
 const supabase = createClient(
@@ -140,7 +145,7 @@ app.post('/api/auth/google', async (req, res) => {
     })
 
     const payload = ticket.getPayload()
-    const { email, sub: googleId, name } = payload
+    const { email, name } = payload
 
     // Check if profile exists
     let { data: profile } = await supabase
@@ -152,13 +157,40 @@ app.post('/api/auth/google', async (req, res) => {
     // If no profile, create one (Note: For Google, we skip auth.admin.createUser 
     // because they are authenticated via Google's token)
     if (!profile) {
+      let existingUser = null
+      if (typeof supabase.auth.admin.getUserByEmail === 'function') {
+        const { data, error } = await supabase.auth.admin.getUserByEmail(email)
+        if (error) throw error
+        existingUser = data?.user || null
+      } else {
+        const { data, error } = await supabase.auth.admin.listUsers({
+          page: 1,
+          perPage: 1000
+        })
+        if (error) throw error
+        existingUser = data?.users?.find((user) => user.email === email) || null
+      }
+
+      let authUserId = existingUser?.id
+
+      if (!authUserId) {
+        const { data: createdUser, error: createUserError } =
+          await supabase.auth.admin.createUser({
+            email,
+            email_confirm: true,
+            user_metadata: { full_name: name, provider: 'google' }
+          })
+        if (createUserError) throw createUserError
+        authUserId = createdUser.user.id
+      }
+
       const { data: newProfile, error: profileError } = await supabase
         .from('profiles')
         .insert([{ 
-          id: googleId, // In a strict setup, you might link this to auth.users instead
+          id: authUserId,
           email: email, 
           display_name: name,
-          provider: 'google' 
+          provider: 'google'
         }])
         .select()
         .single()
@@ -186,6 +218,54 @@ app.post('/api/fetch-url', async (req, res) => {
     res.json({ content: text.slice(0, 50000) })
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch content.' })
+  }
+})
+
+// SAVE A CONVERSATION
+app.post('/api/conversations', async (req, res) => {
+  const { userId, title, content, summary, takeaways, keywords } = req.body || {}
+
+  if (!userId || !content) {
+    return res.status(400).json({ error: 'User ID and content are required.' })
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('conversations')
+      .insert([{
+        user_id: userId,
+        title: title || 'New Conversation',
+        content,
+        summary,
+        takeaways: takeaways || [],
+        keywords: keywords || []
+      }])
+      .select()
+      .single()
+
+    if (error) throw error
+    res.status(201).json(data)
+  } catch (err) {
+    console.error('Save error:', err)
+    res.status(500).json({ error: 'Failed to save conversation.' })
+  }
+})
+
+// GET ALL CONVERSATIONS FOR A USER
+app.get('/api/conversations/:userId', async (req, res) => {
+  const { userId } = req.params
+
+  try {
+    const { data, error } = await supabase
+      .from('conversations')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+    res.json(data)
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch conversations.' })
   }
 })
 
