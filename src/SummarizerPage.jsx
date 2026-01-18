@@ -283,17 +283,19 @@ ${noteText}`
       }`}
     >
       <aside className={`studio-rail ${sidebarCollapsed ? 'collapsed' : ''}`}>
-        <button
-          className="sidebar-toggle"
-          type="button"
-          onClick={() => setSidebarCollapsed((prev) => !prev)}
-          aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        >
-          {sidebarCollapsed ? '≡' : '<<'}
-        </button>
         <div className="studio-header">
-          <div className="logo-mark">S</div>
-          <span className="logo-name">Sage</span>
+          <button className="logo-button" type="button" onClick={() => navigate('/summarizer')}>
+            <div className="logo-mark">S</div>
+            <span className="logo-name">Sage</span>
+          </button>
+          <button
+            className="sidebar-toggle"
+            type="button"
+            onClick={() => setSidebarCollapsed((prev) => !prev)}
+            aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            {sidebarCollapsed ? '≡' : '<<'}
+          </button>
         </div>
 
         <div className="studio-section">
