@@ -311,7 +311,7 @@ ${noteText}`
 
         <div className="studio-section">
           <button
-            className="studio-link active"
+            className="studio-link active add-content"
             onClick={() => {
               setNoteText('')
               setOverview('')
@@ -327,7 +327,7 @@ ${noteText}`
         <div className="studio-section">
           <p className="studio-label">Spaces</p>
           <button 
-            className="studio-link"
+            className="studio-link create-space"
             onClick={() => setShowCreateSpace(true)}
           >
             <span className="studio-icon">+</span>
@@ -336,7 +336,7 @@ ${noteText}`
           {spaces.map((space) => (
             <button
               key={space.id}
-              className={`studio-link ${activeSpace === space.id ? 'active' : ''}`}
+              className={`studio-link space-item ${activeSpace === space.id ? 'active' : ''}`}
               onClick={() => {
                 setActiveSpace(space.id)
                 const activeSpaceKey = displayName ? `activeSpace:${displayName}` : 'activeSpace:anon'
@@ -353,7 +353,7 @@ ${noteText}`
           {filteredSummaries.slice(0, 4).map((item) => (
             <button
               key={item.id}
-              className="studio-link"
+              className="studio-link recent-item"
               onClick={() => navigate(`/conversation/${item.id}`)}
             >
               <span className="studio-text">

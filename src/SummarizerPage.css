@@ -181,6 +181,13 @@
   display: none;
 }
 
+.studio-rail.collapsed .studio-link.add-content,
+.studio-rail.collapsed .studio-link.create-space,
+.studio-rail.collapsed .studio-link.space-item,
+.studio-rail.collapsed .studio-link.recent-item {
+  display: none;
+}
+
 .studio-rail.collapsed .studio-text {
   display: none;
 }
