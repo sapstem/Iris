@@ -6,6 +6,11 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
+.studio-shell.theme-dark {
+  background: #0f1115;
+  color: #e6e7eb;
+}
+
 /* Left Sidebar */
 .studio-rail {
   width: 280px;
@@ -19,6 +24,16 @@
   overflow-y: auto;
 }
 
+.studio-shell.theme-dark .studio-rail {
+  background: #12151b;
+  border-right-color: #222831;
+}
+
+.studio-rail.collapsed {
+  width: 72px;
+  padding: 20px 10px;
+}
+
 /* Logo Section */
 .studio-header {
   display: flex;
@@ -26,6 +41,10 @@
   gap: 8px;
   margin-bottom: 24px;
   padding: 0 8px;
+}
+
+.studio-rail.collapsed .studio-header {
+  justify-content: center;
 }
 
 .logo-mark {
@@ -41,15 +60,52 @@
   font-size: 18px;
 }
 
+.studio-shell.theme-dark .logo-mark {
+  background: #f5f5f5;
+  color: #111318;
+}
+
 .logo-name {
   font-size: 20px;
   font-weight: 600;
   color: #1a1a1a;
 }
 
+.studio-shell.theme-dark .logo-name {
+  color: #f5f6f8;
+}
+
+.sidebar-toggle {
+  margin-left: auto;
+  border: none;
+  background: #f0f0f0;
+  color: #1a1a1a;
+  border-radius: 8px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.studio-shell.theme-dark .sidebar-toggle {
+  background: #1f242d;
+  color: #f5f6f8;
+}
+
+.studio-rail.collapsed .logo-name {
+  display: none;
+}
+
 /* Sidebar Sections */
 .studio-section {
   margin-bottom: 24px;
+}
+
+.studio-rail.collapsed .studio-section {
+  display: none;
 }
 
 .studio-label {
@@ -60,6 +116,10 @@
   letter-spacing: 0.5px;
   margin-bottom: 8px;
   padding: 0 12px;
+}
+
+.studio-shell.theme-dark .studio-label {
+  color: #7c8796;
 }
 
 /* Sidebar Links */
@@ -85,10 +145,24 @@
   color: #1a1a1a;
 }
 
+.studio-shell.theme-dark .studio-link {
+  color: #aab2bf;
+}
+
+.studio-shell.theme-dark .studio-link:hover {
+  background: #1a1f26;
+  color: #f5f6f8;
+}
+
 .studio-link.active {
   background: #f0f0f0;
   color: #1a1a1a;
   font-weight: 500;
+}
+
+.studio-shell.theme-dark .studio-link.active {
+  background: #1f252e;
+  color: #f5f6f8;
 }
 
 /* Main Content */
@@ -97,6 +171,10 @@
   flex: 1;
   padding: 40px 60px;
   max-width: 1400px;
+}
+
+.studio-shell.sidebar-collapsed .studio-main {
+  margin-left: 72px;
 }
 
 /* Hero Section */
@@ -111,6 +189,10 @@
   color: #1a1a1a;
   text-align: center;
   margin-bottom: 40px;
+}
+
+.studio-shell.theme-dark .studio-hero h1 {
+  color: #f5f6f8;
 }
 
 /* Action Cards */
@@ -131,10 +213,20 @@
   transition: all 0.2s;
 }
 
+.studio-shell.theme-dark .action-tile {
+  background: #151a20;
+  border-color: #232a33;
+}
+
 .action-tile:hover {
   border-color: #d0d0d0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   transform: translateY(-2px);
+}
+
+.studio-shell.theme-dark .action-tile:hover {
+  border-color: #323b46;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }
 
 .action-tile .icon {
@@ -149,9 +241,17 @@
   margin-bottom: 4px;
 }
 
+.studio-shell.theme-dark .action-tile .title {
+  color: #f5f6f8;
+}
+
 .action-tile .sub {
   font-size: 13px;
   color: #999;
+}
+
+.studio-shell.theme-dark .action-tile .sub {
+  color: #8f98a8;
 }
 
 /* Prompt Bar */
@@ -167,6 +267,11 @@
   margin-bottom: 16px;
 }
 
+.studio-shell.theme-dark .prompt-bar {
+  background: #151a20;
+  border-color: #232a33;
+}
+
 .prompt-bar input {
   flex: 1;
   border: none;
@@ -176,8 +281,16 @@
   background: transparent;
 }
 
+.studio-shell.theme-dark .prompt-bar input {
+  color: #f5f6f8;
+}
+
 .prompt-bar input::placeholder {
   color: #999;
+}
+
+.studio-shell.theme-dark .prompt-bar input::placeholder {
+  color: #7c8796;
 }
 
 .prompt-controls {
@@ -223,11 +336,20 @@
   margin-top: 24px;
 }
 
+.studio-shell.theme-dark .summary-output {
+  background: #151a20;
+  border-color: #232a33;
+}
+
 .summary-overview {
   font-size: 15px;
   line-height: 1.6;
   color: #333;
   margin-bottom: 20px;
+}
+
+.studio-shell.theme-dark .summary-overview {
+  color: #d6d9df;
 }
 
 .summary-grid {
@@ -245,6 +367,10 @@
   margin-bottom: 12px;
 }
 
+.studio-shell.theme-dark .summary-heading {
+  color: #8f98a8;
+}
+
 .summary-output ul {
   list-style: none;
   padding: 0;
@@ -257,6 +383,10 @@
   margin-bottom: 8px;
   padding-left: 20px;
   position: relative;
+}
+
+.studio-shell.theme-dark .summary-output li {
+  color: #d6d9df;
 }
 
 .summary-output li::before {
@@ -281,6 +411,12 @@
   color: #333;
 }
 
+.studio-shell.theme-dark .chip {
+  background: #1c222b;
+  border-color: #2b3440;
+  color: #d6d9df;
+}
+
 /* Spaces Area */
 .spaces-area {
   max-width: 900px;
@@ -300,6 +436,10 @@
   color: #1a1a1a;
 }
 
+.studio-shell.theme-dark .spaces-header h2 {
+  color: #f5f6f8;
+}
+
 .spaces-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -316,9 +456,19 @@
   min-height: 120px;
 }
 
+.studio-shell.theme-dark .space-card {
+  background: #151a20;
+  border-color: #232a33;
+}
+
 .space-card:hover {
   border-color: #d0d0d0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.studio-shell.theme-dark .space-card:hover {
+  border-color: #323b46;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }
 
 .space-card.dashed {
@@ -330,6 +480,11 @@
   color: #ccc;
 }
 
+.studio-shell.theme-dark .space-card.dashed {
+  border-color: #2b3440;
+  color: #556070;
+}
+
 .space-title {
   font-size: 14px;
   font-weight: 500;
@@ -337,9 +492,17 @@
   margin-bottom: 8px;
 }
 
+.studio-shell.theme-dark .space-title {
+  color: #f5f6f8;
+}
+
 .space-sub {
   font-size: 12px;
   color: #999;
+}
+
+.studio-shell.theme-dark .space-sub {
+  color: #8f98a8;
 }
 
 /* Utility */
@@ -348,14 +511,50 @@
   font-size: 13px;
 }
 
+.studio-shell.theme-dark .muted {
+  color: #7c8796;
+}
+
 /* User Profile at Bottom */
 .studio-rail .user-profile {
   margin-top: auto;
-  padding: 12px;
+  padding: 12px 8px 0;
   border-top: 1px solid #e5e5e5;
+  position: relative;
+}
+
+.studio-shell.theme-dark .studio-rail .user-profile {
+  border-top-color: #222831;
+}
+
+.studio-rail.collapsed .user-profile {
+  padding: 12px 8px 0;
+}
+
+.user-profile-button {
+  width: 100%;
+  background: none;
+  border: none;
   display: flex;
   align-items: center;
   gap: 12px;
+  padding: 10px 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.user-profile-button:hover {
+  background: #f5f5f5;
+}
+
+.studio-shell.theme-dark .user-profile-button:hover {
+  background: #1a1f26;
+}
+
+.studio-rail.collapsed .user-profile-button {
+  justify-content: center;
+  padding: 10px 0;
 }
 
 .user-avatar {
@@ -365,10 +564,85 @@
   background: #e5e5e5;
 }
 
+.studio-shell.theme-dark .user-avatar {
+  background: #2b3440;
+}
+
 .user-name {
   font-size: 14px;
   font-weight: 500;
   color: #1a1a1a;
+}
+
+.studio-shell.theme-dark .user-name {
+  color: #f5f6f8;
+}
+
+.studio-rail.collapsed .user-name {
+  display: none;
+}
+
+.user-menu {
+  position: absolute;
+  right: 8px;
+  bottom: calc(100% + 10px);
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 12px;
+  min-width: 180px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  z-index: 10;
+}
+
+.studio-shell.theme-dark .user-menu {
+  background: #151a20;
+  border-color: #232a33;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
+}
+
+.user-menu-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #8c95a3;
+  margin-bottom: 8px;
+}
+
+.user-menu-item {
+  width: 100%;
+  border: 1px solid transparent;
+  background: none;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #1a1a1a;
+  cursor: pointer;
+  text-align: left;
+}
+
+.user-menu-item:hover {
+  background: #f5f5f5;
+}
+
+.user-menu-item.active {
+  background: #f0f0f0;
+  border-color: #d9d9d9;
+  font-weight: 600;
+}
+
+.studio-shell.theme-dark .user-menu-item {
+  color: #f5f6f8;
+}
+
+.studio-shell.theme-dark .user-menu-item:hover {
+  background: #1a1f26;
+}
+
+.studio-shell.theme-dark .user-menu-item.active {
+  background: #1f252e;
+  border-color: #2f3946;
 }
 
 /* Upgrade Button */
@@ -389,6 +663,16 @@
 
 .upgrade-btn:hover {
   background: #f0fdf4;
+}
+
+.studio-shell.theme-dark .upgrade-btn {
+  background: #151a20;
+  border-color: #34d399;
+  color: #34d399;
+}
+
+.studio-shell.theme-dark .upgrade-btn:hover {
+  background: rgba(52, 211, 153, 0.1);
 }
 /* Create Space Modal */
 .create-space-modal {

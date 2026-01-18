@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import RecordModal from './RecordModal'
@@ -58,6 +58,16 @@ function SummarizerPage() {
   const [showCreateSpace, setShowCreateSpace] = useState(false)
   const [newSpaceName, setNewSpaceName] = useState('')
   const [isHydrated, setIsHydrated] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const [theme, setTheme] = useState(() => {
+    const stored = localStorage.getItem('theme')
+    if (stored === 'light' || stored === 'dark') return stored
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light'
+  })
+  const userMenuRef = useRef(null)
 
   useEffect(() => {
     const name = getDisplayName()
@@ -79,6 +89,22 @@ function SummarizerPage() {
       setActiveSpace(Number(savedActiveSpace))
     }
     setIsHydrated(true)
+  }, [])
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    localStorage.setItem('theme', theme)
+  }, [theme])
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!userMenuRef.current) return
+      if (!userMenuRef.current.contains(event.target)) {
+        setUserMenuOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
   useEffect(() => {
@@ -246,11 +272,23 @@ ${noteText}`
   }
 
   return (
-    <div className="studio-shell">
-      <aside className="studio-rail">
+    <div
+      className={`studio-shell ${theme === 'dark' ? 'theme-dark' : 'theme-light'} ${
+        sidebarCollapsed ? 'sidebar-collapsed' : ''
+      }`}
+    >
+      <aside className={`studio-rail ${sidebarCollapsed ? 'collapsed' : ''}`}>
         <div className="studio-header">
           <div className="logo-mark">S</div>
           <span className="logo-name">Sage</span>
+          <button
+            className="sidebar-toggle"
+            type="button"
+            onClick={() => setSidebarCollapsed((prev) => !prev)}
+            aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            {sidebarCollapsed ? '>' : '<'}
+          </button>
         </div>
 
         <div className="studio-section">
@@ -306,9 +344,35 @@ ${noteText}`
           )}
         </div>
 
-        <div className="user-profile">
-          <div className="user-avatar"></div>
-          <span className="user-name">{displayName}</span>
+        <div className="user-profile" ref={userMenuRef}>
+          <button
+            className="user-profile-button"
+            type="button"
+            onClick={() => setUserMenuOpen((prev) => !prev)}
+            aria-expanded={userMenuOpen}
+          >
+            <div className="user-avatar"></div>
+            <span className="user-name">{displayName}</span>
+          </button>
+          {userMenuOpen && (
+            <div className="user-menu">
+              <p className="user-menu-label">Theme</p>
+              <button
+                className={`user-menu-item ${theme === 'light' ? 'active' : ''}`}
+                type="button"
+                onClick={() => setTheme('light')}
+              >
+                Light mode
+              </button>
+              <button
+                className={`user-menu-item ${theme === 'dark' ? 'active' : ''}`}
+                type="button"
+                onClick={() => setTheme('dark')}
+              >
+                Dark mode
+              </button>
+            </div>
+          )}
         </div>
       </aside>
 
