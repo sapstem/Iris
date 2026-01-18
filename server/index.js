@@ -7,10 +7,18 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { OAuth2Client } from 'google-auth-library'
 import fetch from 'node-fetch'
+import { createClient } from '@supabase/supabase-js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
+// Looks for .env in the same folder as index.js
 dotenv.config({ path: path.join(__dirname, '.env') })
+
+// 1. Initialize Supabase with Service Role Key (Bypasses RLS for backend tasks)
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY
+)
 
 const app = express()
 const port = process.env.PORT || 5175
@@ -18,6 +26,7 @@ const jwtSecret = process.env.JWT_SECRET || 'dev-secret-change-me'
 const googleClientId = process.env.GOOGLE_CLIENT_ID || process.env.VITE_GOOGLE_CLIENT_ID
 const googleClient = googleClientId ? new OAuth2Client(googleClientId) : null
 
+// 2. CORS Configuration
 const allowedOrigins = (process.env.CLIENT_ORIGIN || 'http://localhost:5173')
   .split(',')
   .map((origin) => origin.trim())
@@ -35,62 +44,93 @@ app.use(cors({
 }))
 app.use(express.json())
 
-// In-memory user store for now. Replace with a database when ready.
-const users = new Map()
-
+// 3. Helper to issue JWTs
 const issueToken = (user) => {
-  return jwt.sign({ sub: user.id, email: user.email }, jwtSecret, { expiresIn: '7d' })
+  return jwt.sign(
+    { sub: user.id, email: user.email }, 
+    jwtSecret, 
+    { expiresIn: '7d' }
+  )
 }
 
+// --- ROUTES ---
+
 app.get('/api/health', (req, res) => {
-  res.json({ ok: true })
+  res.json({ ok: true, database: 'Supabase Connected' })
 })
 
+// SIGNUP: Creates entry in auth.users AND public.profiles
 app.post('/api/auth/signup', async (req, res) => {
-  const { email, password } = req.body || {}
+  const { email, password, displayName } = req.body || {}
 
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password are required.' })
   }
 
-  if (users.has(email)) {
-    return res.status(409).json({ error: 'Email already exists.' })
+  try {
+    // A. Create user in Supabase Auth (hidden table)
+    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true
+    })
+
+    if (authError) return res.status(400).json({ error: authError.message })
+
+    // B. Create the Profile in your public.profiles table
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .insert([{ 
+        id: authData.user.id, 
+        email: email,
+        display_name: displayName || email.split('@')[0]
+      }])
+      .select()
+      .single()
+
+    if (profileError) return res.status(400).json({ error: profileError.message })
+
+    const token = issueToken(profile)
+    res.status(201).json({ token, user: profile })
+  } catch (err) {
+    console.error('Signup error:', err)
+    res.status(500).json({ error: 'Server error during signup.' })
   }
-
-  const hashed = await bcrypt.hash(password, 10)
-  const user = { id: Date.now().toString(), email, password: hashed, provider: 'local' }
-  users.set(email, user)
-
-  const token = issueToken(user)
-  res.status(201).json({ token, user: { email: user.email } })
 })
 
+// SIGNIN: Uses Supabase Auth to verify, then returns Profile
 app.post('/api/auth/signin', async (req, res) => {
   const { email, password } = req.body || {}
 
-  const user = users.get(email)
-  if (!user || user.provider != 'local') {
-    return res.status(401).json({ error: 'Invalid credentials.' })
-  }
+  try {
+    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    })
 
-  const matches = await bcrypt.compare(password, user.password)
-  if (!matches) {
-    return res.status(401).json({ error: 'Invalid credentials.' })
-  }
+    if (authError) return res.status(401).json({ error: 'Invalid credentials.' })
 
-  const token = issueToken(user)
-  res.json({ token, user: { email: user.email } })
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', authData.user.id)
+      .single()
+
+    if (profileError) return res.status(404).json({ error: 'Profile not found.' })
+
+    const token = issueToken(profile)
+    res.json({ token, user: profile })
+  } catch (err) {
+    res.status(500).json({ error: 'Server error during signin.' })
+  }
 })
 
+// GOOGLE AUTH: Verifies token, then ensures Profile exists
 app.post('/api/auth/google', async (req, res) => {
   const { credential } = req.body || {}
 
-  if (!googleClient) {
-    return res.status(500).json({ error: 'Google auth is not configured.' })
-  }
-
-  if (!credential) {
-    return res.status(400).json({ error: 'Google credential is required.' })
+  if (!googleClient || !credential) {
+    return res.status(400).json({ error: 'Google configuration missing.' })
   }
 
   try {
@@ -99,62 +139,53 @@ app.post('/api/auth/google', async (req, res) => {
       audience: googleClientId
     })
 
-    const payload = ticket.getPayload() || {}
-    const email = payload.email
-    const googleId = payload.sub
+    const payload = ticket.getPayload()
+    const { email, sub: googleId, name } = payload
 
-    if (!email || !googleId) {
-      return res.status(400).json({ error: 'Google account is missing email.' })
+    // Check if profile exists
+    let { data: profile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('email', email)
+      .single()
+
+    // If no profile, create one (Note: For Google, we skip auth.admin.createUser 
+    // because they are authenticated via Google's token)
+    if (!profile) {
+      const { data: newProfile, error: profileError } = await supabase
+        .from('profiles')
+        .insert([{ 
+          id: googleId, // In a strict setup, you might link this to auth.users instead
+          email: email, 
+          display_name: name,
+          provider: 'google' 
+        }])
+        .select()
+        .single()
+      
+      if (profileError) throw profileError
+      profile = newProfile
     }
 
-    let user = users.get(email)
-    if (user && user.provider == 'local') {
-      return res.status(409).json({ error: 'Email already registered with password.' })
-    }
-
-    if (!user) {
-      user = { id: googleId, email, provider: 'google' }
-      users.set(email, user)
-    }
-
-    const token = issueToken(user)
-    res.json({ token, user: { email: user.email } })
+    const token = issueToken(profile)
+    res.json({ token, user: profile })
   } catch (error) {
-    console.error('Google auth error:', error)
-    res.status(401).json({ error: 'Invalid Google credential.' })
+    console.error('Google error:', error)
+    res.status(401).json({ error: 'Invalid Google login.' })
   }
 })
 
+// URL FETCH ROUTE
 app.post('/api/fetch-url', async (req, res) => {
   const { url } = req.body || {}
-
-  if (!url || typeof url !== 'string') {
-    return res.status(400).json({ error: 'URL is required.' })
-  }
-
-  if (!/^https?:\/\//i.test(url)) {
-    return res.status(400).json({ error: 'Only http/https URLs are allowed.' })
-  }
+  if (!url) return res.status(400).json({ error: 'URL is required.' })
 
   try {
-    const response = await fetch(url, { method: 'GET', redirect: 'follow' })
-    if (!response.ok) {
-      return res.status(400).json({ error: `Unable to fetch URL (status ${response.status})` })
-    }
-    const contentType = response.headers.get('content-type') || ''
-    if (!contentType.includes('text')) {
-      return res.status(400).json({ error: 'URL must return text content.' })
-    }
-    let text = await response.text()
-    // Trim excessively long responses
-    const MAX_LEN = 50000
-    if (text.length > MAX_LEN) {
-      text = text.slice(0, MAX_LEN)
-    }
-    res.json({ content: text })
-  } catch (error) {
-    console.error('Fetch URL error:', error)
-    res.status(500).json({ error: 'Failed to fetch URL.' })
+    const response = await fetch(url)
+    const text = await response.text()
+    res.json({ content: text.slice(0, 50000) })
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch content.' })
   }
 })
 

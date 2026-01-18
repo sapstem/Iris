@@ -285,7 +285,7 @@ User's question: ${userMessage}`
                   {messages.map((msg, i) => (
                     <div key={i} className={`chat-message ${msg.role}`}>
                       <div className="message-label">
-                        {msg.role === 'user' ? 'You' : 'Sage'}
+                        {msg.role === 'user' ? 'You' : 'Iris'}
                       </div>
                       <div className="message-content">
                         {msg.content}
@@ -294,7 +294,7 @@ User's question: ${userMessage}`
                   ))}
                   {loading && (
                     <div className="chat-message assistant">
-                      <div className="message-label">Sage</div>
+                      <div className="message-label">Iris</div>
                       <div className="message-content typing">
                         <span></span><span></span><span></span>
                       </div>
