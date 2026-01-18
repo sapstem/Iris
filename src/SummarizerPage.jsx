@@ -130,6 +130,11 @@ function SummarizerPage() {
     }
   }, [displayName, activeSpace, isHydrated])
 
+  const handleLogout = () => {
+    localStorage.removeItem('auth_token')
+    navigate('/auth')
+  }
+
   const createSpace = () => {
     if (!newSpaceName.trim()) return
     
@@ -278,16 +283,27 @@ ${noteText}`
       }`}
     >
       <aside className={`studio-rail ${sidebarCollapsed ? 'collapsed' : ''}`}>
+        <button
+          className="sidebar-toggle"
+          type="button"
+          onClick={() => setSidebarCollapsed((prev) => !prev)}
+          aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        >
+          {sidebarCollapsed ? '≡' : '<<'}
+        </button>
         <div className="studio-header">
           <div className="logo-mark">S</div>
           <span className="logo-name">Sage</span>
-          <button
-            className="sidebar-toggle"
-            type="button"
-            onClick={() => setSidebarCollapsed((prev) => !prev)}
-            aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          >
-            {sidebarCollapsed ? '>' : '<'}
+        </div>
+
+        <div className="studio-section">
+          <button className="studio-link" type="button" onClick={() => navigate('/summarizer')}>
+            <span className="studio-icon">⌂</span>
+            <span className="studio-text">Dashboard</span>
+          </button>
+          <button className="studio-link" type="button">
+            <span className="studio-icon">⚙</span>
+            <span className="studio-text">Settings</span>
           </button>
         </div>
 
@@ -301,7 +317,8 @@ ${noteText}`
               setKeywords([])
             }}
           >
-            + Add content
+            <span className="studio-icon">+</span>
+            <span className="studio-text">Add content</span>
           </button>
         </div>
 
@@ -311,7 +328,8 @@ ${noteText}`
             className="studio-link"
             onClick={() => setShowCreateSpace(true)}
           >
-            + Create Space
+            <span className="studio-icon">+</span>
+            <span className="studio-text">Create Space</span>
           </button>
           {spaces.map((space) => (
             <button
@@ -323,7 +341,7 @@ ${noteText}`
                 localStorage.setItem(activeSpaceKey, space.id.toString())
               }}
             >
-              {space.name}
+              <span className="studio-text">{space.name}</span>
             </button>
           ))}
         </div>
@@ -336,7 +354,9 @@ ${noteText}`
               className="studio-link"
               onClick={() => navigate(`/conversation/${item.id}`)}
             >
-              {item.text.slice(0, 25) || 'Summary'}...
+              <span className="studio-text">
+                {item.text.slice(0, 25) || 'Summary'}...
+              </span>
             </button>
           ))}
           {filteredSummaries.length === 0 && (
@@ -356,20 +376,17 @@ ${noteText}`
           </button>
           {userMenuOpen && (
             <div className="user-menu">
-              <p className="user-menu-label">Theme</p>
-              <button
-                className={`user-menu-item ${theme === 'light' ? 'active' : ''}`}
-                type="button"
-                onClick={() => setTheme('light')}
-              >
-                Light mode
+              <button className="user-menu-item" type="button">
+                Account
               </button>
-              <button
-                className={`user-menu-item ${theme === 'dark' ? 'active' : ''}`}
-                type="button"
-                onClick={() => setTheme('dark')}
-              >
-                Dark mode
+              <button className="user-menu-item" type="button" onClick={() => setTheme('light')}>
+                Theme: Light
+              </button>
+              <button className="user-menu-item" type="button" onClick={() => setTheme('dark')}>
+                Theme: Dark
+              </button>
+              <button className="user-menu-item logout" type="button" onClick={handleLogout}>
+                Log out
               </button>
             </div>
           )}

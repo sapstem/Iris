@@ -22,6 +22,7 @@
   position: fixed;
   height: 100vh;
   overflow-y: auto;
+  overflow-x: visible;
 }
 
 .studio-shell.theme-dark .studio-rail {
@@ -76,13 +77,13 @@
 }
 
 .sidebar-toggle {
-  margin-left: auto;
+  margin: 4px 8px 16px auto;
   border: none;
   background: #f0f0f0;
   color: #1a1a1a;
   border-radius: 8px;
-  width: 28px;
-  height: 28px;
+  width: 36px;
+  height: 36px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -99,13 +100,17 @@
   display: none;
 }
 
+.studio-rail.collapsed .logo-mark {
+  display: none;
+}
+
 /* Sidebar Sections */
 .studio-section {
   margin-bottom: 24px;
 }
 
 .studio-rail.collapsed .studio-section {
-  display: none;
+  margin-bottom: 12px;
 }
 
 .studio-label {
@@ -120,6 +125,10 @@
 
 .studio-shell.theme-dark .studio-label {
   color: #7c8796;
+}
+
+.studio-rail.collapsed .studio-label {
+  display: none;
 }
 
 /* Sidebar Links */
@@ -138,6 +147,32 @@
   align-items: center;
   gap: 8px;
   margin-bottom: 2px;
+}
+
+.studio-icon {
+  width: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: inherit;
+}
+
+.studio-rail.collapsed .studio-link {
+  justify-content: center;
+  padding: 10px;
+}
+
+.studio-rail.collapsed .studio-link .studio-text {
+  display: none;
+}
+
+.studio-rail.collapsed .studio-text {
+  display: none;
+}
+
+.studio-rail.collapsed .studio-icon {
+  font-size: 16px;
 }
 
 .studio-link:hover {
@@ -248,6 +283,10 @@
 .action-tile .sub {
   font-size: 13px;
   color: #999;
+}
+
+.studio-shell.theme-dark .summary-output li::before {
+  color: #7c8796;
 }
 
 .studio-shell.theme-dark .action-tile .sub {
@@ -515,6 +554,10 @@
   color: #7c8796;
 }
 
+.studio-rail.collapsed .studio-empty {
+  display: none;
+}
+
 /* User Profile at Bottom */
 .studio-rail .user-profile {
   margin-top: auto;
@@ -595,6 +638,12 @@
   z-index: 10;
 }
 
+.studio-rail.collapsed .user-menu {
+  left: 8px;
+  right: auto;
+  transform: translateX(100%);
+}
+
 .studio-shell.theme-dark .user-menu {
   background: #151a20;
   border-color: #232a33;
@@ -630,6 +679,16 @@
   background: #f0f0f0;
   border-color: #d9d9d9;
   font-weight: 600;
+}
+
+.user-menu-item.logout {
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #ef4444;
+  margin-top: 6px;
+}
+
+.user-menu-item.logout:hover {
+  background: rgba(239, 68, 68, 0.12);
 }
 
 .studio-shell.theme-dark .user-menu-item {
