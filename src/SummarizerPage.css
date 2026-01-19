@@ -656,6 +656,12 @@
   background: #e5e5e5;
 }
 
+.user-avatar.has-image {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 .studio-shell.theme-dark .user-avatar {
   background: #2b3440;
 }

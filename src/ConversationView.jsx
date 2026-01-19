@@ -19,8 +19,8 @@ const getDisplayName = () => {
   if (!token) return 'Guest'
   try {
     const payload = JSON.parse(atob(base64UrlToBase64(token.split('.')[1] || '')))
-    // Use actual Google account name
-    return payload?.name || payload?.given_name || 'Guest'
+    const fullName = payload?.given_name || payload?.name || payload?.email?.split('@')[0] || 'Guest'
+    return fullName.split(' ')[0] || 'Guest'
   } catch (e) {
     return 'Guest'
   }

@@ -16,15 +16,19 @@ const base64UrlToBase64 = (input) => {
   return output
 }
 
-const getDisplayName = () => {
+const getUserProfile = () => {
   const token = localStorage.getItem('auth_token')
-  if (!token) return 'Guest'
+  if (!token) return { name: 'Guest', picture: '' }
   try {
     const payload = JSON.parse(atob(base64UrlToBase64(token.split('.')[1] || '')))
-    // Use actual Google account name
-    return payload?.name || payload?.given_name || 'Guest'
+    const fullName = payload?.given_name || payload?.name || payload?.email?.split('@')[0] || 'Guest'
+    const firstName = fullName.split(' ')[0]
+    return {
+      name: firstName || 'Guest',
+      picture: payload?.picture || ''
+    }
   } catch (e) {
-    return 'Guest'
+    return { name: 'Guest', picture: '' }
   }
 }
 
@@ -42,6 +46,7 @@ const saveSummaries = (name, items) => {
 function SummarizerPage() {
   const navigate = useNavigate()
   const [displayName, setDisplayName] = useState('Guest')
+  const [avatarUrl, setAvatarUrl] = useState('')
   const [noteText, setNoteText] = useState('')
   const [savedSummaries, setSavedSummaries] = useState([])
   const [loading, setLoading] = useState(false)
@@ -70,20 +75,21 @@ function SummarizerPage() {
   const userMenuRef = useRef(null)
 
   useEffect(() => {
-    const name = getDisplayName()
-    setDisplayName(name)
-    const items = loadSummaries(name)
+    const profile = getUserProfile()
+    setDisplayName(profile.name)
+    setAvatarUrl(profile.picture)
+    const items = loadSummaries(profile.name)
     setSavedSummaries(items)
     
     // Load spaces
-    const spacesKey = name ? `spaces:${name}` : 'spaces:anon'
+    const spacesKey = profile.name ? `spaces:${profile.name}` : 'spaces:anon'
     const savedSpaces = localStorage.getItem(spacesKey)
     if (savedSpaces) {
       setSpaces(JSON.parse(savedSpaces))
     }
     
     // Load active space
-    const activeSpaceKey = name ? `activeSpace:${name}` : 'activeSpace:anon'
+    const activeSpaceKey = profile.name ? `activeSpace:${profile.name}` : 'activeSpace:anon'
     const savedActiveSpace = localStorage.getItem(activeSpaceKey)
     if (savedActiveSpace && savedActiveSpace !== 'null') {
       setActiveSpace(Number(savedActiveSpace))
@@ -384,7 +390,10 @@ ${noteText}`
             onClick={() => setUserMenuOpen((prev) => !prev)}
             aria-expanded={userMenuOpen}
           >
-            <div className="user-avatar"></div>
+            <div
+              className={`user-avatar${avatarUrl ? ' has-image' : ''}`}
+              style={avatarUrl ? { backgroundImage: `url(${avatarUrl})` } : undefined}
+            ></div>
             <span className="user-name">{displayName}</span>
           </button>
           {userMenuOpen && (
@@ -432,7 +441,7 @@ ${noteText}`
               <div className="icon">⭱</div>
               <div>
                 <p className="title">Upload</p>
-                <p className="sub">File, audio, video</p>
+                <p className="sub">File, Audio, Video</p>
               </div>
             </div>
             <div className="action-tile" onClick={() => setShowLinkModal(true)}>

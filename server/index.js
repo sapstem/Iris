@@ -50,10 +50,10 @@ app.use(cors({
 app.use(express.json())
 
 // 3. Helper to issue JWTs
-const issueToken = (user) => {
+const issueToken = (user, extraClaims = {}) => {
   return jwt.sign(
-    { sub: user.id, email: user.email }, 
-    jwtSecret, 
+    { sub: user.id, email: user.email, ...extraClaims },
+    jwtSecret,
     { expiresIn: '7d' }
   )
 }
@@ -95,7 +95,9 @@ app.post('/api/auth/signup', async (req, res) => {
 
     if (profileError) return res.status(400).json({ error: profileError.message })
 
-    const token = issueToken(profile)
+    const displayName = profile.display_name || profile.email?.split('@')[0] || 'Guest'
+    const firstName = displayName.split(' ')[0]
+    const token = issueToken(profile, { name: displayName, given_name: firstName })
     res.status(201).json({ token, user: profile })
   } catch (err) {
     console.error('Signup error:', err)
@@ -123,7 +125,9 @@ app.post('/api/auth/signin', async (req, res) => {
 
     if (profileError) return res.status(404).json({ error: 'Profile not found.' })
 
-    const token = issueToken(profile)
+    const displayName = profile.display_name || profile.email?.split('@')[0] || 'Guest'
+    const firstName = displayName.split(' ')[0]
+    const token = issueToken(profile, { name: displayName, given_name: firstName })
     res.json({ token, user: profile })
   } catch (err) {
     res.status(500).json({ error: 'Server error during signin.' })
@@ -145,7 +149,7 @@ app.post('/api/auth/google', async (req, res) => {
     })
 
     const payload = ticket.getPayload()
-    const { email, name } = payload
+    const { email, name, given_name: givenName, picture } = payload
 
     // Check if profile exists
     let { data: profile } = await supabase
@@ -197,9 +201,24 @@ app.post('/api/auth/google', async (req, res) => {
       
       if (profileError) throw profileError
       profile = newProfile
+    } else if (name && profile.display_name !== name) {
+      const emailPrefix = email?.split('@')[0] || ''
+      if (!profile.display_name || profile.display_name === emailPrefix) {
+        const { data: updatedProfile, error: updateError } = await supabase
+          .from('profiles')
+          .update({ display_name: name })
+          .eq('id', profile.id)
+          .select()
+          .single()
+
+        if (updateError) throw updateError
+        profile = updatedProfile
+      }
     }
 
-    const token = issueToken(profile)
+    const displayName = name || profile.display_name || profile.email?.split('@')[0] || 'Guest'
+    const firstName = givenName || displayName.split(' ')[0]
+    const token = issueToken(profile, { name: displayName, given_name: firstName, picture })
     res.json({ token, user: profile })
   } catch (error) {
     console.error('Google error:', error)
