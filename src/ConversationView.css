@@ -523,3 +523,157 @@
   cursor: not-allowed;
   opacity: 0.5;
 }
+
+.conversation-view.theme-dark {
+  background: #0f1115;
+  color: #e6e7eb;
+}
+
+.conversation-view.theme-dark .hamburger-menu {
+  background: #151a20;
+  border-color: #232a33;
+}
+
+.conversation-view.theme-dark .hamburger-menu span {
+  background: #f5f6f8;
+}
+
+.conversation-view.theme-dark .studio-rail {
+  background: #12151b;
+  border-right-color: #222831;
+}
+
+.conversation-view.theme-dark .studio-header {
+  border-bottom-color: #222831;
+}
+
+.conversation-view.theme-dark .logo-mark {
+  background: #f5f6f8;
+  color: #111318;
+}
+
+.conversation-view.theme-dark .logo-name {
+  color: #f5f6f8;
+}
+
+.conversation-view.theme-dark .studio-link {
+  color: #aab2bf;
+}
+
+.conversation-view.theme-dark .studio-link:hover {
+  background: #1a1f26;
+  color: #f5f6f8;
+}
+
+.conversation-view.theme-dark .sidebar-action-btn {
+  background: #151a20;
+  border-color: #232a33;
+  color: #f5f6f8;
+}
+
+.conversation-view.theme-dark .sidebar-action-btn:hover {
+  background: #1a1f26;
+  border-color: #2f3946;
+}
+
+.conversation-view.theme-dark .conversation-header {
+  background: #0f1115;
+  border-bottom-color: #222831;
+}
+
+.conversation-view.theme-dark .conversation-title {
+  color: #f5f6f8;
+}
+
+.conversation-view.theme-dark .back-btn {
+  color: #9aa3af;
+}
+
+.conversation-view.theme-dark .share-btn {
+  background: #151a20;
+  border-color: #232a33;
+  color: #f5f6f8;
+}
+
+.conversation-view.theme-dark .conversation-tabs {
+  background: #0f1115;
+  border-bottom-color: #222831;
+}
+
+.conversation-view.theme-dark .tab {
+  color: #9aa3af;
+}
+
+.conversation-view.theme-dark .tab:hover {
+  background: #1a1f26;
+  color: #f5f6f8;
+}
+
+.conversation-view.theme-dark .tab.active {
+  background: #1f252e;
+  color: #f5f6f8;
+}
+
+.conversation-view.theme-dark .summary-card {
+  background: #151a20;
+  border-color: #232a33;
+}
+
+.conversation-view.theme-dark .summary-card p {
+  color: #d6d9df;
+}
+
+.conversation-view.theme-dark .summary-section h3 {
+  color: #8f98a8;
+}
+
+.conversation-view.theme-dark .summary-section li {
+  color: #d6d9df;
+  border-bottom-color: #1f252e;
+}
+
+.conversation-view.theme-dark .feature-placeholder h2 {
+  color: #f5f6f8;
+}
+
+.conversation-view.theme-dark .feature-placeholder p {
+  color: #9aa3af;
+}
+
+.conversation-view.theme-dark .chat-messages-container {
+  border-top-color: #222831;
+}
+
+.conversation-view.theme-dark .message-label {
+  color: #8f98a8;
+}
+
+.conversation-view.theme-dark .message-content {
+  background: #151a20;
+  border-color: #232a33;
+  color: #d6d9df;
+}
+
+.conversation-view.theme-dark .chat-message.user .message-content {
+  background: #1a2430;
+  border-color: #2b3b52;
+}
+
+.conversation-view.theme-dark .conversation-input-bar {
+  background: #0f1115;
+  border-top-color: #222831;
+}
+
+.conversation-view.theme-dark .conversation-input-bar input {
+  background: #151a20;
+  border-color: #232a33;
+  color: #f5f6f8;
+}
+
+.conversation-view.theme-dark .conversation-input-bar input::placeholder {
+  color: #7c8796;
+}
+
+.conversation-view.theme-dark .send-message-btn:disabled {
+  background: #232a33;
+}

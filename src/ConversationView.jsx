@@ -48,6 +48,7 @@ function ConversationView() {
   const [messages, setMessages] = useState([])
   const [loading, setLoading] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [theme, setTheme] = useState('dark')
 
   useEffect(() => {
     let mounted = true
@@ -73,6 +74,22 @@ function ConversationView() {
       mounted = false
     }
   }, [id, navigate])
+
+  useEffect(() => {
+    let mounted = true
+    fetchJson('/api/auth/me')
+      .then((data) => {
+        if (!mounted) return
+        setTheme(data?.user?.theme || 'dark')
+      })
+      .catch(() => {
+        if (!mounted) return
+        setTheme('dark')
+      })
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   const handleSendMessage = async () => {
     if (!chatInput.trim() || !genAI) return
@@ -133,7 +150,7 @@ User's question: ${userMessage}`
   }
 
   return (
-    <div className="conversation-view">
+    <div className={`conversation-view ${theme === 'dark' ? 'theme-dark' : 'theme-light'}`}>
       {/* Hamburger Menu Button */}
       <button 
         className="hamburger-menu"
