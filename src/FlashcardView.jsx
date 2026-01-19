@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import './FlashcardView.css'
 import { ArrowLeftIcon, ArrowRightIcon, CardsIcon, RefreshIcon } from './Icons'
@@ -34,6 +34,7 @@ function FlashcardView({ conversation }) {
   const [loading, setLoading] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isFlipped, setIsFlipped] = useState(false)
+  const containerRef = useRef(null)
 
   useEffect(() => {
     if (!conversation?.id) return
@@ -94,6 +95,37 @@ Return ONLY valid JSON array, no markdown formatting.`
     setIsFlipped(!isFlipped)
   }
 
+  const handleNextSafe = () => {
+    if (flashcards.length <= 1) return
+    handleNext()
+  }
+
+  const handlePreviousSafe = () => {
+    if (flashcards.length <= 1) return
+    handlePrevious()
+  }
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.defaultPrevented) return
+      const activeTag = document.activeElement?.tagName || ''
+      if (activeTag === 'INPUT' || activeTag === 'TEXTAREA') return
+
+      if (event.code === 'ArrowRight') {
+        event.preventDefault()
+        handleNextSafe()
+      } else if (event.code === 'ArrowLeft') {
+        event.preventDefault()
+        handlePreviousSafe()
+      } else if (event.code === 'Space') {
+        event.preventDefault()
+        handleFlip()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [flashcards.length, isFlipped])
   const handleNext = () => {
     setIsFlipped(false)
     setCurrentIndex((prev) => (prev + 1) % flashcards.length)
@@ -129,7 +161,7 @@ Return ONLY valid JSON array, no markdown formatting.`
   const currentCard = flashcards[currentIndex]
 
   return (
-    <div className="flashcard-container">
+    <div className="flashcard-container" ref={containerRef}>
       <div className="flashcard-header">
         <h3>Flashcards</h3>
         <div className="flashcard-actions">
@@ -149,36 +181,41 @@ Return ONLY valid JSON array, no markdown formatting.`
         >
           <div className="flashcard-front">
             <div className="card-label">Question</div>
-            <div className="card-content">
+            <div className="card-content scrollable">
               {currentCard.question}
             </div>
             <div className="flip-hint">Click to flip</div>
           </div>
           <div className="flashcard-back">
             <div className="card-label">Answer</div>
-            <div className="card-content">
+            <div className="card-content scrollable">
               {currentCard.answer}
             </div>
             <div className="flip-hint">Click to flip</div>
           </div>
+          <div className="flashcard-nav">
+            <button 
+              className="nav-btn prev"
+              onClick={(event) => {
+                event.stopPropagation()
+                handlePreviousSafe()
+              }}
+              disabled={flashcards.length <= 1}
+            >
+              <ArrowLeftIcon /> Previous
+            </button>
+            <button 
+              className="nav-btn next"
+              onClick={(event) => {
+                event.stopPropagation()
+                handleNextSafe()
+              }}
+              disabled={flashcards.length <= 1}
+            >
+              Next <ArrowRightIcon />
+            </button>
+          </div>
         </div>
-      </div>
-
-      <div className="flashcard-controls">
-        <button 
-          className="nav-btn prev" 
-          onClick={handlePrevious}
-          disabled={flashcards.length <= 1}
-        >
-          <ArrowLeftIcon /> Previous
-        </button>
-        <button 
-          className="nav-btn next" 
-          onClick={handleNext}
-          disabled={flashcards.length <= 1}
-        >
-          Next <ArrowRightIcon />
-        </button>
       </div>
     </div>
   )

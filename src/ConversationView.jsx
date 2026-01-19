@@ -249,38 +249,6 @@ User's question: ${userMessage}`
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className="conversation-tabs">
-          <button 
-            className={`tab ${activeTab === 'chat' ? 'active' : ''}`}
-            onClick={() => setActiveTab('chat')}
-          >
-            <span className="tab-icon"><ChatIcon /></span>
-            Chat
-          </button>
-          <button 
-            className={`tab ${activeTab === 'flashcards' ? 'active' : ''}`}
-            onClick={() => setActiveTab('flashcards')}
-          >
-            <span className="tab-icon"><CardsIcon /></span>
-            Flashcards
-          </button>
-          <button 
-            className={`tab ${activeTab === 'quizzes' ? 'active' : ''}`}
-            onClick={() => setActiveTab('quizzes')}
-          >
-            <span className="tab-icon"><QuizIcon /></span>
-            Quizzes
-          </button>
-          <button 
-            className={`tab ${activeTab === 'notes' ? 'active' : ''}`}
-            onClick={() => setActiveTab('notes')}
-          >
-            <span className="tab-icon"><NotesIcon /></span>
-            Notes
-          </button>
-        </div>
-
         {/* Content Area */}
         <div className="conversation-content">
           {activeTab === 'chat' && (
@@ -359,23 +327,25 @@ User's question: ${userMessage}`
         </div>
 
         {/* Bottom Input Bar */}
-        <div className="conversation-input-bar">
-          <input
-            type="text"
-            placeholder="Ask a question about this content..."
-            value={chatInput}
-            onChange={(e) => setChatInput(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && !loading && handleSendMessage()}
-            disabled={loading}
-          />
-          <button 
-            className="send-message-btn"
-            onClick={handleSendMessage}
-            disabled={loading || !chatInput.trim()}
-          >
-            <SendIcon />
-          </button>
-        </div>
+        {activeTab === 'chat' && (
+          <div className="conversation-input-bar">
+            <input
+              type="text"
+              placeholder="Ask a question about this content..."
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && !loading && handleSendMessage()}
+              disabled={loading}
+            />
+            <button 
+              className="send-message-btn"
+              onClick={handleSendMessage}
+              disabled={loading || !chatInput.trim()}
+            >
+              <SendIcon />
+            </button>
+          </div>
+        )}
       </main>
     </div>
   )
