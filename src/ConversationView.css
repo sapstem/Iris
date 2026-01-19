@@ -277,7 +277,7 @@
 .conversation-content {
   flex: 1;
   padding: 40px;
-  overflow-y: auto;
+  overflow-y: hidden;
   max-width: 900px;
   margin: 0 auto;
   width: 100%;
