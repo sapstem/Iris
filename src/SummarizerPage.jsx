@@ -346,10 +346,16 @@ ${noteText}`
             onClick={() => setUserMenuOpen((prev) => !prev)}
             aria-expanded={userMenuOpen}
           >
-            <div
-              className={`user-avatar${avatarUrl ? ' has-image' : ''}`}
-              style={avatarUrl ? { backgroundImage: `url(${avatarUrl})` } : undefined}
-            ></div>
+            <div className="user-avatar">
+              {avatarUrl && (
+                <img
+                  className="user-avatar-img"
+                  src={avatarUrl}
+                  alt=""
+                  referrerPolicy="no-referrer"
+                />
+              )}
+            </div>
             <span className="user-name">{displayName}</span>
           </button>
           {userMenuOpen && (
