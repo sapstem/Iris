@@ -5,7 +5,6 @@ import FlashcardView from './FlashcardView'
 import NotesView from './NotesView'
 import './ConversationView.css'
 import {
-  ArrowLeftIcon,
   CardsIcon,
   ChatIcon,
   NotesIcon,
@@ -169,7 +168,6 @@ User's question: ${userMessage}`
               setActiveTab('chat')
             }}
             aria-label="Chat Bot"
-            title="Chat Bot"
             data-label="Chat Bot"
           >
             <span className="action-icon"><ChatIcon /></span>
@@ -181,7 +179,6 @@ User's question: ${userMessage}`
               setActiveTab('notes')
             }}
             aria-label="Document"
-            title="Document"
             data-label="Document"
           >
             <span className="action-icon"><NotesIcon /></span>
@@ -193,7 +190,6 @@ User's question: ${userMessage}`
               setActiveTab('flashcards')
             }}
             aria-label="Flashcards"
-            title="Flashcards"
             data-label="Flashcards"
           >
             <span className="action-icon"><CardsIcon /></span>
@@ -205,7 +201,6 @@ User's question: ${userMessage}`
               setActiveTab('quizzes')
             }}
             aria-label="Quiz"
-            title="Quiz"
             data-label="Quiz"
           >
             <span className="action-icon"><QuizIcon /></span>
@@ -216,9 +211,6 @@ User's question: ${userMessage}`
       {/* Main Content */}
       <main className="conversation-main">{/* Top Bar */}
         <div className="conversation-header">
-          <button className="back-btn" onClick={() => navigate('/summarizer')}>
-            <ArrowLeftIcon />
-          </button>
           <h1 className="conversation-title">
             {conversation.content.slice(0, 50)}...
           </h1>
