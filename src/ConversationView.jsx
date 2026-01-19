@@ -170,6 +170,7 @@ User's question: ${userMessage}`
             }}
             aria-label="Chat Bot"
             title="Chat Bot"
+            data-label="Chat Bot"
           >
             <span className="action-icon"><ChatIcon /></span>
           </button>
@@ -181,6 +182,7 @@ User's question: ${userMessage}`
             }}
             aria-label="Document"
             title="Document"
+            data-label="Document"
           >
             <span className="action-icon"><NotesIcon /></span>
           </button>
@@ -192,6 +194,7 @@ User's question: ${userMessage}`
             }}
             aria-label="Flashcards"
             title="Flashcards"
+            data-label="Flashcards"
           >
             <span className="action-icon"><CardsIcon /></span>
           </button>
@@ -203,6 +206,7 @@ User's question: ${userMessage}`
             }}
             aria-label="Quiz"
             title="Quiz"
+            data-label="Quiz"
           >
             <span className="action-icon"><QuizIcon /></span>
           </button>
