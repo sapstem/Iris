@@ -7,23 +7,28 @@ import './ConversationView.css'
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
 const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5175'
 
-const base64UrlToBase64 = (input) => {
-  let output = input.replace(/-/g, '+').replace(/_/g, '/')
-  while (output.length % 4 !== 0) output += '='
-  return output
-}
+const fetchJson = async (path, options = {}) => {
+  const response = await fetch(`${API_BASE}${path}`, {
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+    ...options
+  })
 
-const getDisplayName = () => {
-  const token = localStorage.getItem('auth_token')
-  if (!token) return 'Guest'
+  let data = null
   try {
-    const payload = JSON.parse(atob(base64UrlToBase64(token.split('.')[1] || '')))
-    const fullName = payload?.given_name || payload?.name || payload?.email?.split('@')[0] || 'Guest'
-    return fullName.split(' ')[0] || 'Guest'
-  } catch (e) {
-    return 'Guest'
+    data = await response.json()
+  } catch (error) {
+    data = null
   }
+
+  if (!response.ok) {
+    const message = data?.error || 'Request failed.'
+    throw new Error(message)
+  }
+
+  return data
 }
 
 function ConversationView() {
@@ -37,27 +42,27 @@ function ConversationView() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useEffect(() => {
-    // Load conversation from localStorage using same key as summarizerpage
-    const displayName = getDisplayName()
-    const key = displayName ? `summaries:${displayName}` : 'summaries:anon'
-    const saved = localStorage.getItem(key)
-    
-    if (saved) {
-      const summaries = JSON.parse(saved)
-      const found = summaries.find(s => s.id === parseInt(id))
-      if (found) {
-        setConversation(found)
-        // Load chat history if exists
-        const chatKey = `chat:${id}`
-        const savedChat = localStorage.getItem(chatKey)
-        if (savedChat) {
-          setMessages(JSON.parse(savedChat))
-        }
-      } else {
-        navigate('/summarizer')
-      }
-    } else {
+    let mounted = true
+
+    const loadConversation = async () => {
+      const data = await fetchJson(`/api/conversations/${id}`)
+      if (!mounted) return
+      setConversation(data)
+    }
+
+    const loadMessages = async () => {
+      const data = await fetchJson(`/api/chat_messages/${id}`)
+      if (!mounted) return
+      setMessages(Array.isArray(data) ? data : [])
+    }
+
+    Promise.all([loadConversation(), loadMessages()]).catch((error) => {
+      console.error('Failed to load conversation:', error)
       navigate('/summarizer')
+    })
+
+    return () => {
+      mounted = false
     }
   }, [id, navigate])
 
@@ -73,13 +78,17 @@ function ConversationView() {
     setLoading(true)
 
     try {
+      await fetchJson('/api/chat_messages', {
+        method: 'POST',
+        body: JSON.stringify({ conversationId: id, role: 'user', content: userMessage })
+      })
       const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
       
       // Build context from original content and chat history
       const context = `
 You are a helpful study assistant. The user is studying the following content:
 
-${conversation.text}
+${conversation.content}
 
 Summary: ${conversation.summary}
 
@@ -94,10 +103,11 @@ User's question: ${userMessage}`
       // Add AI response to chat
       const updatedMessages = [...newMessages, { role: 'assistant', content: aiMessage }]
       setMessages(updatedMessages)
-      
-      // Save chat history to localStorage
-      const chatKey = `chat:${id}`
-      localStorage.setItem(chatKey, JSON.stringify(updatedMessages))
+
+      await fetchJson('/api/chat_messages', {
+        method: 'POST',
+        body: JSON.stringify({ conversationId: id, role: 'assistant', content: aiMessage })
+      })
     } catch (error) {
       console.error('Failed to get response:', error)
       const errorMessages = [...newMessages, { 
@@ -206,7 +216,7 @@ User's question: ${userMessage}`
             ←
           </button>
           <h1 className="conversation-title">
-            {conversation.text.slice(0, 50)}...
+            {conversation.content.slice(0, 50)}...
           </h1>
           <div className="header-actions">
             <button className="share-btn">Share</button>

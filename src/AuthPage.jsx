@@ -73,8 +73,7 @@ function AuthPage() {
     setStatus('')
 
     try {
-      const result = await postJson('/api/auth/google', { credential: response.credential })
-      localStorage.setItem('auth_token', result.token)
+      await postJson('/api/auth/google', { credential: response.credential })
       navigate('/summarizer')
     } catch (error) {
       setStatus(error.message)
@@ -97,8 +96,7 @@ function AuthPage() {
     const endpoint = mode == 'signin' ? '/api/auth/signin' : '/api/auth/signup'
 
     try {
-      const result = await postJson(endpoint, { email, password })
-      localStorage.setItem('auth_token', result.token)
+      await postJson(endpoint, { email, password })
       navigate('/summarizer')
     } catch (error) {
       setStatus(error.message)
@@ -174,7 +172,8 @@ const postJson = async (path, payload) => {
   const response = await fetch(`${API_BASE}${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
+    credentials: 'include'
   })
 
   let data = null

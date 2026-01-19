@@ -1,49 +1,85 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './NotesView.css'
+
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5175'
+
+const fetchJson = async (path, options = {}) => {
+  const response = await fetch(`${API_BASE}${path}`, {
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+    ...options
+  })
+
+  let data = null
+  try {
+    data = await response.json()
+  } catch (error) {
+    data = null
+  }
+
+  if (!response.ok) {
+    const message = data?.error || 'Request failed.'
+    throw new Error(message)
+  }
+
+  return data
+}
 
 function NotesView({ conversation }) {
   const [notes, setNotes] = useState('')
   const [title, setTitle] = useState('Untitled Document')
+  const saveTimerRef = useRef(null)
 
   useEffect(() => {
-    // Load notes and title from localStorage
-    const notesKey = `notes:${conversation.id}`
-    const titleKey = `notes-title:${conversation.id}`
-    
-    const savedNotes = localStorage.getItem(notesKey)
-    const savedTitle = localStorage.getItem(titleKey)
-    
-    if (savedNotes) {
-      setNotes(savedNotes)
+    if (!conversation) return
+    if (conversation.notes) {
+      setNotes(conversation.notes)
     } else {
-      setNotes(conversation.text)
+      setNotes(conversation.content || '')
     }
-    
-    if (savedTitle) {
-      setTitle(savedTitle)
+
+    if (conversation.notes_title) {
+      setTitle(conversation.notes_title)
+    } else if (conversation.title) {
+      setTitle(conversation.title)
     } else {
-      // Use first 50 chars as default title
-      const defaultTitle = conversation.text.slice(0, 50).trim() || 'Untitled Document'
+      const defaultTitle = (conversation.content || '').slice(0, 50).trim() || 'Untitled Document'
       setTitle(defaultTitle)
     }
-  }, [conversation.id, conversation.text])
+  }, [conversation])
 
   const handleNotesChange = (e) => {
     const content = e.target.value
     setNotes(content)
-    
-    // Auto-save
-    const key = `notes:${conversation.id}`
-    localStorage.setItem(key, content)
+    if (!conversation?.id) return
+    if (saveTimerRef.current) {
+      clearTimeout(saveTimerRef.current)
+    }
+    saveTimerRef.current = setTimeout(() => {
+      fetchJson(`/api/conversations/${conversation.id}/notes`, {
+        method: 'PUT',
+        body: JSON.stringify({ notes: content, title })
+      }).catch((error) => {
+        console.error('Failed to save notes:', error)
+      })
+    }, 500)
   }
 
   const handleTitleChange = (e) => {
     const newTitle = e.target.value
     setTitle(newTitle)
-    
-    // Auto-save title
-    const key = `notes-title:${conversation.id}`
-    localStorage.setItem(key, newTitle)
+    if (!conversation?.id) return
+    if (saveTimerRef.current) {
+      clearTimeout(saveTimerRef.current)
+    }
+    saveTimerRef.current = setTimeout(() => {
+      fetchJson(`/api/conversations/${conversation.id}/notes`, {
+        method: 'PUT',
+        body: JSON.stringify({ notes, title: newTitle })
+      }).catch((error) => {
+        console.error('Failed to save notes:', error)
+      })
+    }, 500)
   }
 
   return (

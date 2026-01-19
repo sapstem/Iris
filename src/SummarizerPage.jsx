@@ -9,38 +9,28 @@ import PasteModal from './PasteModal'
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
 const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5175'
 
-const base64UrlToBase64 = (input) => {
-  let output = input.replace(/-/g, '+').replace(/_/g, '/')
-  while (output.length % 4 !== 0) output += '='
-  return output
-}
+const fetchJson = async (path, options = {}) => {
+  const response = await fetch(`${API_BASE}${path}`, {
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+    ...options
+  })
 
-const getUserProfile = () => {
-  const token = localStorage.getItem('auth_token')
-  if (!token) return { name: 'Guest', picture: '' }
+  let data = null
   try {
-    const payload = JSON.parse(atob(base64UrlToBase64(token.split('.')[1] || '')))
-    const fullName = payload?.given_name || payload?.name || payload?.email?.split('@')[0] || 'Guest'
-    const firstName = fullName.split(' ')[0]
-    return {
-      name: firstName || 'Guest',
-      picture: payload?.picture || ''
-    }
-  } catch (e) {
-    return { name: 'Guest', picture: '' }
+    data = await response.json()
+  } catch (error) {
+    data = null
   }
-}
 
-const loadSummaries = (name) => {
-  const key = name ? `summaries:${name}` : 'summaries:anon'
-  const saved = localStorage.getItem(key)
-  return saved ? JSON.parse(saved) : []
-}
+  if (!response.ok) {
+    const message = data?.error || 'Request failed.'
+    throw new Error(message)
+  }
 
-const saveSummaries = (name, items) => {
-  const key = name ? `summaries:${name}` : 'summaries:anon'
-  localStorage.setItem(key, JSON.stringify(items))
+  return data
 }
 
 function SummarizerPage() {
@@ -62,45 +52,56 @@ function SummarizerPage() {
   const [activeSpace, setActiveSpace] = useState(null)
   const [showCreateSpace, setShowCreateSpace] = useState(false)
   const [newSpaceName, setNewSpaceName] = useState('')
-  const [isHydrated, setIsHydrated] = useState(false)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
-  const [theme, setTheme] = useState(() => {
-    const stored = localStorage.getItem('theme')
-    if (stored === 'light' || stored === 'dark') return stored
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light'
-  })
+  const [theme, setTheme] = useState('dark')
+  const [profileLoaded, setProfileLoaded] = useState(false)
   const userMenuRef = useRef(null)
 
   useEffect(() => {
-    const profile = getUserProfile()
-    setDisplayName(profile.name)
-    setAvatarUrl(profile.picture)
-    const items = loadSummaries(profile.name)
-    setSavedSummaries(items)
-    
-    // Load spaces
-    const spacesKey = profile.name ? `spaces:${profile.name}` : 'spaces:anon'
-    const savedSpaces = localStorage.getItem(spacesKey)
-    if (savedSpaces) {
-      setSpaces(JSON.parse(savedSpaces))
+    let mounted = true
+
+    const loadProfile = async () => {
+      const result = await fetchJson('/api/auth/me')
+      if (!mounted) return
+      const name = result.user?.display_name || result.user?.email || 'Guest'
+      setDisplayName(name.split(' ')[0])
+      setAvatarUrl(result.user?.avatar_url || '')
+      setTheme(result.user?.theme || 'dark')
+      setProfileLoaded(true)
     }
-    
-    // Load active space
-    const activeSpaceKey = profile.name ? `activeSpace:${profile.name}` : 'activeSpace:anon'
-    const savedActiveSpace = localStorage.getItem(activeSpaceKey)
-    if (savedActiveSpace && savedActiveSpace !== 'null') {
-      setActiveSpace(Number(savedActiveSpace))
+
+    const loadSpaces = async () => {
+      const data = await fetchJson('/api/spaces')
+      if (!mounted) return
+      setSpaces(Array.isArray(data) ? data : [])
     }
-    setIsHydrated(true)
+
+    const loadConversations = async () => {
+      const data = await fetchJson('/api/conversations')
+      if (!mounted) return
+      setSavedSummaries(Array.isArray(data) ? data : [])
+    }
+
+    Promise.all([loadProfile(), loadSpaces(), loadConversations()]).catch((error) => {
+      console.error('Failed to load dashboard data:', error)
+    })
+
+    return () => {
+      mounted = false
+    }
   }, [])
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme
-    localStorage.setItem('theme', theme)
-  }, [theme])
+    if (!profileLoaded) return
+    fetchJson('/api/profile/theme', {
+      method: 'PUT',
+      body: JSON.stringify({ theme })
+    }).catch((error) => {
+      console.error('Failed to save theme:', error)
+    })
+  }, [theme, profileLoaded])
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -113,56 +114,32 @@ function SummarizerPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  useEffect(() => {
-    if (!isHydrated) return
-    saveSummaries(displayName, savedSummaries)
-  }, [displayName, savedSummaries, isHydrated])
-
-  useEffect(() => {
-    if (!isHydrated) return
-    // Save spaces
-    const spacesKey = displayName ? `spaces:${displayName}` : 'spaces:anon'
-    localStorage.setItem(spacesKey, JSON.stringify(spaces))
-  }, [displayName, spaces, isHydrated])
-
-  useEffect(() => {
-    if (!isHydrated) return
-    // Save active space
-    const activeSpaceKey = displayName ? `activeSpace:${displayName}` : 'activeSpace:anon'
-    if (activeSpace !== null) {
-      localStorage.setItem(activeSpaceKey, activeSpace.toString())
-    } else {
-      localStorage.removeItem(activeSpaceKey)
-    }
-  }, [displayName, activeSpace, isHydrated])
-
   const handleLogout = () => {
-    localStorage.removeItem('auth_token')
-    navigate('/auth')
+    fetchJson('/api/auth/logout', { method: 'POST' })
+      .catch((error) => console.error('Failed to logout:', error))
+      .finally(() => navigate('/auth'))
   }
 
-  const createSpace = () => {
+  const createSpace = async () => {
     if (!newSpaceName.trim()) return
-    
-    const newSpace = {
-      id: Date.now(),
-      name: newSpaceName.trim(),
-      conversationIds: [],
-      createdAt: new Date().toLocaleString()
+
+    try {
+      const newSpace = await fetchJson('/api/spaces', {
+        method: 'POST',
+        body: JSON.stringify({ name: newSpaceName.trim() })
+      })
+      setSpaces([newSpace, ...spaces])
+      setNewSpaceName('')
+      setShowCreateSpace(false)
+    } catch (error) {
+      console.error('Failed to create space:', error)
+      setStatus('Failed to create space.')
     }
-    
-    setSpaces([newSpace, ...spaces])
-    setNewSpaceName('')
-    setShowCreateSpace(false)
   }
 
   const filteredSummaries = activeSpace
-    ? savedSummaries.filter(s => 
-        spaces.find(space => space.id === activeSpace)?.conversationIds.includes(s.id)
-      )
-    : savedSummaries.filter(s => 
-        !spaces.some(space => space.conversationIds.includes(s.id))
-      )
+    ? savedSummaries.filter((summary) => summary.space_id === activeSpace)
+    : savedSummaries.filter((summary) => summary.space_id === null)
 
   const runSummarize = async () => {
     if (!noteText.trim()) {
@@ -187,39 +164,22 @@ ${noteText}`
       const raw = response.text().replace(/```json|```/g, '').trim()
       const parsed = JSON.parse(raw)
 
-      const newItem = {
-        id: Date.now(),
-        text: noteText.trim(),
-        summary: parsed.overview || '',
-        takeaways: Array.isArray(parsed.takeaways) ? parsed.takeaways : [],
-        keywords: Array.isArray(parsed.keywords) ? parsed.keywords : [],
-        date: new Date().toLocaleString()
-      }
+      const newItem = await fetchJson('/api/conversations', {
+        method: 'POST',
+        body: JSON.stringify({
+          title: 'New Conversation',
+          content: noteText.trim(),
+          summary: parsed.overview || '',
+          takeaways: Array.isArray(parsed.takeaways) ? parsed.takeaways : [],
+          keywords: Array.isArray(parsed.keywords) ? parsed.keywords : [],
+          spaceId: activeSpace
+        })
+      })
 
-      setOverview(newItem.summary)
-      setTakeaways(newItem.takeaways)
-      setKeywords(newItem.keywords)
-      
-      const updatedSummaries = [newItem, ...savedSummaries]
-      setSavedSummaries(updatedSummaries)
-      
-      // Save summaries immediately to localStorage
-      saveSummaries(displayName, updatedSummaries)
-      
-      // If viewing a space, add conversation to that space
-      if (activeSpace) {
-        const updatedSpaces = spaces.map(space => 
-          space.id === activeSpace 
-            ? { ...space, conversationIds: [...space.conversationIds, newItem.id] }
-            : space
-        )
-        setSpaces(updatedSpaces)
-        
-        // Save immediately to localStorage before navigating
-        const spacesKey = displayName ? `spaces:${displayName}` : 'spaces:anon'
-        localStorage.setItem(spacesKey, JSON.stringify(updatedSpaces))
-      }
-      
+      setOverview(newItem.summary || '')
+      setTakeaways(newItem.takeaways || [])
+      setKeywords(newItem.keywords || [])
+      setSavedSummaries([newItem, ...savedSummaries])
       navigate(`/conversation/${newItem.id}`)
     } catch (error) {
       console.error(error)
@@ -311,8 +271,6 @@ ${noteText}`
             type="button"
             onClick={() => {
               setActiveSpace(null)
-              const activeSpaceKey = displayName ? `activeSpace:${displayName}` : 'activeSpace:anon'
-              localStorage.removeItem(activeSpaceKey)
               navigate('/summarizer')
             }}
           >
@@ -355,8 +313,6 @@ ${noteText}`
               className={`studio-link space-item ${activeSpace === space.id ? 'active' : ''}`}
               onClick={() => {
                 setActiveSpace(space.id)
-                const activeSpaceKey = displayName ? `activeSpace:${displayName}` : 'activeSpace:anon'
-                localStorage.setItem(activeSpaceKey, space.id.toString())
               }}
             >
               <span className="studio-text">{space.name}</span>
@@ -373,7 +329,7 @@ ${noteText}`
               onClick={() => navigate(`/conversation/${item.id}`)}
             >
               <span className="studio-text">
-                {item.text.slice(0, 25) || 'Summary'}...
+                {(item.content || '').slice(0, 25) || 'Summary'}...
               </span>
             </button>
           ))}
@@ -422,8 +378,6 @@ ${noteText}`
               <button className="all-notes-btn"
                 onClick={() => {
                   setActiveSpace(null)
-                  const activeSpaceKey = displayName ? `activeSpace:${displayName}` : 'activeSpace:anon'
-                  localStorage.removeItem(activeSpaceKey)
                 }}
               >
                 ← All Notes
@@ -522,8 +476,8 @@ ${noteText}`
               ＋
             </div>
             {spaces.map((space) => {
-              const spaceConvos = savedSummaries.filter(s => 
-                space.conversationIds.includes(s.id)
+              const spaceConvos = savedSummaries.filter(
+                (summary) => summary.space_id === space.id
               )
               const recentConvo = spaceConvos[0]
               return (
@@ -532,8 +486,6 @@ ${noteText}`
                   className="space-card"
                   onClick={() => {
                     setActiveSpace(space.id)
-                    const activeSpaceKey = displayName ? `activeSpace:${displayName}` : 'activeSpace:anon'
-                    localStorage.setItem(activeSpaceKey, space.id.toString())
                   }}
                 >
                   <p className="space-title">{space.name}</p>
@@ -541,7 +493,7 @@ ${noteText}`
                     {spaceConvos.length} conversation{spaceConvos.length !== 1 ? 's' : ''}
                   </p>
                   {recentConvo && (
-                    <p className="space-preview">{recentConvo.text.slice(0, 50)}...</p>
+                    <p className="space-preview">{(recentConvo.content || '').slice(0, 50)}...</p>
                   )}
                 </div>
               )

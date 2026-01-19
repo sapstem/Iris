@@ -4,6 +4,29 @@ import './FlashcardView.css'
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
 const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5175'
+
+const fetchJson = async (path, options = {}) => {
+  const response = await fetch(`${API_BASE}${path}`, {
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+    ...options
+  })
+
+  let data = null
+  try {
+    data = await response.json()
+  } catch (error) {
+    data = null
+  }
+
+  if (!response.ok) {
+    const message = data?.error || 'Request failed.'
+    throw new Error(message)
+  }
+
+  return data
+}
 
 function FlashcardView({ conversation }) {
   const [flashcards, setFlashcards] = useState([])
@@ -12,13 +35,10 @@ function FlashcardView({ conversation }) {
   const [isFlipped, setIsFlipped] = useState(false)
 
   useEffect(() => {
-    // Load flashcards from localStorage
-    const key = `flashcards:${conversation.id}`
-    const saved = localStorage.getItem(key)
-    
-    if (saved) {
-      setFlashcards(JSON.parse(saved))
-    }
+    if (!conversation?.id) return
+    fetchJson(`/api/flashcards/${conversation.id}`)
+      .then((data) => setFlashcards(Array.isArray(data) ? data : []))
+      .catch((error) => console.error('Failed to load flashcards:', error))
   }, [conversation.id])
 
   const generateFlashcards = async () => {
@@ -35,7 +55,7 @@ function FlashcardView({ conversation }) {
 You are a study assistant creating flashcards. Based on the following content, create 5-10 flashcards.
 
 Content:
-${conversation.text}
+${conversation.content}
 
 Summary: ${conversation.summary}
 
@@ -53,9 +73,10 @@ Return ONLY valid JSON array, no markdown formatting.`
       const text = response.text().replace(/```json|```/g, '').trim()
       const cards = JSON.parse(text)
 
-      // Save to localStorage
-      const key = `flashcards:${conversation.id}`
-      localStorage.setItem(key, JSON.stringify(cards))
+      await fetchJson(`/api/flashcards/${conversation.id}`, {
+        method: 'POST',
+        body: JSON.stringify({ cards })
+      })
       
       setFlashcards(cards)
       setCurrentIndex(0)
