@@ -286,8 +286,8 @@ ${noteText}`
         <div className="studio-rail-scroll">
         <div className="studio-header">
           <button className="logo-button" type="button" onClick={() => navigate('/summarizer')}>
-            <div className="logo-mark">S</div>
-            <span className="logo-name">Sage</span>
+            <div className="logo-mark">I</div>
+            <span className="logo-name">Iris</span>
           </button>
           <button
             className="sidebar-toggle"
@@ -410,20 +410,11 @@ ${noteText}`
         <div className="studio-hero">
           {activeSpace ? (
             <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-              <button 
+              <button className="all-notes-btn"
                 onClick={() => {
                   setActiveSpace(null)
                   const activeSpaceKey = displayName ? `activeSpace:${displayName}` : 'activeSpace:anon'
                   localStorage.removeItem(activeSpaceKey)
-                }}
-                style={{
-                  background: '#f5f5f5',
-                  border: '1px solid #e5e5e5',
-                  padding: '8px 16px',
-                  borderRadius: '8px',
-                  fontSize: '14px',
-                  cursor: 'pointer',
-                  marginBottom: '10px'
                 }}
               >
                 ← All Notes
