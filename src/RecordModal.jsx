@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './RecordModal.css'
+import { CloseIcon, MicIcon, ScreenIcon } from './Icons'
 
 function RecordModal({ isOpen, onClose }) {
   const [isRecording, setIsRecording] = useState(false)
@@ -78,13 +79,15 @@ function RecordModal({ isOpen, onClose }) {
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Record Lecture</h2>
-          <button className="close-btn" onClick={onClose}>×</button>
+          <button className="close-btn" onClick={onClose}>
+            <CloseIcon />
+          </button>
         </div>
 
         {!isRecording ? (
           <div className="recording-options">
             <button className="option-card" onClick={startMicRecording}>
-              <div className="option-icon">🎤</div>
+              <div className="option-icon"><MicIcon /></div>
               <div className="option-text">
                 <h3>Microphone</h3>
                 <p>Record your voice or class</p>
@@ -92,7 +95,7 @@ function RecordModal({ isOpen, onClose }) {
             </button>
 
             <button className="option-card" onClick={startBrowserTabRecording}>
-              <div className="option-icon">💻</div>
+              <div className="option-icon"><ScreenIcon /></div>
               <div className="option-text">
                 <h3>Browser Tab</h3>
                 <p>Capture audio playing in a browser tab</p>

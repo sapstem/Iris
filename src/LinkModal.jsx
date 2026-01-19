@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './RecordModal.css'
+import { CloseIcon } from './Icons'
 
 function LinkModal({ isOpen, onClose, onSubmit }) {
   const [url, setUrl] = useState('')
@@ -22,7 +23,9 @@ function LinkModal({ isOpen, onClose, onSubmit }) {
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Add Link</h2>
-          <button className="close-btn" onClick={onClose}>×</button>
+          <button className="close-btn" onClick={onClose}>
+            <CloseIcon />
+          </button>
         </div>
 
         <div className="modal-body">

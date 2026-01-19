@@ -108,7 +108,6 @@ function AuthPage() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <p className="auth-kicker">Sage</p>
         <h1>{mode == 'signin' ? 'Welcome back' : 'Create your account'}</h1>
         <p className="auth-subtitle">
           {mode == 'signin'

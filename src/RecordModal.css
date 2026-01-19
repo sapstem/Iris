@@ -51,6 +51,11 @@
   color: #000;
 }
 
+.close-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
 .recording-options {
   display: flex;
   flex-direction: column;
@@ -79,6 +84,14 @@
 
 .option-icon {
   font-size: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option-icon svg {
+  width: 26px;
+  height: 26px;
 }
 
 .option-text h3 {

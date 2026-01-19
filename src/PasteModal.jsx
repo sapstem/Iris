@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './RecordModal.css'
+import { CloseIcon } from './Icons'
 
 function PasteModal({ isOpen, onClose, onPaste }) {
   const [text, setText] = useState('')
@@ -28,7 +29,9 @@ function PasteModal({ isOpen, onClose, onPaste }) {
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Paste Text</h2>
-          <button className="close-btn" onClick={onClose}>×</button>
+          <button className="close-btn" onClick={onClose}>
+            <CloseIcon />
+          </button>
         </div>
 
         <div className="modal-body">
@@ -40,7 +43,7 @@ function PasteModal({ isOpen, onClose, onPaste }) {
           />
           <div className="modal-actions">
             <button className="modal-secondary" onClick={handlePaste}>
-              📋 Paste from Clipboard
+              Paste from Clipboard
             </button>
             <button className="modal-primary" onClick={handleSubmit} disabled={!text.trim()}>
               Add Text

@@ -40,10 +40,18 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .regenerate-btn:hover {
   background: #e8e8e8;
+}
+
+.regenerate-btn svg {
+  width: 14px;
+  height: 14px;
 }
 
 /* Flashcard Wrapper */
@@ -136,6 +144,9 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .nav-btn:hover:not(:disabled) {
@@ -149,6 +160,11 @@
   opacity: 0.5;
 }
 
+.nav-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
 /* Empty State */
 .flashcard-empty {
   text-align: center;
@@ -158,6 +174,11 @@
 .empty-icon {
   font-size: 64px;
   margin-bottom: 20px;
+}
+
+.empty-icon svg {
+  width: 48px;
+  height: 48px;
 }
 
 .flashcard-empty h2 {

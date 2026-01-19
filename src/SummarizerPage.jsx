@@ -6,6 +6,21 @@ import './SummarizerPage.css'
 import UploadModal from './UploadModal'
 import LinkModal from './LinkModal'
 import PasteModal from './PasteModal'
+import {
+  ArrowLeftIcon,
+  ChevronDoubleLeftIcon,
+  ChevronDownIcon,
+  CloseIcon,
+  ClipboardIcon,
+  HomeIcon,
+  LinkIcon,
+  MenuIcon,
+  MicIcon,
+  PlusIcon,
+  SendIcon,
+  SettingsIcon,
+  UploadIcon
+} from './Icons'
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
 const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null
@@ -261,7 +276,7 @@ ${noteText}`
             onClick={() => setSidebarCollapsed((prev) => !prev)}
             aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
-            {sidebarCollapsed ? '≡' : '<<'}
+            {sidebarCollapsed ? <MenuIcon /> : <ChevronDoubleLeftIcon />}
           </button>
         </div>
 
@@ -274,11 +289,11 @@ ${noteText}`
               navigate('/summarizer')
             }}
           >
-            <span className="studio-icon">⌂</span>
+            <span className="studio-icon"><HomeIcon /></span>
             <span className="studio-text">Dashboard</span>
           </button>
           <button className="studio-link" type="button">
-            <span className="studio-icon">⚙</span>
+            <span className="studio-icon"><SettingsIcon /></span>
             <span className="studio-text">Settings</span>
           </button>
         </div>
@@ -293,7 +308,7 @@ ${noteText}`
               setKeywords([])
             }}
           >
-            <span className="studio-icon">+</span>
+            <span className="studio-icon"><PlusIcon /></span>
             <span className="studio-text">Add content</span>
           </button>
         </div>
@@ -304,7 +319,7 @@ ${noteText}`
             className="studio-link create-space"
             onClick={() => setShowCreateSpace(true)}
           >
-            <span className="studio-icon">+</span>
+            <span className="studio-icon"><PlusIcon /></span>
             <span className="studio-text">Create Space</span>
           </button>
           {spaces.map((space) => (
@@ -386,7 +401,8 @@ ${noteText}`
                   setActiveSpace(null)
                 }}
               >
-                ← All Notes
+                <span className="all-notes-icon"><ArrowLeftIcon /></span>
+                All Notes
               </button>
               <h1>
                 {spaces.find(s => s.id === activeSpace)?.name || 'Space'}
@@ -398,28 +414,28 @@ ${noteText}`
 
           <div className="action-row">
             <div className="action-tile" onClick={() => setShowUploadModal(true)}>
-              <div className="icon">⭱</div>
+              <div className="icon"><UploadIcon /></div>
               <div>
                 <p className="title">Upload</p>
                 <p className="sub">File, Audio, Video</p>
               </div>
             </div>
             <div className="action-tile" onClick={() => setShowLinkModal(true)}>
-              <div className="icon">🔗</div>
+              <div className="icon"><LinkIcon /></div>
               <div>
                 <p className="title">Link</p>
                 <p className="sub">YouTube, Website</p>
               </div>
             </div>
             <div className="action-tile" onClick={() => setShowPasteModal(true)}>
-              <div className="icon">📋</div>
+              <div className="icon"><ClipboardIcon /></div>
               <div>
                 <p className="title">Paste</p>
                 <p className="sub">Copied Text</p>
               </div>
             </div>
             <div className="action-tile" onClick={() => setShowRecordModal(true)}>
-              <div className="icon">🎙</div>
+              <div className="icon"><MicIcon /></div>
               <div>
                 <p className="title">Record</p>
                 <p className="sub">Record Lecture</p>
@@ -438,7 +454,7 @@ ${noteText}`
             <div className="prompt-controls">
             </div>
             <button className="send-btn" onClick={runSummarize} disabled={loading}>
-              ↑
+              <SendIcon />
             </button>
           </div>
 
@@ -472,14 +488,14 @@ ${noteText}`
         <div className="spaces-area">
           <div className="spaces-header">
             <h2>Spaces</h2>
-            <span className="muted">Newest ▼</span>
+            <span className="muted">Newest <ChevronDownIcon /></span>
           </div>
           <div className="spaces-grid">
-            <div 
+            <div
               className="space-card dashed"
               onClick={() => setShowCreateSpace(true)}
             >
-              ＋
+              <PlusIcon />
             </div>
             {spaces.map((space) => {
               const spaceConvos = savedSummaries.filter(
@@ -537,7 +553,9 @@ ${noteText}`
           <div className="create-space-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>Create Space</h2>
-              <button className="close-btn" onClick={() => setShowCreateSpace(false)}>×</button>
+              <button className="close-btn" onClick={() => setShowCreateSpace(false)}>
+                <CloseIcon />
+              </button>
             </div>
             <div className="create-space-body">
               <input

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './RecordModal.css' // Reuse same styles
+import { CloseIcon, FileIcon } from './Icons'
 
 function UploadModal({ isOpen, onClose, onUpload }) {
   const [uploading, setUploading] = useState(false)
@@ -29,7 +30,9 @@ function UploadModal({ isOpen, onClose, onUpload }) {
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Upload File</h2>
-          <button className="close-btn" onClick={onClose}>×</button>
+          <button className="close-btn" onClick={onClose}>
+            <CloseIcon />
+          </button>
         </div>
 
         {!uploading ? (
@@ -41,7 +44,7 @@ function UploadModal({ isOpen, onClose, onUpload }) {
                 onChange={handleFileSelect}
                 style={{ display: 'none' }}
               />
-              <div className="option-icon">📄</div>
+              <div className="option-icon"><FileIcon /></div>
               <div className="option-text">
                 <h3>Choose File</h3>
                 <p>Upload .txt, .pdf, .doc, .docx</p>

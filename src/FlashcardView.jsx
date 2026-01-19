@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import './FlashcardView.css'
+import { ArrowLeftIcon, ArrowRightIcon, CardsIcon, RefreshIcon } from './Icons'
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
 const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null
@@ -115,7 +116,7 @@ Return ONLY valid JSON array, no markdown formatting.`
   if (flashcards.length === 0) {
     return (
       <div className="flashcard-empty">
-        <div className="empty-icon">🃏</div>
+        <div className="empty-icon"><CardsIcon /></div>
         <h2>No Flashcards Yet</h2>
         <p>Generate flashcards from your content to start studying.</p>
         <button className="generate-btn" onClick={generateFlashcards}>
@@ -136,7 +137,7 @@ Return ONLY valid JSON array, no markdown formatting.`
             {currentIndex + 1} / {flashcards.length}
           </span>
           <button className="regenerate-btn" onClick={generateFlashcards}>
-            🔄 Regenerate
+            <RefreshIcon /> Regenerate
           </button>
         </div>
       </div>
@@ -169,14 +170,14 @@ Return ONLY valid JSON array, no markdown formatting.`
           onClick={handlePrevious}
           disabled={flashcards.length <= 1}
         >
-          ← Previous
+          <ArrowLeftIcon /> Previous
         </button>
         <button 
           className="nav-btn next" 
           onClick={handleNext}
           disabled={flashcards.length <= 1}
         >
-          Next →
+          Next <ArrowRightIcon />
         </button>
       </div>
     </div>

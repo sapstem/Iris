@@ -108,6 +108,9 @@
   font-size: 14px;
   transition: all 0.2s;
   margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .conversation-view .studio-link:hover {
@@ -143,7 +146,14 @@
 }
 
 .conversation-view .sidebar-action-btn .action-icon {
-  font-size: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.conversation-view .sidebar-action-btn .action-icon svg {
+  width: 18px;
+  height: 18px;
 }
 
 .conversation-main {
@@ -170,6 +180,11 @@
   font-size: 20px;
   cursor: pointer;
   color: #666;
+}
+
+.back-btn svg {
+  width: 18px;
+  height: 18px;
 }
 
 .conversation-title {
@@ -236,7 +251,26 @@
 }
 
 .tab-icon {
-  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.inline-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+}
+
+.inline-icon svg {
+  width: 16px;
+  height: 16px;
 }
 
 /* Content Area */
@@ -303,6 +337,11 @@
 .placeholder-icon {
   font-size: 64px;
   margin-bottom: 20px;
+}
+
+.placeholder-icon svg {
+  width: 48px;
+  height: 48px;
 }
 
 .feature-placeholder h2 {
@@ -467,6 +506,11 @@
   justify-content: center;
   transition: all 0.2s;
   flex-shrink: 0;
+}
+
+.send-message-btn svg {
+  width: 18px;
+  height: 18px;
 }
 
 .send-message-btn:hover:not(:disabled) {

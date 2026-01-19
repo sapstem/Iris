@@ -4,6 +4,14 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import FlashcardView from './FlashcardView'
 import NotesView from './NotesView'
 import './ConversationView.css'
+import {
+  ArrowLeftIcon,
+  CardsIcon,
+  ChatIcon,
+  NotesIcon,
+  QuizIcon,
+  SendIcon
+} from './Icons'
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
 const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null
@@ -151,7 +159,8 @@ User's question: ${userMessage}`
             setSidebarOpen(false)
           }}
         >
-          ← Back to Home
+          <span className="inline-icon"><ArrowLeftIcon /></span>
+          Back to Home
         </button>
 
         <div className="sidebar-actions">
@@ -162,7 +171,7 @@ User's question: ${userMessage}`
               setSidebarOpen(false)
             }}
           >
-            <span className="action-icon">💬</span>
+            <span className="action-icon"><ChatIcon /></span>
             <span>Chat Bot</span>
           </button>
 
@@ -173,7 +182,7 @@ User's question: ${userMessage}`
               setSidebarOpen(false)
             }}
           >
-            <span className="action-icon">📄</span>
+            <span className="action-icon"><NotesIcon /></span>
             <span>Document</span>
           </button>
 
@@ -184,7 +193,7 @@ User's question: ${userMessage}`
               setSidebarOpen(false)
             }}
           >
-            <span className="action-icon">🃏</span>
+            <span className="action-icon"><CardsIcon /></span>
             <span>Flashcards</span>
           </button>
 
@@ -195,7 +204,7 @@ User's question: ${userMessage}`
               setSidebarOpen(false)
             }}
           >
-            <span className="action-icon">📝</span>
+            <span className="action-icon"><QuizIcon /></span>
             <span>Quiz</span>
           </button>
         </div>
@@ -213,7 +222,7 @@ User's question: ${userMessage}`
       <main className="conversation-main">{/* Top Bar */}
         <div className="conversation-header">
           <button className="back-btn" onClick={() => navigate('/summarizer')}>
-            ←
+            <ArrowLeftIcon />
           </button>
           <h1 className="conversation-title">
             {conversation.content.slice(0, 50)}...
@@ -229,28 +238,28 @@ User's question: ${userMessage}`
             className={`tab ${activeTab === 'chat' ? 'active' : ''}`}
             onClick={() => setActiveTab('chat')}
           >
-            <span className="tab-icon">💬</span>
+            <span className="tab-icon"><ChatIcon /></span>
             Chat
           </button>
           <button 
             className={`tab ${activeTab === 'flashcards' ? 'active' : ''}`}
             onClick={() => setActiveTab('flashcards')}
           >
-            <span className="tab-icon">🃏</span>
+            <span className="tab-icon"><CardsIcon /></span>
             Flashcards
           </button>
           <button 
             className={`tab ${activeTab === 'quizzes' ? 'active' : ''}`}
             onClick={() => setActiveTab('quizzes')}
           >
-            <span className="tab-icon">📝</span>
+            <span className="tab-icon"><QuizIcon /></span>
             Quizzes
           </button>
           <button 
             className={`tab ${activeTab === 'notes' ? 'active' : ''}`}
             onClick={() => setActiveTab('notes')}
           >
-            <span className="tab-icon">📄</span>
+            <span className="tab-icon"><NotesIcon /></span>
             Notes
           </button>
         </div>
@@ -321,7 +330,7 @@ User's question: ${userMessage}`
 
           {activeTab === 'quizzes' && (
             <div className="feature-placeholder">
-              <div className="placeholder-icon">📝</div>
+            <div className="placeholder-icon"><NotesIcon /></div>
               <h2>Quizzes</h2>
               <p>Coming soon! Test yourself with AI-generated quizzes.</p>
             </div>
@@ -347,7 +356,7 @@ User's question: ${userMessage}`
             onClick={handleSendMessage}
             disabled={loading || !chatInput.trim()}
           >
-            ↑
+            <SendIcon />
           </button>
         </div>
       </main>

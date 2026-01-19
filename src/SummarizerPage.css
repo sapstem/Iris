@@ -112,6 +112,11 @@
   font-weight: 600;
 }
 
+.sidebar-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
 .studio-shell.theme-dark .sidebar-toggle {
   background: #1f242d;
   color: #f5f6f8;
@@ -181,6 +186,11 @@
   justify-content: center;
   font-size: 14px;
   color: inherit;
+}
+
+.studio-icon svg {
+  width: 18px;
+  height: 18px;
 }
 
 .studio-rail.collapsed .studio-link {
@@ -299,6 +309,14 @@
 .action-tile .icon {
   font-size: 32px;
   margin-bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-tile .icon svg {
+  width: 30px;
+  height: 30px;
 }
 
 .action-tile .title {
@@ -330,12 +348,36 @@
   cursor: pointer;
   margin-bottom: 10px;
   color: #1a1a1a;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .studio-shell.theme-dark .all-notes-btn {
   background: #1a1f26;
   border-color: #2b3440;
   color: #f5f6f8;
+}
+
+.all-notes-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.spaces-header .muted {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.spaces-header .muted svg {
+  width: 12px;
+  height: 12px;
+}
+
+.space-card.dashed svg {
+  width: 26px;
+  height: 26px;
 }
 
 .studio-shell.theme-dark .action-tile .sub {
@@ -406,12 +448,19 @@
   transition: all 0.2s;
 }
 
+.send-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
 .send-btn:hover:not(:disabled) {
   background: #333;
 }
 
 .send-btn:disabled {
-  opacity: 0.4;
+  opacity: 1;
+  background: #1a1a1a;
+  color: #ffffff;
   cursor: not-allowed;
 }
 
@@ -478,7 +527,7 @@
 }
 
 .summary-output li::before {
-  content: '•';
+  content: '-';
   position: absolute;
   left: 0;
   color: #999;
@@ -842,6 +891,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.close-btn svg {
+  width: 18px;
+  height: 18px;
 }
 
 .close-btn:hover {
