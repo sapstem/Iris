@@ -11,6 +11,37 @@
   margin: 0 auto 80px;
 }
 
+.hero-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-line {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px; 
+  flex-wrap: nowrap; /* prevent wrapping */
+  justify-content: center;
+}
+
+.hero-subline {
+  display: block;
+  font-size: 0.85em;
+  color: inherit;
+}
+
+.typing-container {
+  display: inline-block;
+  width: 300px;
+  text-align: left;
+}
+
+.typing-text {
+  display: inline-block;
+}
+
 
 /* Features Section */
 .features-section {
