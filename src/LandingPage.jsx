@@ -40,13 +40,14 @@ function LandingPage() {
       {/* Hero Section - Your existing content */}
       <section className="hero-section">
         <h1 className="hero-title">
-          A smarter way to study with{' '}
+          Generate{' '}
           <span className="typing-container">
             <span className="typing-text" data-text={currentText}>
               {currentText}
             </span>
           </span>
           <span className="cursor">|</span>
+          {' '}from your notes
         </h1>
         <p className="subtitle">
           Transform your notes into summaries, flashcards, and study guides in seconds
