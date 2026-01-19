@@ -47,7 +47,6 @@ function ConversationView() {
   const [chatInput, setChatInput] = useState('')
   const [messages, setMessages] = useState([])
   const [loading, setLoading] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [theme, setTheme] = useState('dark')
 
   useEffect(() => {
@@ -151,33 +150,16 @@ User's question: ${userMessage}`
 
   return (
     <div className={`conversation-view ${theme === 'dark' ? 'theme-dark' : 'theme-light'}`}>
-      {/* Hamburger Menu Button */}
-      <button 
-        className="hamburger-menu"
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-        aria-label="Toggle menu"
-      >
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-
       {/* Sidebar - toggleable */}
-      <aside className={`studio-rail ${sidebarOpen ? 'open' : ''}`}>
-        <div className="studio-header">
-          <div className="logo-mark">S</div>
-          <span className="logo-name">Sage</span>
-        </div>
-        
-        <button 
-          className="studio-link"
+      <aside className="studio-rail compact">
+        <button
+          className="studio-header"
           onClick={() => {
             navigate('/summarizer')
-            setSidebarOpen(false)
           }}
+          aria-label="Go to dashboard"
         >
-          <span className="inline-icon"><ArrowLeftIcon /></span>
-          Back to Home
+          <div className="logo-mark">I</div>
         </button>
 
         <div className="sidebar-actions">
@@ -185,55 +167,47 @@ User's question: ${userMessage}`
             className="sidebar-action-btn"
             onClick={() => {
               setActiveTab('chat')
-              setSidebarOpen(false)
             }}
+            aria-label="Chat Bot"
+            title="Chat Bot"
           >
             <span className="action-icon"><ChatIcon /></span>
-            <span>Chat Bot</span>
           </button>
 
           <button 
             className="sidebar-action-btn"
             onClick={() => {
               setActiveTab('notes')
-              setSidebarOpen(false)
             }}
+            aria-label="Document"
+            title="Document"
           >
             <span className="action-icon"><NotesIcon /></span>
-            <span>Document</span>
           </button>
 
           <button 
             className="sidebar-action-btn"
             onClick={() => {
               setActiveTab('flashcards')
-              setSidebarOpen(false)
             }}
+            aria-label="Flashcards"
+            title="Flashcards"
           >
             <span className="action-icon"><CardsIcon /></span>
-            <span>Flashcards</span>
           </button>
 
           <button 
             className="sidebar-action-btn"
             onClick={() => {
               setActiveTab('quizzes')
-              setSidebarOpen(false)
             }}
+            aria-label="Quiz"
+            title="Quiz"
           >
             <span className="action-icon"><QuizIcon /></span>
-            <span>Quiz</span>
           </button>
         </div>
       </aside>
-
-      {/* Overlay - click to close sidebar */}
-      {sidebarOpen && (
-        <div 
-          className="sidebar-overlay"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
 
       {/* Main Content */}
       <main className="conversation-main">{/* Top Bar */}
