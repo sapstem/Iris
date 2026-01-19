@@ -236,3 +236,80 @@
   font-size: 16px;
   color: #666;
 }
+
+.conversation-view.theme-dark .flashcard-header h3 {
+  color: #f5f6f8;
+}
+
+.conversation-view.theme-dark .card-counter {
+  color: #9aa3af;
+}
+
+.conversation-view.theme-dark .regenerate-btn {
+  background: #1a1f26;
+  border-color: #2b3440;
+  color: #f5f6f8;
+}
+
+.conversation-view.theme-dark .regenerate-btn:hover {
+  background: #222a35;
+}
+
+.conversation-view.theme-dark .flashcard-front,
+.conversation-view.theme-dark .flashcard-back {
+  border-color: #2b3440;
+  background: #151a20;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.conversation-view.theme-dark .flashcard-back {
+  background: #1a1f26;
+}
+
+.conversation-view.theme-dark .card-label {
+  color: #8f98a8;
+}
+
+.conversation-view.theme-dark .card-content {
+  color: #f5f6f8;
+}
+
+.conversation-view.theme-dark .flip-hint {
+  color: #7c8796;
+}
+
+.conversation-view.theme-dark .nav-btn {
+  background: #f5f6f8;
+  color: #101419;
+}
+
+.conversation-view.theme-dark .nav-btn:hover:not(:disabled) {
+  background: #e2e6ec;
+}
+
+.conversation-view.theme-dark .nav-btn:disabled {
+  background: #232a33;
+  color: #6b7280;
+  opacity: 1;
+}
+
+.conversation-view.theme-dark .flashcard-empty h2 {
+  color: #f5f6f8;
+}
+
+.conversation-view.theme-dark .flashcard-empty p {
+  color: #9aa3af;
+}
+
+.conversation-view.theme-dark .generate-btn {
+  background: #f5f6f8;
+  color: #101419;
+}
+
+.conversation-view.theme-dark .generate-btn:hover {
+  background: #e2e6ec;
+}
+
+.conversation-view.theme-dark .flashcard-loading p {
+  color: #9aa3af;
+}
