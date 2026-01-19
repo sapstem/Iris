@@ -31,55 +31,18 @@ function PasteModal({ isOpen, onClose, onPaste }) {
           <button className="close-btn" onClick={onClose}>×</button>
         </div>
 
-        <div style={{ padding: '20px 0' }}>
+        <div className="modal-body">
           <textarea
             placeholder="Paste your text here..."
             value={text}
             onChange={(e) => setText(e.target.value)}
-            style={{
-              width: '100%',
-              minHeight: '200px',
-              padding: '14px',
-              border: '1px solid #e5e5e5',
-              borderRadius: '8px',
-              fontSize: '15px',
-              fontFamily: 'inherit',
-              resize: 'vertical',
-              outline: 'none'
-            }}
+            className="modal-textarea"
           />
-          <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
-            <button
-              onClick={handlePaste}
-              style={{
-                flex: 1,
-                padding: '14px',
-                background: '#f5f5f5',
-                border: '1px solid #e5e5e5',
-                borderRadius: '8px',
-                fontSize: '15px',
-                fontWeight: '600',
-                cursor: 'pointer'
-              }}
-            >
+          <div className="modal-actions">
+            <button className="modal-secondary" onClick={handlePaste}>
               📋 Paste from Clipboard
             </button>
-            <button
-              onClick={handleSubmit}
-              disabled={!text.trim()}
-              style={{
-                flex: 1,
-                padding: '14px',
-                background: '#1a1a1a',
-                color: 'white',
-                border: 'none',
-                borderRadius: '8px',
-                fontSize: '15px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                opacity: !text.trim() ? 0.5 : 1
-              }}
-            >
+            <button className="modal-primary" onClick={handleSubmit} disabled={!text.trim()}>
               Add Text
             </button>
           </div>

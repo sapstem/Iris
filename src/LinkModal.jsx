@@ -25,38 +25,19 @@ function LinkModal({ isOpen, onClose, onSubmit }) {
           <button className="close-btn" onClick={onClose}>×</button>
         </div>
 
-        <div style={{ padding: '20px 0' }}>
+        <div className="modal-body">
           <input
             type="url"
             placeholder="Paste YouTube or website URL"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSubmit()}
-            style={{
-              width: '100%',
-              padding: '14px',
-              border: '1px solid #e5e5e5',
-              borderRadius: '8px',
-              fontSize: '15px',
-              outline: 'none'
-            }}
+            className="modal-input"
           />
           <button
             onClick={handleSubmit}
             disabled={!url.trim() || loading}
-            style={{
-              width: '100%',
-              marginTop: '16px',
-              padding: '14px',
-              background: '#1a1a1a',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              fontSize: '15px',
-              fontWeight: '600',
-              cursor: 'pointer',
-              opacity: (!url.trim() || loading) ? 0.5 : 1
-            }}
+            className="modal-primary full-width"
           >
             {loading ? 'Loading...' : 'Add Link'}
           </button>
