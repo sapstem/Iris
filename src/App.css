@@ -97,8 +97,8 @@ h1 {
 
 .typing-container {
   position: relative;
-  display: inline-block;
-  min-width: 320px;
+  display: inline-flex;
+  align-items: baseline;
 }
 
 .typing-text {
