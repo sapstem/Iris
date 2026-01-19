@@ -165,9 +165,6 @@ Return ONLY valid JSON array, no markdown formatting.`
       <div className="flashcard-header">
         <h3>Flashcards</h3>
         <div className="flashcard-actions">
-          <span className="card-counter">
-            {currentIndex + 1} / {flashcards.length}
-          </span>
           <button className="regenerate-btn" onClick={generateFlashcards}>
             <RefreshIcon /> Regenerate
           </button>
@@ -193,29 +190,39 @@ Return ONLY valid JSON array, no markdown formatting.`
             </div>
             <div className="flip-hint">Click to flip</div>
           </div>
-          <div className="flashcard-nav">
-            <button 
-              className="nav-btn prev"
-              onClick={(event) => {
-                event.stopPropagation()
-                handlePreviousSafe()
-              }}
-              disabled={flashcards.length <= 1}
-            >
-              <ArrowLeftIcon /> Previous
-            </button>
-            <button 
-              className="nav-btn next"
-              onClick={(event) => {
-                event.stopPropagation()
-                handleNextSafe()
-              }}
-              disabled={flashcards.length <= 1}
-            >
-              Next <ArrowRightIcon />
-            </button>
-          </div>
         </div>
+      </div>
+
+      <div className="flashcard-nav">
+        <button 
+          className="nav-arrow prev"
+          onClick={handlePreviousSafe}
+          disabled={flashcards.length <= 1}
+          aria-label="Previous card"
+        >
+          <ArrowLeftIcon />
+        </button>
+        <div className="card-counter">
+          {currentIndex + 1} / {flashcards.length}
+        </div>
+        <button 
+          className="nav-arrow next"
+          onClick={handleNextSafe}
+          disabled={flashcards.length <= 1}
+          aria-label="Next card"
+        >
+          <ArrowRightIcon />
+        </button>
+      </div>
+
+      <div className="flashcard-list">
+        {flashcards.map((card, index) => (
+          <div className="flashcard-row" key={`${index}-${card.question}`}>
+            <div className="flashcard-col question">{card.question}</div>
+            <div className="flashcard-divider" aria-hidden="true" />
+            <div className="flashcard-col answer">{card.answer}</div>
+          </div>
+        ))}
       </div>
     </div>
   )
