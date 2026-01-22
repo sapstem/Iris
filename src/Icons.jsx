@@ -23,6 +23,13 @@ export const ChevronDoubleLeftIcon = (props) => (
   </svg>
 )
 
+export const ChevronDoubleRightIcon = (props) => (
+  <svg {...baseProps} {...props}>
+    <polyline points="11 6 17 12 11 18" />
+    <polyline points="5 6 11 12 5 18" />
+  </svg>
+)
+
 export const ChevronDownIcon = (props) => (
   <svg {...baseProps} {...props}>
     <polyline points="6 9 12 15 18 9" />

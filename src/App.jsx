@@ -40,12 +40,7 @@ function AppFrame() {
   return (
     <>
       {(location.pathname === '/' || location.pathname === '/auth') && (
-        <>
-          <video autoPlay loop muted playsInline className="video-background">
-            <source src="/background.mp4" type="video/mp4" />
-          </video>
-
-          <nav className="nav">
+        <>\n<nav className="nav">
             <Link to="/" className="logo">Iris</Link>
             <Link to="/auth">
               <button className="nav-cta">Get Started</button>

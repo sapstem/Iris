@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
 
 * {
   margin: 0;
@@ -7,13 +7,13 @@
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Merriweather', serif;
   min-height: 100vh;
   position: relative;
   -webkit-font-smoothing: antialiased;
   margin: 0;
   overflow-x: hidden;
-  background: transparent;
+  background: #fdf4ed; /*homescreen bg color*/
 }
 
 .video-background {
@@ -53,25 +53,27 @@ body::before {
 .logo {
   font-size: 1.6rem;
   font-weight: 800;
-  color: #ffffff;
+  color: #1d1a1a;
   letter-spacing: -0.02em;
 }
 
 .nav-cta {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(107, 87, 188, 0.15);
   backdrop-filter: blur(10px);
-  color: white;
+  color: rgb(47, 41, 135); /* button text color */
   padding: 12px 28px;
   border-radius: 24px;
   font-size: 15px;
   font-weight: 600;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(10, 10, 10, 0.2);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
+
+/* nav button color hover effect */
 .nav-cta:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(124, 126, 196, 0.251);
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
 }
@@ -86,8 +88,9 @@ body::before {
   z-index: 10;
 }
 
+/* title with typing effect */
 h1 {
-  color: hsl(216, 66%, 92%);
+  color: hsl(217, 93%, 28%);
   font-size: 4.5rem;
   font-weight: 900;
   margin-bottom: 28px;
@@ -101,8 +104,11 @@ h1 {
   align-items: baseline;
 }
 
+
+/* consider adding defaultunderline to have word centered in rather
+than having it uncentered  */
 .typing-text {
-  color: rgba(252, 250, 250, 0.95);
+  color: hsl(217, 93%, 28%);
   text-shadow: 
     0 0 30px rgba(255, 255, 255, 0.5),
     0 0 60px rgba(255, 255, 255, 0.3);

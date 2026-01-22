@@ -118,6 +118,26 @@
   height: 18px;
 }
 
+.sidebar-toggle-icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.studio-shell.theme-light .sidebar-toggle-icon,
+.studio-shell.theme-light .sidebar-toggle-icon * {
+  stroke: #1a1a1a;
+}
+
+.studio-shell.theme-dark .sidebar-toggle-icon,
+.studio-shell.theme-dark .sidebar-toggle-icon * {
+  stroke: #f5f6f8;
+}
+
 .studio-shell.theme-dark .sidebar-toggle {
   background: #1f242d;
   color: #f5f6f8;
@@ -160,6 +180,18 @@
 
 .studio-rail.collapsed .studio-label {
   display: none;
+}
+
+.studio-empty {
+  padding: 2px 12px 0;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #8c95a3;
+}
+
+.studio-shell.theme-dark .studio-empty {
+  color: #7c8796;
 }
 
 /* Sidebar Links */
@@ -452,6 +484,14 @@
 .send-btn svg {
   width: 18px;
   height: 18px;
+}
+
+.send-icon {
+  stroke: #ffffff;
+}
+
+.studio-shell.theme-light .send-icon {
+  stroke: #ffffff;
 }
 
 .send-btn:hover:not(:disabled) {

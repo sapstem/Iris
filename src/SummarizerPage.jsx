@@ -8,7 +8,9 @@ import LinkModal from './LinkModal'
 import PasteModal from './PasteModal'
 import {
   ArrowLeftIcon,
+  ArrowRightIcon,
   ChevronDoubleLeftIcon,
+  ChevronDoubleRightIcon,
   ChevronDownIcon,
   CloseIcon,
   ClipboardIcon,
@@ -276,7 +278,11 @@ ${noteText}`
             onClick={() => setSidebarCollapsed((prev) => !prev)}
             aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
-            {sidebarCollapsed ? <MenuIcon /> : <ChevronDoubleLeftIcon />}
+            {sidebarCollapsed ? (
+              <ChevronDoubleRightIcon className="sidebar-toggle-icon" />
+            ) : (
+              <ChevronDoubleLeftIcon className="sidebar-toggle-icon" />
+            )}
           </button>
         </div>
 
@@ -314,7 +320,7 @@ ${noteText}`
         </div>
 
         <div className="studio-section">
-          <p className="studio-label">Spaces</p>
+          <p className="studio-label">Projects</p>
           <button 
             className="studio-link create-space"
             onClick={() => setShowCreateSpace(true)}
@@ -454,7 +460,7 @@ ${noteText}`
             <div className="prompt-controls">
             </div>
             <button className="send-btn" onClick={runSummarize} disabled={loading}>
-              <SendIcon />
+              <ArrowRightIcon className="send-icon" />
             </button>
           </div>
 
@@ -487,7 +493,7 @@ ${noteText}`
 
         <div className="spaces-area">
           <div className="spaces-header">
-            <h2>Spaces</h2>
+            <h2>Projects</h2>
             <span className="muted">Newest <ChevronDownIcon /></span>
           </div>
           <div className="spaces-grid">
@@ -552,7 +558,7 @@ ${noteText}`
         <div className="modal-overlay" onClick={() => setShowCreateSpace(false)}>
           <div className="create-space-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>Create Space</h2>
+              <h2>Create Project</h2>
               <button className="close-btn" onClick={() => setShowCreateSpace(false)}>
                 <CloseIcon />
               </button>
