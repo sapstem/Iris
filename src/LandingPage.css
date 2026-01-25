@@ -2,20 +2,95 @@
 .landing-page {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 80px 24px 120px;
+  padding: 48px 24px 120px;
   text-align: center;
+  color: #000;
+}
+
+.landing-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px 28px;
+  margin: 0 auto 70px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #b9d5ef 0%, #a8c9e6 100%);
+  border: 2px solid rgba(36, 57, 89, 0.45);
+  box-shadow: 0 14px 28px rgba(27, 44, 67, 0.25);
+}
+
+.nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: "Garamond", "Times New Roman", serif;
+  font-size: 1.4rem;
+  letter-spacing: 0.02em;
+}
+
+.nav-logo {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #1f2a44;
+  color: #f7f3ea;
+  font-weight: 700;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  font-family: "Trebuchet MS", "Gill Sans", sans-serif;
+  font-size: 0.95rem;
+  text-transform: lowercase;
+}
+
+.nav-links a {
+  color: #1f2a44;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 999px;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.nav-links a:hover {
+  background: rgba(255, 255, 255, 0.6);
+  transform: translateY(-1px);
+}
+
+.nav-cta {
+  border: 1px solid rgba(31, 42, 68, 0.6);
+  background: #f7f3ea;
+  color: #1f2a44;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nav-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 18px rgba(31, 42, 68, 0.2);
 }
 
 .hero-section {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto 80px;
 }
 
 .hero-title {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 6px;
+  margin: 0 auto;
 }
 
 .hero-line {
@@ -33,13 +108,31 @@
 }
 
 .typing-container {
-  display: inline-block;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
   width: 300px;
-  text-align: left;
+  margin-left: 6px;
+}
+
+.typing-line {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  min-height: 1.1em;
+  width: 100%;
 }
 
 .typing-text {
   display: inline-block;
+}
+
+.typing-underline {
+  width: 72%;
+  height: 2px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(200, 216, 255, 0.1), rgba(200, 216, 255, 0.9), rgba(200, 216, 255, 0.1));
 }
 
 
@@ -64,16 +157,15 @@
   font-size: 3.2rem;
   margin-bottom: 16px;
   letter-spacing: -0.02em;
-  background: linear-gradient(135deg, #bfd5fa 0%, #e6e8e7 40%, #c1d6f7 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #000;
+  background: none;
+  -webkit-text-fill-color: #000;
 }
 
 .section-subtitle {
   font-size: 1.2rem;
   margin-bottom: 54px;
-  color: rgba(240, 246, 255, 0.85);
+  color: #000;
   max-width: 680px;
   margin-left: auto;
   margin-right: auto;
@@ -121,11 +213,11 @@
 .feature-card h3 {
   font-size: 1.4rem;
   margin-bottom: 12px;
-  color: #f5f8ff;
+  color: #000;
 }
 
 .feature-card p {
-  color: rgba(234, 241, 255, 0.82);
+  color: #000;
   line-height: 2;
   font-size: 1rem;
 }
@@ -187,11 +279,11 @@
 .step h3 {
   font-size: 1.3rem;
   margin-bottom: 10px;
-  color: rgba(245, 248, 255, 0.95);
+  color: #000;
 }
 
 .step p {
-  color: rgba(225, 235, 255, 0.8);
+  color: #000;
   font-size: 0.95rem;
   line-height: 1.5;
 }
@@ -213,16 +305,15 @@
 .final-cta h2 {
   font-size: 2.5rem;
   margin-bottom: 20px;
-  background: linear-gradient(135deg, #f8fbff 0%, #d2def9 50%, #e0e9f8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #000;
+  background: none;
+  -webkit-text-fill-color: #000;
 }
 
 .final-cta p {
   font-size: 1.1rem;
   margin-bottom: 40px;
-  color: rgba(236, 244, 255, 0.85);
+  color: #000;
   max-width: 500px;
   margin-left: auto;
   margin-right: auto;
@@ -239,11 +330,11 @@
 .faq-section h2 {
   font-size: 3rem;
   margin-bottom: 12px;
-  color: #f7f8ff;
+  color: #000;
 }
 
 .faq-subtitle {
-  color: rgba(220, 230, 255, 0.7);
+  color: #000;
   margin-bottom: 40px;
   font-size: 1.15rem;
 }
@@ -269,7 +360,7 @@
   padding: 20px 24px;
   font-size: 1.1rem;
   font-weight: 600;
-  color: rgba(245, 248, 255, 0.95);
+  color: #000;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -283,7 +374,7 @@
 .faq-item summary::after {
   content: "+";
   font-size: 1.4rem;
-  color: rgba(200, 216, 255, 0.8);
+  color: #000;
 }
 
 .faq-item[open] summary::after {
@@ -292,7 +383,7 @@
 
 .faq-item p {
   padding: 0 24px 20px;
-  color: rgba(220, 232, 255, 0.8);
+  color: #000;
   line-height: 1.6;
 }
 
@@ -309,14 +400,13 @@
 .footer-brand h3 {
   font-size: 1.6rem;
   margin-bottom: 12px;
-  background: linear-gradient(135deg, #f8fbff 0%, #dcecf4 50%, #bdb8ff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #000;
+  background: none;
+  -webkit-text-fill-color: #000;
 }
 
 .footer-brand p {
-  color: rgba(236, 244, 255, 0.78);
+  color: #000;
   margin-bottom: 24px;
   line-height: 1.6;
 }
@@ -329,7 +419,7 @@
 }
 
 .footer-links a {
-  color: rgba(236, 244, 255, 0.85);
+  color: #000;
   text-decoration: none;
   font-weight: 600;
   letter-spacing: 0.01em;
@@ -337,7 +427,7 @@
 }
 
 .footer-links a:hover {
-  color: #ffffff;
+  color: #000;
   transform: translateX(4px);
 }
 
@@ -346,12 +436,28 @@
   border-top: 1px solid rgba(255, 255, 255, 0.12);
   padding: 22px 0 32px;
   text-align: center;
-  color: rgba(220, 230, 255, 0.65);
+  color: #000;
   font-size: 0.95rem;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .landing-nav {
+    flex-direction: column;
+    border-radius: 24px;
+    padding: 18px 20px;
+    gap: 14px;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .nav-cta {
+    width: 100%;
+  }
+
   .features-section,
   .how-it-works,
   .final-cta {

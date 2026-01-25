@@ -37,16 +37,33 @@ function LandingPage() {
 
   return (
     <div className="landing-page">
+      <header className="landing-nav">
+        <div className="nav-brand">
+          <span className="nav-logo" aria-hidden="true">*</span>
+          Iris
+        </div>
+        <nav className="nav-links" aria-label="Primary">
+          <a href="#about">About</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#faq">FAQ</a>
+        </nav>
+        <button className="nav-cta" onClick={() => navigate('/auth')}>
+          Start learning
+        </button>
+      </header>
       {/* Hero Section - Your existing content */}
       <section className="hero-section">
         <h1 className="hero-title">
           <span className="hero-line">
             Generate {' '}
             <span className="typing-container">
-              <span className="typing-text" data-text={currentText}>
-                {currentText}
+              <span className="typing-line">
+                <span className="typing-text" data-text={currentText}>
+                  {currentText}
+                </span>
+                <span className="typing-cursor">|</span>
               </span>
-              <span className="typing-cursor">|</span>
+              <span className="typing-underline" aria-hidden="true" />
             </span>
           </span>
           <span className="hero-subline">from your notes</span>
@@ -66,7 +83,7 @@ function LandingPage() {
 
       
       
-<section className="features-section">
+<section className="features-section" id="about">
   <h2 className="section-title">Smarter ways to review, all in one place</h2>
   <p className="section-subtitle">Upload your material once, and get clean summaries, highlighted key concepts, flashcards, quizzes, and a chat tutor that sticks to your content.</p>
 
@@ -110,7 +127,7 @@ function LandingPage() {
 </section>
 
       {/* How It Works Section */}
-      <section className="how-it-works">
+      <section className="how-it-works" id="how-it-works">
         <h2 className="section-title">How It Works</h2>
         <div className="steps">
           <div className="step">
@@ -149,7 +166,7 @@ function LandingPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="faq-section">
+      <section className="faq-section" id="faq">
         <h2>Frequently Asked Questions</h2>
         <p className="faq-subtitle">Everything you need to know about Iris</p>
 

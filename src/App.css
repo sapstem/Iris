@@ -87,12 +87,12 @@ body::before {
   position: relative;
   z-index: 10;
 }
-
+ 
 /* title with typing effect */
 h1 {
-  color: hsl(217, 93%, 28%);
+  color: hsl(217, 61%, 22%);
   font-size: 4.5rem;
-  font-weight: 900;
+  font-weight: 300;
   margin-bottom: 28px;
   letter-spacing: -0.04em;
   line-height: 1.08;
