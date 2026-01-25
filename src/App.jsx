@@ -39,16 +39,6 @@ function AppFrame() {
 
   return (
     <>
-      {(location.pathname === '/' || location.pathname === '/auth') && (
-        <>\n<nav className="nav">
-            <Link to="/" className="logo">Iris</Link>
-            <Link to="/auth">
-              <button className="nav-cta">Get Started</button>
-            </Link>
-          </nav>
-        </>
-      )}
-
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/summarizer" element={(

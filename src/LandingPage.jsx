@@ -39,7 +39,6 @@ function LandingPage() {
     <div className="landing-page">
       <header className="landing-nav">
         <div className="nav-brand">
-          <span className="nav-logo" aria-hidden="true">*</span>
           Iris
         </div>
         <nav className="nav-links" aria-label="Primary">
@@ -53,29 +52,36 @@ function LandingPage() {
       </header>
       {/* Hero Section - Your existing content */}
       <section className="hero-section">
-        <h1 className="hero-title">
-          <span className="hero-line">
-            Generate {' '}
-            <span className="typing-container">
-              <span className="typing-line">
-                <span className="typing-text" data-text={currentText}>
-                  {currentText}
+        <div className="hero-layout">
+          <div className="hero-copy">
+            <h1 className="hero-title">
+              <span className="hero-line">
+                Generate {' '}
+                <span className="typing-container">
+                  <span className="typing-line">
+                    <span className="typing-text" data-text={currentText}>
+                      {currentText}
+                    </span>
+                    <span className="typing-cursor">|</span>
+                  </span>
+                  <span className="typing-underline" aria-hidden="true" />
                 </span>
-                <span className="typing-cursor">|</span>
               </span>
-              <span className="typing-underline" aria-hidden="true" />
-            </span>
-          </span>
-          <span className="hero-subline">from your notes</span>
-        </h1>
-        <p className="subtitle">
-          Transform your notes into summaries, flashcards, and study guides in seconds
-        </p>
-        
-        <div className="cta-group">
-          <button className="cta-primary" onClick={() => navigate('/auth')}>
-            Start Learning
-          </button>
+              <span className="hero-subline">from your notes</span>
+            </h1>
+            <p className="subtitle">
+              Transform your notes into summaries, flashcards, and study guides in seconds
+            </p>
+            
+            <div className="cta-group">
+              <button className="cta-primary" onClick={() => navigate('/auth')}>
+                Start Learning
+              </button>
+            </div>
+          </div>
+          <div className="hero-image-wrap">
+            <img className="hero-image" src={new URL('./assets/study1.png', import.meta.url).href} alt="Study illustration" />
+          </div>
         </div>
       </section>
 
