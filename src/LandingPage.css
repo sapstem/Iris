@@ -27,6 +27,7 @@
   font-family: "Garamond", "Times New Roman", serif;
   font-size: 1.4rem;
   letter-spacing: 0.02em;
+  color: #000;
 }
 
 .nav-links {
@@ -39,7 +40,7 @@
 }
 
 .nav-links a {
-  color: #1f2a44;
+  color: #000;
   text-decoration: none;
   padding: 6px 12px;
   border-radius: 999px;
@@ -54,7 +55,7 @@
 .nav-cta {
   border: 1px solid rgba(31, 42, 68, 0.6);
   background: #f7f3ea;
-  color: #1f2a44;
+  color: #000;
   padding: 10px 18px;
   border-radius: 999px;
   font-weight: 600;
@@ -93,6 +94,8 @@
   align-items: flex-start;
   gap: 6px;
   margin: 0 auto;
+  font-family: "Crimson Pro", "Merriweather", serif;
+  color: #000;
 }
 
 .hero-line {
@@ -105,8 +108,8 @@
 
 .hero-subline {
   display: block;
-  font-size: 0.85em;
-  color: inherit;
+  font-size: 1em;
+  color: #000;
 }
 
 .typing-container {
@@ -190,14 +193,15 @@
 
 .typing-text {
   display: inline-block;
+  color: #000;
 }
 
-.typing-underline {
-  width: 72%;
-  height: 2px;
-  margin-top: 8px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, rgba(200, 216, 255, 0.1), rgba(200, 216, 255, 0.9), rgba(200, 216, 255, 0.1));
+.typing-cursor {
+  color: #000;
+}
+
+.subtitle {
+  color: #000;
 }
 
 

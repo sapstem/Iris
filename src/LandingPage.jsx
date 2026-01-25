@@ -59,14 +59,13 @@ function LandingPage() {
                 Generate {' '}
                 <span className="typing-container">
                   <span className="typing-line">
-                    <span className="typing-text" data-text={currentText}>
-                      {currentText}
-                    </span>
-                    <span className="typing-cursor">|</span>
-                  </span>
-                  <span className="typing-underline" aria-hidden="true" />
+                <span className="typing-text" data-text={currentText}>
+                  {currentText}
                 </span>
+                <span className="typing-cursor">|</span>
               </span>
+            </span>
+          </span>
               <span className="hero-subline">from your notes</span>
             </h1>
             <p className="subtitle">
