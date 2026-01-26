@@ -46,8 +46,8 @@ function LandingPage() {
           <a href="#how-it-works">How it works</a>
           <a href="#faq">FAQ</a>
         </nav>
-        <button className="nav-cta" onClick={() => navigate('/auth')}>
-          Start learning
+        <button className="cta-primary nav-cta-primary" onClick={() => navigate('/auth')}>
+          Start Learning
         </button>
       </header>
       {/* Hero Section - Your existing content */}
@@ -66,10 +66,10 @@ function LandingPage() {
               </span>
             </span>
           </span>
-              <span className="hero-subline">from your notes</span>
+              <span className="hero-subline">from your materials</span>
             </h1>
             <p className="subtitle">
-              Transform your notes into summaries, flashcards, and study guides in seconds
+              any format in, study materials out.
             </p>
             
             <div className="cta-group">

@@ -13,7 +13,16 @@ body {
   -webkit-font-smoothing: antialiased;
   margin: 0;
   overflow-x: hidden;
-  background: #fdf4ed; /*homescreen bg color*/
+  background: var(--page-bg); /*homescreen bg color*/
+}
+
+:root {
+  --page-bg: #fdf4ed;
+  --text-primary: #000;
+  --button-fill: var(--page-bg);
+  --button-hover-fill: #ffffff;
+  --button-border: rgba(0, 0, 0, 0.2);
+  --button-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
 }
 
 .video-background {
@@ -58,9 +67,9 @@ body::before {
 }
 
 .nav-cta {
-  background: rgba(107, 87, 188, 0.15);
+  background: rgb(255, 249, 240);
   backdrop-filter: blur(10px);
-  color: rgb(47, 41, 135); /* button text color */
+  color: rgb(10, 10, 15); /* button text color */
   padding: 12px 28px;
   border-radius: 24px;
   font-size: 15px;
@@ -147,22 +156,23 @@ than having it uncentered  */
 }
 
 .cta-primary {
-  background: rgba(255, 255, 255, 0.9);
-  color: #1a1a1a;
+  background: var(--button-fill);
+  color: var(--text-primary);
   padding: 18px 48px;
-  border-radius: 14px;
+  border-radius: 999px;
   font-size: 17px;
   font-weight: 600;
-  border: none;
+  border: 1px solid var(--button-border);
   cursor: pointer;
   transition: all 0.3s ease;
   letter-spacing: -0.01em;
 }
 
 .cta-primary:hover {
-  background: #ffffff;
+  background: var(--button-hover-fill);
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(255, 255, 255, 0.2);
+  box-shadow: var(--button-shadow);
+  border: 1px solid var(--button-border);
 }
 
 .cta-secondary {
