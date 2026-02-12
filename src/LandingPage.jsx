@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import './LandingPage.css'
+import irisLogo from './assets/irislogo.png'
 
 const ROTATING_WORDS = ['summaries', 'flashcards', 'guides', 'notes', 'quizzes']
 
@@ -39,7 +40,7 @@ function LandingPage() {
     <div className="landing-page">
       <header className="landing-nav">
         <div className="nav-brand">
-          Iris
+          <img className="nav-logo-image" src={irisLogo} alt="Iris logo" />
         </div>
         <nav className="nav-links" aria-label="Primary">
           <Link to="/about">About me</Link>

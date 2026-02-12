@@ -98,16 +98,11 @@
 }
 
 .conversation-view .logo-mark {
-  width: 36px;
-  height: 36px;
-  background: #1a1a1a;
-  color: white;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 16px;
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  object-position: center;
+  flex-shrink: 0;
 }
 
 .conversation-view .logo-name {
@@ -619,8 +614,7 @@
 }
 
 .conversation-view.theme-dark .logo-mark {
-  background: #f5f6f8;
-  color: #111318;
+  opacity: 0.95;
 }
 
 .conversation-view.theme-dark .logo-name {

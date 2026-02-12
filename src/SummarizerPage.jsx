@@ -6,6 +6,7 @@ import './SummarizerPage.css'
 import UploadModal from './UploadModal'
 import LinkModal from './LinkModal'
 import PasteModal from './PasteModal'
+import irisLogo from './assets/irislogo.png'
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
@@ -269,7 +270,7 @@ ${noteText}`
         <div className="studio-rail-scroll">
         <div className="studio-header">
           <button className="logo-button" type="button" onClick={() => navigate('/summarizer')}>
-            <div className="logo-mark">I</div>
+            <img className="logo-mark" src={irisLogo} alt="Iris logo" />
             <span className="logo-name">Iris</span>
           </button>
           <button

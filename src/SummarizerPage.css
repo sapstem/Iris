@@ -71,21 +71,15 @@
 }
 
 .logo-mark {
-  width: 32px;
-  height: 32px;
-  background: #1a1a1a;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: 700;
-  font-size: 18px;
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  object-position: center;
+  flex-shrink: 0;
 }
 
 .studio-shell.theme-dark .logo-mark {
-  background: #f5f5f5;
-  color: #111318;
+  opacity: 0.95;
 }
 
 .logo-name {

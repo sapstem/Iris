@@ -4,6 +4,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import FlashcardView from './FlashcardView'
 import NotesView from './NotesView'
 import './ConversationView.css'
+import irisLogo from './assets/irislogo.png'
 import {
   CardsIcon,
   ChatIcon,
@@ -158,7 +159,7 @@ User's question: ${userMessage}`
           }}
           aria-label="Go to dashboard"
         >
-          <div className="logo-mark">I</div>
+          <img className="logo-mark" src={irisLogo} alt="Iris logo" />
         </button>
 
         <div className="sidebar-actions">
