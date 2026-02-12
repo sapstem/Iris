@@ -1081,7 +1081,7 @@
   width: 100%;
   border: 1px solid #e5e1d8;
   border-radius: 10px;
-  padding: 11px 50px 11px 14px;
+  padding: 11px 14px;
   font-size: 0.92rem;
   background: #ffffff;
   color: #1a1a1a;
@@ -1091,13 +1091,6 @@
   background: #1d2026;
   border-color: #2f3642;
   color: #edf0f6;
-}
-
-.workspace-search-btn {
-  right: 8px;
-  width: 30px;
-  height: 30px;
-  border-radius: 7px;
 }
 
 .studio-hero {

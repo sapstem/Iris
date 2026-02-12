@@ -68,6 +68,7 @@ function SummarizerPage() {
   const [activeSpace, setActiveSpace] = useState(null)
   const [showCreateSpace, setShowCreateSpace] = useState(false)
   const [newSpaceName, setNewSpaceName] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [theme, setTheme] = useState('dark')
@@ -156,6 +157,25 @@ function SummarizerPage() {
   const filteredSummaries = activeSpace
     ? savedSummaries.filter((summary) => summary.space_id === activeSpace)
     : savedSummaries.filter((summary) => summary.space_id === null)
+
+  const normalizedSearch = searchQuery.trim().toLowerCase()
+
+  const visibleSpaces = normalizedSearch
+    ? spaces.filter((space) => {
+        const inSpaceName = (space.name || '').toLowerCase().includes(normalizedSearch)
+        if (inSpaceName) return true
+        return savedSummaries.some((summary) =>
+          summary.space_id === space.id &&
+          `${summary.title || ''} ${summary.content || ''}`.toLowerCase().includes(normalizedSearch)
+        )
+      })
+    : spaces
+
+  const visibleRecent = normalizedSearch
+    ? filteredSummaries.filter((item) =>
+        `${item.title || ''} ${item.content || ''}`.toLowerCase().includes(normalizedSearch)
+      )
+    : filteredSummaries
 
   const formatRelativeTime = (value) => {
     if (!value) return 'Updated recently'
@@ -370,7 +390,7 @@ ${noteText}`
 
         <div className="studio-section">
           <p className="studio-label">Recent Activity</p>
-          {filteredSummaries.slice(0, 4).map((item) => (
+          {visibleRecent.slice(0, 4).map((item) => (
             <button
               key={item.id}
               className="studio-link recent-item"
@@ -380,8 +400,10 @@ ${noteText}`
               <span className="recent-meta">{getRecentContext(item)}</span>
             </button>
           ))}
-          {filteredSummaries.length === 0 && (
-            <p className="studio-empty">No recent conversations</p>
+          {visibleRecent.length === 0 && (
+            <p className="studio-empty">
+              {normalizedSearch ? 'No activity matches your search' : 'No recent conversations'}
+            </p>
           )}
         </div>
 
@@ -447,13 +469,9 @@ ${noteText}`
             <input
               type="text"
               placeholder="Search projects or notes"
-              value={noteText}
-              onChange={(e) => setNoteText(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && runSummarize()}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button className="send-btn workspace-search-btn" onClick={runSummarize} disabled={loading}>
-              <ArrowRightIcon className="send-icon" />
-            </button>
           </div>
         </div>
 
@@ -503,7 +521,7 @@ ${noteText}`
             >
               <PlusIcon />
             </div>
-            {spaces.map((space) => {
+            {visibleSpaces.map((space) => {
               const spaceConvos = savedSummaries.filter(
                 (summary) => summary.space_id === space.id
               )
@@ -526,6 +544,12 @@ ${noteText}`
                 </div>
               )
             })}
+            {visibleSpaces.length === 0 && normalizedSearch && (
+              <div className="space-card">
+                <p className="space-title">No projects found</p>
+                <p className="space-sub">Try a different search term.</p>
+              </div>
+            )}
           </div>
         </div>
 

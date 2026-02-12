@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import NotesView from './NotesView'
 import './ProjectWorkspacePage.css'
 import irisLogo from './assets/irislogo.png'
 
@@ -37,9 +36,9 @@ function ProjectWorkspacePage() {
   const [avatarUrl, setAvatarUrl] = useState('')
   const [spaces, setSpaces] = useState([])
   const [conversations, setConversations] = useState([])
-  const [activeConversationId, setActiveConversationId] = useState(null)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     let mounted = true
@@ -90,20 +89,22 @@ function ProjectWorkspacePage() {
     [conversations, currentSpaceId]
   )
 
-  useEffect(() => {
-    if (projectConversations.length === 0) {
-      setActiveConversationId(null)
-      return
-    }
-    setActiveConversationId((prev) => {
-      if (prev && projectConversations.some((item) => item.id === prev)) return prev
-      return projectConversations[0].id
+  const filteredConversations = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase()
+    if (!q) return projectConversations
+    return projectConversations.filter((item) => {
+      const title = (item.title || '').toLowerCase()
+      const content = (item.content || '').toLowerCase()
+      return title.includes(q) || content.includes(q)
     })
-  }, [projectConversations])
+  }, [projectConversations, searchQuery])
 
-  const activeConversation = projectConversations.find(
-    (conversation) => conversation.id === activeConversationId
-  )
+  const formatDate = (value) => {
+    if (!value) return 'Updated recently'
+    const date = new Date(value)
+    if (Number.isNaN(date.getTime())) return 'Updated recently'
+    return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+  }
 
   const handleLogout = () => {
     fetchJson('/api/auth/logout', { method: 'POST' })
@@ -143,22 +144,6 @@ function ProjectWorkspacePage() {
                 <p className="project-meta-label">Project</p>
                 <h2>{currentSpace?.name || 'Workspace'}</h2>
               </div>
-
-              <div className="project-doc-list">
-                {projectConversations.map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    className={`project-doc-item ${item.id === activeConversationId ? 'active' : ''}`}
-                    onClick={() => setActiveConversationId(item.id)}
-                  >
-                    <span className="project-doc-title">{(item.title || item.content || 'Untitled').slice(0, 30)}</span>
-                  </button>
-                ))}
-                {projectConversations.length === 0 && (
-                  <p className="project-empty">No notes in this project yet.</p>
-                )}
-              </div>
             </>
           )}
         </div>
@@ -187,25 +172,61 @@ function ProjectWorkspacePage() {
 
       <main className="project-main">
         <header className="project-main-header">
-          <button type="button" onClick={() => navigate('/summarizer')} className="project-back-btn">
-            Back
-          </button>
-          <div className="project-main-header-copy">
-            <p>{currentSpace?.name || 'Project'}</p>
-            <h1>{activeConversation?.notes_title || activeConversation?.title || 'Untitled Document'}</h1>
+          <div className="project-breadcrumb">
+            <span className="crumb-home">Home</span>
+            <span className="crumb-sep">/</span>
+            <span className="crumb-current">{currentSpace?.name || 'Project'}</span>
+          </div>
+          <div className="project-top-actions">
+            <div className="project-search-wrap">
+              <input
+                type="text"
+                placeholder="Search documents"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+              />
+            </div>
+            <button type="button" className="project-share-btn">Share</button>
           </div>
         </header>
 
         <section className="project-doc-area">
-          {activeConversation ? (
-            <NotesView conversation={activeConversation} />
-          ) : (
-            <div className="project-empty-state">
-              <h2>No notes yet</h2>
-              <p>Create or summarize content from the dashboard to start a document in this project.</p>
-              <button type="button" onClick={() => navigate('/summarizer')}>Go to dashboard</button>
+          <div className="project-board">
+            <div className="project-board-actions">
+              <button
+                type="button"
+                className="project-action-btn"
+                onClick={() => navigate('/summarizer')}
+              >
+                + New Note
+              </button>
+              <button type="button" className="project-action-btn">
+                + New Folder
+              </button>
             </div>
-          )}
+
+            {filteredConversations.length > 0 ? (
+              <div className="project-doc-grid">
+                {filteredConversations.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className="project-doc-card"
+                    onClick={() => navigate(`/conversation/${item.id}`)}
+                  >
+                    <p className="project-doc-card-title">{item.title || 'Untitled Document'}</p>
+                    <p className="project-doc-card-meta">{formatDate(item.updated_at || item.created_at)}</p>
+                    <p className="project-doc-card-preview">{(item.content || '').slice(0, 90) || 'Open to view notes and study modes.'}</p>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="project-empty-state">
+                <h2>There's nothing in this folder yet!</h2>
+                <p>Add folders or notes to see them here.</p>
+              </div>
+            )}
+          </div>
         </section>
       </main>
     </div>
