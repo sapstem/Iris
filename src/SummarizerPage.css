@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=chevron_right');
+
 /* Layout Container */
 .studio-shell {
   display: flex;
@@ -130,6 +132,26 @@
 .studio-shell.theme-dark .sidebar-toggle-icon,
 .studio-shell.theme-dark .sidebar-toggle-icon * {
   stroke: #f5f6f8;
+}
+
+.sidebar-toggle-glyph {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+  font-size: 20px;
+  line-height: 1;
+  color: #1a1a1a;
+  transition: transform 0.2s ease;
+}
+
+.studio-shell.theme-dark .sidebar-toggle-glyph {
+  color: #f5f6f8;
+}
+
+.sidebar-toggle-glyph.is-open {
+  transform: rotate(180deg);
 }
 
 .studio-shell.theme-dark .sidebar-toggle {
@@ -1011,5 +1033,242 @@
   
   .studio-main {
     padding: 20px 30px;
+  }
+}
+
+/* Workspace refresh */
+.studio-shell {
+  background: #faf9f6;
+}
+
+.studio-shell.theme-dark {
+  background: #15171c;
+  color: #e4e7ee;
+}
+
+.workspace-top {
+  max-width: 900px;
+  margin: 0 auto 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.workspace-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.workspace-title {
+  font-size: 1.9rem;
+  font-weight: 600;
+  color: #1c1d21;
+  margin: 0;
+}
+
+.studio-shell.theme-dark .workspace-title {
+  color: #f2f4f8;
+}
+
+.workspace-search {
+  width: min(380px, 100%);
+  position: relative;
+}
+
+.workspace-search input {
+  width: 100%;
+  border: 1px solid #e5e1d8;
+  border-radius: 10px;
+  padding: 11px 50px 11px 14px;
+  font-size: 0.92rem;
+  background: #ffffff;
+  color: #1a1a1a;
+}
+
+.studio-shell.theme-dark .workspace-search input {
+  background: #1d2026;
+  border-color: #2f3642;
+  color: #edf0f6;
+}
+
+.workspace-search-btn {
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+}
+
+.studio-hero {
+  margin-bottom: 28px;
+}
+
+.action-row {
+  gap: 10px;
+}
+
+.action-tile,
+.prompt-bar,
+.summary-output,
+.space-card {
+  border: 1px solid #e5e1d8;
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.studio-shell.theme-dark .action-tile,
+.studio-shell.theme-dark .prompt-bar,
+.studio-shell.theme-dark .summary-output,
+.studio-shell.theme-dark .space-card {
+  background: #1d2026;
+  border-color: #2f3642;
+}
+
+.action-tile {
+  padding: 16px 14px;
+  border-radius: 10px;
+  text-align: left;
+}
+
+.action-tile .icon {
+  margin-bottom: 8px;
+}
+
+.action-tile .icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.action-tile .title {
+  font-size: 0.92rem;
+}
+
+.action-tile .sub {
+  font-size: 0.8rem;
+}
+
+.action-tile:hover,
+.space-card:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: #d7d2c7;
+}
+
+.studio-shell.theme-dark .action-tile:hover,
+.studio-shell.theme-dark .space-card:hover {
+  border-color: #3b4554;
+}
+
+.spaces-area {
+  max-width: 980px;
+}
+
+.spaces-header h2 {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #5b605d;
+}
+
+.studio-shell.theme-dark .spaces-header h2 {
+  color: #9ba5b3;
+}
+
+.spaces-grid {
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+
+.space-card {
+  border-radius: 10px;
+  min-height: 132px;
+  position: relative;
+}
+
+.space-card::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+  width: calc(100% - 8px);
+  height: calc(100% - 8px);
+  border: 1px solid #ece8df;
+  border-radius: 10px;
+  z-index: -1;
+}
+
+.studio-shell.theme-dark .space-card::after {
+  border-color: #262d38;
+}
+
+.space-title {
+  font-size: 0.96rem;
+}
+
+.space-sub {
+  font-size: 0.8rem;
+}
+
+.capture-panel {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.capture-panel .prompt-bar {
+  margin-top: 8px;
+}
+
+.recent-item {
+  display: block;
+  text-align: left;
+  padding: 10px 12px;
+}
+
+.recent-title {
+  display: block;
+  font-size: 0.85rem;
+  color: inherit;
+}
+
+.recent-meta {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.74rem;
+  color: #8c95a3;
+}
+
+.studio-shell.theme-dark .recent-meta {
+  color: #7f8a99;
+}
+
+.prompt-bar {
+  border-radius: 10px;
+}
+
+.prompt-bar input {
+  font-size: 0.92rem;
+}
+
+.summary-output {
+  border-radius: 10px;
+}
+
+@media (max-width: 1024px) {
+  .workspace-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .workspace-title-wrap {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .workspace-title {
+    text-align: center;
+  }
+
+  .workspace-search {
+    width: 100%;
   }
 }

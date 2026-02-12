@@ -10,8 +10,6 @@ import irisLogo from './assets/irislogo.png'
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
-  ChevronDoubleLeftIcon,
-  ChevronDoubleRightIcon,
   ChevronDownIcon,
   CloseIcon,
   ClipboardIcon,
@@ -159,6 +157,31 @@ function SummarizerPage() {
     ? savedSummaries.filter((summary) => summary.space_id === activeSpace)
     : savedSummaries.filter((summary) => summary.space_id === null)
 
+  const formatRelativeTime = (value) => {
+    if (!value) return 'Updated recently'
+    const time = new Date(value).getTime()
+    if (Number.isNaN(time)) return 'Updated recently'
+    const diffMs = Date.now() - time
+    const diffMin = Math.floor(diffMs / 60000)
+    if (diffMin < 1) return 'Just now'
+    if (diffMin < 60) return `Edited ${diffMin}m ago`
+    const diffHr = Math.floor(diffMin / 60)
+    if (diffHr < 24) return `Edited ${diffHr}h ago`
+    const diffDay = Math.floor(diffHr / 24)
+    return `Edited ${diffDay}d ago`
+  }
+
+  const getRecentContext = (item) => {
+    const cardCount = Array.isArray(item?.flashcards) ? item.flashcards.length : 0
+    if (cardCount > 0) {
+      return `${cardCount} cards ready`
+    }
+    if (Array.isArray(item?.takeaways) && item.takeaways.length > 0) {
+      return `${item.takeaways.length} key points`
+    }
+    return formatRelativeTime(item?.updated_at || item?.created_at)
+  }
+
   const runSummarize = async () => {
     if (!noteText.trim()) {
       setStatus('Enter some text first.')
@@ -279,11 +302,14 @@ ${noteText}`
             onClick={() => setSidebarCollapsed((prev) => !prev)}
             aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
-            {sidebarCollapsed ? (
-              <ChevronDoubleRightIcon className="sidebar-toggle-icon" />
-            ) : (
-              <ChevronDoubleLeftIcon className="sidebar-toggle-icon" />
-            )}
+            <span
+              className={`material-symbols-outlined sidebar-toggle-glyph ${
+                sidebarCollapsed ? '' : 'is-open'
+              }`}
+              aria-hidden="true"
+            >
+              chevron_right
+            </span>
           </button>
         </div>
 
@@ -343,16 +369,15 @@ ${noteText}`
         </div>
 
         <div className="studio-section">
-          <p className="studio-label">Recents</p>
+          <p className="studio-label">Recent Activity</p>
           {filteredSummaries.slice(0, 4).map((item) => (
             <button
               key={item.id}
               className="studio-link recent-item"
               onClick={() => navigate(`/conversation/${item.id}`)}
             >
-              <span className="studio-text">
-                {(item.content || '').slice(0, 25) || 'Summary'}...
-              </span>
+              <span className="studio-text recent-title">{(item.title || item.content || 'Summary').slice(0, 22)}</span>
+              <span className="recent-meta">{getRecentContext(item)}</span>
             </button>
           ))}
           {filteredSummaries.length === 0 && (
@@ -400,9 +425,9 @@ ${noteText}`
       </aside>
 
       <main className="studio-main">
-        <div className="studio-hero">
+        <div className="workspace-top">
           {activeSpace ? (
-            <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+            <div className="workspace-title-wrap">
               <button className="all-notes-btn"
                 onClick={() => {
                   setActiveSpace(null)
@@ -411,13 +436,28 @@ ${noteText}`
                 <span className="all-notes-icon"><ArrowLeftIcon /></span>
                 All Notes
               </button>
-              <h1>
+              <h1 className="workspace-title">
                 {spaces.find(s => s.id === activeSpace)?.name || 'Space'}
               </h1>
             </div>
           ) : (
-            <h1>Hey {displayName}, ready to learn?</h1>
+            <h1 className="workspace-title">{displayName}'s Study Workspace</h1>
           )}
+          <div className="workspace-search">
+            <input
+              type="text"
+              placeholder="Search projects or notes"
+              value={noteText}
+              onChange={(e) => setNoteText(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && runSummarize()}
+            />
+            <button className="send-btn workspace-search-btn" onClick={runSummarize} disabled={loading}>
+              <ArrowRightIcon className="send-icon" />
+            </button>
+          </div>
+        </div>
+
+        <div className="studio-hero">
 
           <div className="action-row">
             <div className="action-tile" onClick={() => setShowUploadModal(true)}>
@@ -449,47 +489,6 @@ ${noteText}`
               </div>
             </div>
           </div>
-
-          <div className="prompt-bar">
-            <input
-              type="text"
-              placeholder="Learn anything"
-              value={noteText}
-              onChange={(e) => setNoteText(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && runSummarize()}
-            />
-            <div className="prompt-controls">
-            </div>
-            <button className="send-btn" onClick={runSummarize} disabled={loading}>
-              <ArrowRightIcon className="send-icon" />
-            </button>
-          </div>
-
-          {status && <p className="muted">{status}</p>}
-
-          {(overview || takeaways.length > 0 || keywords.length > 0) && (
-            <div className="summary-output">
-              {overview && <p className="summary-overview">{overview}</p>}
-              <div className="summary-grid">
-                {takeaways.length > 0 && (
-                  <div>
-                    <p className="summary-heading">Takeaways</p>
-                    <ul>
-                      {takeaways.map((t, i) => <li key={i}>{t}</li>)}
-                    </ul>
-                  </div>
-                )}
-                {keywords.length > 0 && (
-                  <div>
-                    <p className="summary-heading">Keywords</p>
-                    <div className="keyword-chips">
-                      {keywords.map((k, i) => <span key={i} className="chip">{k}</span>)}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
         </div>
 
         <div className="spaces-area">
@@ -528,6 +527,46 @@ ${noteText}`
               )
             })}
           </div>
+        </div>
+
+        <div className="capture-panel">
+          <div className="prompt-bar">
+            <input
+              type="text"
+              placeholder="Quick capture: paste notes and press enter"
+              value={noteText}
+              onChange={(e) => setNoteText(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && runSummarize()}
+            />
+            <button className="send-btn" onClick={runSummarize} disabled={loading}>
+              <ArrowRightIcon className="send-icon" />
+            </button>
+          </div>
+          {status && <p className="muted">{status}</p>}
+
+          {(overview || takeaways.length > 0 || keywords.length > 0) && (
+            <div className="summary-output">
+              {overview && <p className="summary-overview">{overview}</p>}
+              <div className="summary-grid">
+                {takeaways.length > 0 && (
+                  <div>
+                    <p className="summary-heading">Takeaways</p>
+                    <ul>
+                      {takeaways.map((t, i) => <li key={i}>{t}</li>)}
+                    </ul>
+                  </div>
+                )}
+                {keywords.length > 0 && (
+                  <div>
+                    <p className="summary-heading">Keywords</p>
+                    <div className="keyword-chips">
+                      {keywords.map((k, i) => <span key={i} className="chip">{k}</span>)}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </main>
 
