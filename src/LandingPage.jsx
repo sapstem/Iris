@@ -153,8 +153,8 @@ function LandingPage() {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path d="M6 10C72 6 116 16 132 54" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
-            <path d="M122 46L132 54L124 65" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M6 8C78 8 126 20 142 56" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+            <path d="M132 48L142 56L134 66" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
         <p className="section-subtitle">Sample question {quizIndex + 1} of {QUIZ_DEMO_QUESTIONS.length}</p>
@@ -209,29 +209,30 @@ function LandingPage() {
       {/* How It Works Section */}
       <section className="how-it-works" id="how-it-works">
         <h2 className="section-title">How It Works</h2>
-        <div className="steps">
-          <div className="step">
-            <div className="step-number">1</div>
-            <h3>Paste Your Notes</h3>
-            <p>Copy and paste any text - lecture notes, articles, or textbook excerpts</p>
+        <div className="steps-ink-path">
+          <div className="ink-connector" aria-hidden="true" />
+          <div className="step step-ink step-left">
+            <div className="step-number-ink" aria-hidden="true"><span>1</span></div>
+            <h3>Input Your Materials</h3>
+            <p>Add lecture notes, reading excerpts, links, or transcripts into one workspace.</p>
           </div>
           
-          <div className="step">
-            <div className="step-number">2</div>
-            <h3>AI Magic</h3>
-            <p>Our AI analyzes your content and identifies key concepts</p>
+          <div className="step step-ink step-right">
+            <div className="step-number-ink" aria-hidden="true"><span>2</span></div>
+            <h3>Iris Synthesizes</h3>
+            <p>Iris reads your source material and maps themes, key ideas, and terms.</p>
           </div>
           
-          <div className="step">
-            <div className="step-number">3</div>
-            <h3>Get Results</h3>
-            <p>Receive summaries, flashcards, and study guides instantly</p>
+          <div className="step step-ink step-left">
+            <div className="step-number-ink" aria-hidden="true"><span>3</span></div>
+            <h3>Generate Study Aids</h3>
+            <p>Create structured notes, focused summaries, flashcards, and quiz prompts.</p>
           </div>
           
-          <div className="step">
-            <div className="step-number">4</div>
-            <h3>Study & Review</h3>
-            <p>Use the generated materials to study efficiently</p>
+          <div className="step step-ink step-right">
+            <div className="step-number-ink" aria-hidden="true"><span>4</span></div>
+            <h3>Master the Material</h3>
+            <p>Review with active recall, refine weak spots, and track progress by project.</p>
           </div>
         </div>
       </section>
