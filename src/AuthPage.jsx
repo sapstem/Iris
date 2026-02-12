@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import './AuthPage.css'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5175'
@@ -7,13 +7,22 @@ const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || ''
 
 function AuthPage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const googleButtonRef = useRef(null)
-  const [mode, setMode] = useState('signin')
+  const initialMode = searchParams.get('mode') === 'signup' ? 'signup' : 'signin'
+  const [mode, setMode] = useState(initialMode)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [status, setStatus] = useState('')
   const [googleReady, setGoogleReady] = useState(false)
+
+  useEffect(() => {
+    const modeParam = searchParams.get('mode')
+    if (modeParam === 'signup' || modeParam === 'signin') {
+      setMode(modeParam)
+    }
+  }, [searchParams])
 
   useEffect(() => {
     if (!GOOGLE_CLIENT_ID) {

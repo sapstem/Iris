@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import LandingPage from './LandingPage'
 import AuthPage from './AuthPage'
 import SummarizerPage from './SummarizerPage'
+import About from './pages/About'
+import HowitWorks from './pages/HowitWorks'
 import './App.css'
 import ConversationView from './ConversationView'
 
@@ -41,6 +43,8 @@ function AppFrame() {
     <>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/how-it-works" element={<HowitWorks />} />
         <Route path="/summarizer" element={(
           <RequireAuth>
             <SummarizerPage />

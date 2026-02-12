@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './LandingPage.css'
 
 const ROTATING_WORDS = ['summaries', 'flashcards', 'guides', 'notes', 'quizzes']
@@ -42,13 +42,18 @@ function LandingPage() {
           Iris
         </div>
         <nav className="nav-links" aria-label="Primary">
-          <a href="#about">About</a>
-          <a href="#how-it-works">How it works</a>
+          <Link to="/about">About me</Link>
+          <Link to="/how-it-works">How it works</Link>
           <a href="#faq">FAQ</a>
         </nav>
-        <button className="cta-primary nav-cta-primary" onClick={() => navigate('/auth')}>
-          Start Learning
-        </button>
+        <div className="nav-auth-actions">
+          <Link to="/auth?mode=signin" className="nav-login-link">
+            Log in
+          </Link>
+          <Link to="/auth?mode=signup" className="nav-signup-btn">
+            Sign up
+          </Link>
+        </div>
       </header>
       {/* Hero Section - Your existing content */}
       <section className="hero-section">
