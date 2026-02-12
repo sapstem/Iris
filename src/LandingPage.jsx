@@ -293,7 +293,7 @@ function LandingPage() {
 
       {/* Final CTA Section */}
       <section className="final-cta">
-        <h2>Ready to Transform Your Study Habits?</h2>
+        <h2>Ready to <span className="marker-underline">Transform</span> Your Study Habits?</h2>
         <p>Join students who are already learning smarter with AI</p>
         <button className="cta-primary" onClick={() => navigate('/auth')}>
           Start Learning Now
