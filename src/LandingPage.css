@@ -344,6 +344,8 @@
 
 .notes-sidebar {
   text-align: left;
+  border-right: 1px solid #e5e1d8;
+  padding-right: 18px;
 }
 
 .notes-title-group {
@@ -354,7 +356,7 @@
 }
 
 .notes-pen-icon {
-  color: #1a4d8f;
+  color: #111;
   font-size: 1.5rem;
   line-height: 1;
 }
@@ -363,16 +365,60 @@
   margin: 0;
   font-size: 2rem;
   font-family: "Merriweather", serif;
-  color: #1d2f45;
+  color: #111;
   letter-spacing: -0.01em;
 }
 
 .notes-description {
   margin: 0;
-  color: #53565d;
+  list-style: none;
+  padding-left: 0;
+  color: #3e424b;
   line-height: 1.5;
   font-size: 1.03rem;
   max-width: 270px;
+}
+
+.notes-description li + li {
+  margin-top: 10px;
+}
+
+.notes-description li {
+  position: relative;
+  padding-left: 22px;
+}
+
+.notes-description li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 11px;
+  height: 11px;
+  border: 1.5px solid #1a4d8f;
+  border-radius: 999px;
+  transform: rotate(-18deg);
+}
+
+.notes-point-title {
+  color: #1a3e70;
+  font-weight: 700;
+  font-size: 1.05em;
+  margin-right: 4px;
+}
+
+.ink-highlight {
+  color: #1a3e70;
+  background: rgba(26, 77, 143, 0.14);
+  border-radius: 3px;
+  padding: 0 4px;
+  font-weight: 600;
+}
+
+.notes-description .yellow-highlight {
+  background: rgba(255, 221, 87, 0.45);
+  padding: 0 3px;
+  border-radius: 2px;
 }
 
 .ink-blue {
@@ -412,20 +458,8 @@
 .notes-card-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-bottom: 16px;
-}
-
-.tag-pill {
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid #dde2eb;
-  background: #f5f8fd;
-  color: #1d3f6b;
-  border-radius: 999px;
-  padding: 6px 12px;
-  font-size: 0.92rem;
-  font-weight: 600;
 }
 
 .notes-expand {
@@ -448,6 +482,27 @@
 
 .notes-card-content p:last-child {
   margin-bottom: 0;
+}
+
+.notes-card-content p:first-child {
+  font-size: 1.22rem;
+}
+
+.notes-card-content strong {
+  font-weight: 700;
+  color: #202733;
+}
+
+.notes-card-content u {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.notes-card-content mark {
+  background: rgba(26, 77, 143, 0.12);
+  color: #1d3f6b;
+  padding: 0 4px;
+  border-radius: 3px;
 }
 
 .hash-tag {
@@ -710,6 +765,11 @@
 
   .notes-description {
     max-width: 100%;
+  }
+
+  .notes-sidebar {
+    border-right: none;
+    padding-right: 0;
   }
 
   .notes-card {

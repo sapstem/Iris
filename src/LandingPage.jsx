@@ -239,19 +239,25 @@ function LandingPage() {
         <div className="notes-container">
           <aside className="notes-sidebar">
             <div className="notes-title-group">
-              <span className="notes-pen-icon" aria-hidden="true">✎</span>
+              <span className="notes-pen-icon" aria-hidden="true">{'\u270E'}</span>
               <h2 className="notes-title">notes</h2>
             </div>
-            <p className="notes-description">
-            Your daily research companion. Annotate your ideas, format for clarity, and consult Iris to bridge gaps in your learning or summarize complex topics.            </p>
-            <p className="notes-reset">
-              <span aria-hidden="true">⏱</span> clears each day, archived automatically.
-            </p>
+            <ul className="notes-description">
+              <li>
+                <span className="notes-point-title">Refine</span> Use the toolbar to{' '}
+                <span className="ink-highlight">bold</span> key concepts or{' '}
+                <span className="ink-highlight">highlight</span> insights you don't want to forget.
+              </li>
+              <li>
+                <span className="notes-point-title">Collaborate</span> Highlight confusing text and ask{' '}
+                <span className="ink-highlight">Iris</span> to explain it,
+                summarize it, or turn it into a quick quiz question.
+              </li>
+            </ul>
           </aside>
 
           <main className="notes-card">
             <header className="notes-card-header">
-              <span className="tag-pill">Notes ^</span>
               <button type="button" className="notes-expand" aria-label="Expand note">
                 ⤢
               </button>
@@ -259,19 +265,26 @@ function LandingPage() {
 
             <div className="notes-card-content">
               <p>
-                This is your daily notes section. A place to jot ideas, dump thoughts and vent.
-                Notes clear each day but you can find them in your archive.
+                <strong>Contemporary Psychology - Lecture 4</strong>
               </p>
               <p>
-                You can use <span className="hash-tag">#tags</span> to save notes about recurring topics
-                you want to find quickly.
+                Today's lecture focused on <strong>Neuroplasticity</strong>, which is the brain's ability to
+                reorganize itself by forming new neural connections throughout life.
               </p>
               <p>
-                I use it like this, <span className="hash-tag">#appidea</span> what would a simple note and
-                study app look like, but with personality?
+                <u>Key Takeaway</u>: The brain isn't "hard-wired" like a computer; it's more like a muscle
+                that adapts to new experiences.
               </p>
               <p>
-                If you delete a note with a hashtag, it also leaves the tag view so things stay clean.
+                <mark>Iris, can you summarize the difference between structural and functional plasticity here?</mark>
+              </p>
+              <p>
+                I need to look up more about the <strong>Hippocampus</strong> and its role in long-term
+                memory. It's fascinating how <u>synaptic pruning</u> works to "delete" unused information to
+                make room for more important data.
+              </p>
+              <p>
+                Note: I should turn these points into flashcards before the study session tonight.
               </p>
             </div>
           </main>
@@ -335,3 +348,5 @@ function LandingPage() {
 }
 
 export default LandingPage
+
+
