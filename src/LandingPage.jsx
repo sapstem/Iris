@@ -4,12 +4,33 @@ import './LandingPage.css'
 import irisLogo from './assets/irislogo.png'
 
 const ROTATING_WORDS = ['summaries', 'flashcards', 'guides', 'notes', 'quizzes']
+const QUIZ_DEMO_QUESTIONS = [
+  {
+    question: 'Which learning method is most effective for long-term recall?',
+    options: ['Re-reading notes repeatedly', 'Active recall with spaced practice', 'Highlighting everything', 'Watching videos at 2x'],
+    answer: 1
+  },
+  {
+    question: 'What does active recall mean?',
+    options: ['Reading summaries silently', 'Testing yourself without looking at notes', 'Copying notes word-for-word', 'Listening to background lectures'],
+    answer: 1
+  },
+  {
+    question: 'When is spaced repetition most useful?',
+    options: ['The night before exams only', 'For repeated review over time', 'Only for math formulas', 'Only when using flashcards'],
+    answer: 1
+  }
+]
 
 function LandingPage() {
   const navigate = useNavigate()
   const [currentWordIndex, setCurrentWordIndex] = useState(0)
   const [currentText, setCurrentText] = useState('')
   const [isDeleting, setIsDeleting] = useState(false)
+  const [quizIndex, setQuizIndex] = useState(0)
+  const [selectedOption, setSelectedOption] = useState(null)
+  const [revealed, setRevealed] = useState(false)
+  const [correctCount, setCorrectCount] = useState(0)
 
   // typing animation effect
   useEffect(() => {
@@ -36,6 +57,32 @@ function LandingPage() {
     return () => clearTimeout(timer)
   }, [currentText, isDeleting, currentWordIndex])
 
+  const currentQuiz = QUIZ_DEMO_QUESTIONS[quizIndex]
+  const isLastQuestion = quizIndex === QUIZ_DEMO_QUESTIONS.length - 1
+
+  const handleQuizAction = () => {
+    if (!revealed) {
+      if (selectedOption === null) return
+      setRevealed(true)
+      if (selectedOption === currentQuiz.answer) {
+        setCorrectCount((prev) => prev + 1)
+      }
+      return
+    }
+
+    if (isLastQuestion) {
+      setQuizIndex(0)
+      setSelectedOption(null)
+      setRevealed(false)
+      setCorrectCount(0)
+      return
+    }
+
+    setQuizIndex((prev) => prev + 1)
+    setSelectedOption(null)
+    setRevealed(false)
+  }
+
   return (
     <div className="landing-page">
       <header className="landing-nav">
@@ -44,7 +91,9 @@ function LandingPage() {
         </div>
         <nav className="nav-links" aria-label="Primary">
           <Link to="/about">About me</Link>
+          <span className="nav-sep" aria-hidden="true">/</span>
           <Link to="/how-it-works">How it works</Link>
+          <span className="nav-sep" aria-hidden="true">/</span>
           <a href="#faq">FAQ</a>
         </nav>
         <div className="nav-auth-actions">
@@ -94,48 +143,67 @@ function LandingPage() {
 
       
       
-<section className="features-section" id="about">
-  <h2 className="section-title">Smarter ways to review, all in one place</h2>
-  <p className="section-subtitle">Upload your material once, and get clean summaries, highlighted key concepts, flashcards, quizzes, and a chat tutor that sticks to your content.</p>
+      <section className="quiz-demo-section" id="quiz-demo">
+        <div className="quiz-annotation" aria-hidden="true">
+          <span className="quiz-annotation-text">try it out</span>
+          <svg
+            className="quiz-annotation-arrow"
+            viewBox="0 0 160 72"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M6 10C72 6 116 16 132 54" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+            <path d="M122 46L132 54L124 65" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+        <p className="section-subtitle">Sample question {quizIndex + 1} of {QUIZ_DEMO_QUESTIONS.length}</p>
 
-  <div className="features-grid">
-    <div className="feature-card">
-      <div className="feature-icon">SUM</div>
-      <h3>Clear summaries</h3>
-      <p>Distilled topic overviews that surface key ideas without the noise.</p>
-    </div>
+        <div className="quiz-demo-card">
+          <p className="quiz-question">{currentQuiz.question}</p>
 
-    <div className="feature-card">
-      <div className="feature-icon">KEY</div>
-      <h3>Keyword highlights</h3>
-      <p>Instant key takeaways for quick revision and class recaps.</p>
-    </div>
+          <div className="quiz-options">
+            {currentQuiz.options.map((option, index) => {
+              const isSelected = selectedOption === index
+              const isCorrect = index === currentQuiz.answer
+              const isWrongPick = revealed && isSelected && !isCorrect
+              const classes = [
+                'quiz-option',
+                isSelected ? 'selected' : '',
+                revealed && isCorrect ? 'correct' : '',
+                isWrongPick ? 'wrong' : ''
+              ].join(' ')
+              return (
+                <button
+                  key={option}
+                  type="button"
+                  className={classes}
+                  onClick={() => !revealed && setSelectedOption(index)}
+                >
+                  {option}
+                </button>
+              )
+            })}
+          </div>
 
-    <div className="feature-card">
-      <div className="feature-icon">CARD</div>
-      <h3>Flashcards</h3>
-      <p>Active recall practice generated from your notes to lock it in.</p>
-    </div>
+          {revealed && (
+            <p className="quiz-feedback">
+              {selectedOption === currentQuiz.answer ? 'Correct.' : `Correct answer: ${currentQuiz.options[currentQuiz.answer]}`}
+            </p>
+          )}
 
-    <div className="feature-card">
-      <div className="feature-icon">QUIZ</div>
-      <h3>Exam quizzes</h3>
-      <p>Self-testing with targeted questions so you know what sticks.</p>
-    </div>
-
-    <div className="feature-card">
-      <div className="feature-icon">CHAT</div>
-      <h3>AI chat tutor</h3>
-      <p>Ask questions and get answers grounded in your uploaded content.</p>
-    </div>
-
-    <div className="feature-card">
-      <div className="feature-icon">SYNC</div>
-      <h3>Topic overviews</h3>
-      <p>Organized breakdowns by concept so you can study by theme.</p>
-    </div>
-  </div>
-</section>
+          <div className="quiz-footer">
+            <p className="quiz-score">Score: {correctCount} / {QUIZ_DEMO_QUESTIONS.length}</p>
+            <button
+              type="button"
+              className="cta-primary quiz-action"
+              onClick={handleQuizAction}
+              disabled={!revealed && selectedOption === null}
+            >
+              {!revealed ? 'Check answer' : isLastQuestion ? 'Restart' : 'Next question'}
+            </button>
+          </div>
+        </div>
+      </section>
 
       {/* How It Works Section */}
       <section className="how-it-works" id="how-it-works">
@@ -164,6 +232,49 @@ function LandingPage() {
             <h3>Study & Review</h3>
             <p>Use the generated materials to study efficiently</p>
           </div>
+        </div>
+      </section>
+
+      <section className="notes-showcase-section" id="notes-showcase">
+        <div className="notes-container">
+          <aside className="notes-sidebar">
+            <div className="notes-title-group">
+              <span className="notes-pen-icon" aria-hidden="true">✎</span>
+              <h2 className="notes-title">notes</h2>
+            </div>
+            <p className="notes-description">
+            Your daily research companion. Annotate your ideas, format for clarity, and consult Iris to bridge gaps in your learning or summarize complex topics.            </p>
+            <p className="notes-reset">
+              <span aria-hidden="true">⏱</span> clears each day, archived automatically.
+            </p>
+          </aside>
+
+          <main className="notes-card">
+            <header className="notes-card-header">
+              <span className="tag-pill">Notes ^</span>
+              <button type="button" className="notes-expand" aria-label="Expand note">
+                ⤢
+              </button>
+            </header>
+
+            <div className="notes-card-content">
+              <p>
+                This is your daily notes section. A place to jot ideas, dump thoughts and vent.
+                Notes clear each day but you can find them in your archive.
+              </p>
+              <p>
+                You can use <span className="hash-tag">#tags</span> to save notes about recurring topics
+                you want to find quickly.
+              </p>
+              <p>
+                I use it like this, <span className="hash-tag">#appidea</span> what would a simple note and
+                study app look like, but with personality?
+              </p>
+              <p>
+                If you delete a note with a hashtag, it also leaves the tag view so things stay clean.
+              </p>
+            </div>
+          </main>
         </div>
       </section>
 
