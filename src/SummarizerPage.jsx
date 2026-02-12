@@ -360,7 +360,7 @@ ${noteText}`
               key={space.id}
               className={`studio-link space-item ${activeSpace === space.id ? 'active' : ''}`}
               onClick={() => {
-                setActiveSpace(space.id)
+                navigate(`/project/${space.id}`)
               }}
             >
               <span className="studio-text">{space.name}</span>
@@ -513,7 +513,7 @@ ${noteText}`
                   key={space.id} 
                   className="space-card"
                   onClick={() => {
-                    setActiveSpace(space.id)
+                    navigate(`/project/${space.id}`)
                   }}
                 >
                   <p className="space-title">{space.name}</p>

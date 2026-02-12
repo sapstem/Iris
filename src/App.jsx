@@ -5,6 +5,7 @@ import AuthPage from './AuthPage'
 import SummarizerPage from './SummarizerPage'
 import About from './pages/About'
 import HowitWorks from './pages/HowitWorks'
+import ProjectWorkspacePage from './ProjectWorkspacePage'
 import './App.css'
 import ConversationView from './ConversationView'
 
@@ -48,6 +49,12 @@ function AppFrame() {
         <Route path="/summarizer" element={(
           <RequireAuth>
             <SummarizerPage />
+          </RequireAuth>
+        )}
+        />
+        <Route path="/project/:spaceId" element={(
+          <RequireAuth>
+            <ProjectWorkspacePage />
           </RequireAuth>
         )}
         />
