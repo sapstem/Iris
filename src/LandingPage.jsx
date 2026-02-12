@@ -124,6 +124,7 @@ function LandingPage() {
               <span className="hero-subline">from your materials</span>
             </h1>
             <p className="subtitle">
+              <span className="subtitle-dot" aria-hidden="true">✦</span>
               any format in, study materials out.
             </p>
             

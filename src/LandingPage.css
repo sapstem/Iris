@@ -8,13 +8,13 @@
 }
 
 .landing-nav {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 24px;
   padding: 14px 0 18px;
   margin: 0 auto 42px;
-  border-bottom: 1px solid #e7dfd1;
+  border-bottom: 1px dashed #e5e1d8;
 }
 
 .nav-brand {
@@ -25,6 +25,7 @@
   font-size: 1.4rem;
   letter-spacing: 0.02em;
   color: #222;
+  justify-self: start;
 }
 
 .nav-logo-image {
@@ -42,6 +43,7 @@
   font-family: "Trebuchet MS", "Gill Sans", sans-serif;
   font-size: 0.92rem;
   text-transform: none;
+  justify-self: center;
 }
 
 .nav-links a {
@@ -66,6 +68,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  justify-self: end;
 }
 
 .nav-login-link {
@@ -84,10 +87,11 @@
 }
 
 .nav-signup-btn {
-  color: #1f1f1f;
+  color: #ffffff;
   text-decoration: none;
-  background: #fffdf9;
-  border: 1px solid #dbd5ca;
+  background:
+    linear-gradient(145deg, #2f69bf, #2458a8);
+  border: 1px solid #2a5ea9;
   border-radius: 8px;
   padding: 7px 12px;
   font-family: "Trebuchet MS", "Gill Sans", sans-serif;
@@ -96,8 +100,8 @@
 }
 
 .nav-signup-btn:hover {
-  background: #f8f5ee;
-  border-color: #cfc7ba;
+  background: linear-gradient(145deg, #2a60b2, #214f96);
+  border-color: #255398;
 }
 
 .landing-page .cta-primary {
@@ -131,6 +135,27 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  position: relative;
+}
+
+.hero-copy::before {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  left: -70px;
+  top: -84px;
+  background-image: url('./assets/irislogo.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  opacity: 0.02;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-copy > * {
+  position: relative;
+  z-index: 1;
 }
 
 .hero-title {
@@ -179,12 +204,20 @@
 .landing-page .subtitle {
   color: #4b4b4b;
   font-family: "Trebuchet MS", "Gill Sans", sans-serif;
-  margin-top: 16px;
+  margin-top: 10px;
   display: inline-block;
   padding: 0;
   background: transparent;
   font-size: 1.08rem;
   letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.subtitle-dot {
+  color: #1a4d8f;
+  font-size: 0.95rem;
 }
 
 .hero-image-wrap {
@@ -745,6 +778,7 @@
   }
 
   .landing-nav {
+    display: flex;
     flex-direction: column;
     gap: 12px;
   }
