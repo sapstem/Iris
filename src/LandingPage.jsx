@@ -208,9 +208,25 @@ function LandingPage() {
 
       {/* How It Works Section */}
       <section className="how-it-works" id="how-it-works">
-        <h2 className="section-title">How It Works</h2>
+        <h2 className="section-title how-title-ink">
+          <span className="how-title-word how-title-word-1">How</span>{' '}
+          <span className="how-title-word how-title-word-2">it</span>{' '}
+          <span className="how-title-word how-title-word-3">works</span>
+        </h2>
         <div className="steps-ink-path">
-          <div className="ink-connector" aria-hidden="true" />
+          <svg
+            className="ink-connector-svg"
+            viewBox="0 0 120 640"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M60 10 C 45 70, 75 145, 60 210 C 44 280, 77 355, 60 430 C 46 500, 74 565, 60 630"
+              pathLength="1"
+            />
+          </svg>
+          <span className="ink-marginalia ink-marginalia-star" aria-hidden="true">✶</span>
+          <span className="ink-marginalia ink-marginalia-arrow" aria-hidden="true">↘</span>
           <div className="step step-ink step-left">
             <div className="step-number-ink" aria-hidden="true"><span>1</span></div>
             <h3>Input Your Materials</h3>
@@ -350,5 +366,3 @@ function LandingPage() {
 }
 
 export default LandingPage
-
-
