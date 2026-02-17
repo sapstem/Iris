@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import './LandingPage.css'
 import irisLogo from './assets/irislogo.png'
 
-const ROTATING_WORDS = ['summaries', 'flashcards', 'guides', 'notes', 'quizzes']
+const ROTATING_WORDS = ['practice exams', 'flashcard decks', 'key concepts', 'study guides']
 const QUIZ_DEMO_QUESTIONS = [
   {
     question: 'Which learning method is most effective for long-term recall?',
@@ -85,15 +85,67 @@ function LandingPage() {
 
   return (
     <div className="landing-page">
+      <div className="marginalia-layer" aria-hidden="true">
+        <span className="marginalia-doodle doodle-einstein">E=mc²</span>
+        <span className="marginalia-doodle doodle-integral">∫x²dx</span>
+        <span className="marginalia-doodle doodle-benzene">⌬</span>
+        <span className="marginalia-doodle doodle-stars">✶ ✶ ✶</span>
+        <span className="marginalia-doodle doodle-arrow">↗</span>
+        <span className="marginalia-doodle doodle-spiral">@</span>
+        <span className="marginalia-doodle doodle-speech" />
+        <span className="marginalia-doodle doodle-chem">C₆H₆</span>
+        <span className="marginalia-doodle doodle-derivative">d/dx</span>
+        <span className="marginalia-doodle doodle-pi">π ≈ 3.14</span>
+        <span className="marginalia-doodle doodle-quote">“...”</span>
+        <span className="marginalia-doodle doodle-check">✓ ✓</span>
+        <span className="marginalia-doodle doodle-xes">x x x</span>
+        <span className="marginalia-doodle doodle-wave">~ ~ ~</span>
+        <span className="marginalia-doodle doodle-atom">⚛</span>
+        <span className="marginalia-doodle doodle-focus">focus?</span>
+        <span className="marginalia-doodle doodle-arrow-down">↘</span>
+        <span className="marginalia-doodle doodle-arrow-left">↙</span>
+        <span className="marginalia-doodle doodle-stars-two">✦ ✶</span>
+        <span className="marginalia-doodle doodle-note">note:</span>
+        <span className="marginalia-doodle doodle-ring">◌</span>
+        <span className="marginalia-doodle doodle-sigma">Σ</span>
+        <span className="marginalia-doodle doodle-theta">θ</span>
+        <span className="marginalia-doodle doodle-lambda">λ</span>
+        <span className="marginalia-doodle doodle-sqrt">√n</span>
+        <span className="marginalia-doodle doodle-sum">∑ i=1..n</span>
+        <span className="marginalia-doodle doodle-dna">DNA</span>
+        <span className="marginalia-doodle doodle-axis">x|y</span>
+        <span className="marginalia-doodle doodle-grid">[ ] [ ]</span>
+        <span className="marginalia-doodle doodle-idea">idea!</span>
+        <span className="marginalia-doodle doodle-loop">↺</span>
+        <span className="marginalia-doodle doodle-brain">brain</span>
+        <span className="marginalia-doodle doodle-eq2">a²+b²=c²</span>
+        <span className="marginalia-doodle doodle-eq3">f(x)=mx+b</span>
+        <span className="marginalia-doodle doodle-quote-two">"revise"</span>
+        <span className="marginalia-doodle doodle-aster">* * *</span>
+        <span className="marginalia-doodle doodle-arrow-up-left">↖</span>
+        <span className="marginalia-doodle doodle-arrow-up-right">↗</span>
+        <span className="marginalia-doodle doodle-orbit">⊙</span>
+        <span className="marginalia-doodle doodle-memo">memo</span>
+        <span className="marginalia-doodle doodle-lit">“theme?”</span>
+        <span className="marginalia-doodle doodle-lab">H₂O</span>
+        <span className="marginalia-doodle doodle-geo">△</span>
+        <span className="marginalia-doodle doodle-check-two">✓</span>
+        <span className="marginalia-doodle doodle-wave-two">≈≈≈</span>
+        <span className="marginalia-doodle doodle-intab">∫ₐᵇ f(x)dx</span>
+        <span className="marginalia-doodle doodle-limit">lim x→∞</span>
+        <span className="marginalia-doodle doodle-vector-f">F→</span>
+        <span className="marginalia-doodle doodle-vector-v">v→</span>
+        <span className="marginalia-doodle doodle-delta">Δ</span>
+        <span className="marginalia-doodle doodle-benzene-ring">⌬ //</span>
+        <span className="marginalia-doodle doodle-helix">~x~x~</span>
+      </div>
       <header className="landing-nav">
-        <div className="nav-brand">
+        <Link to="/" className="nav-brand" aria-label="Iris home">
           <img className="nav-logo-image" src={irisLogo} alt="Iris logo" />
-        </div>
+        </Link>
         <nav className="nav-links" aria-label="Primary">
-          <Link to="/about">About me</Link>
-          <span className="nav-sep" aria-hidden="true">/</span>
-          <Link to="/how-it-works">How it works</Link>
-          <span className="nav-sep" aria-hidden="true">/</span>
+          <a href="#quiz-demo">Features</a>
+          <a href="#how-it-works">How it works</a>
           <a href="#faq">FAQ</a>
         </nav>
         <div className="nav-auth-actions">
@@ -110,22 +162,25 @@ function LandingPage() {
         <div className="hero-layout">
           <div className="hero-copy">
             <h1 className="hero-title">
-              <span className="hero-line">
-                Generate {' '}
-                <span className="typing-container">
-                  <span className="typing-line">
-                <span className="typing-text" data-text={currentText}>
-                  {currentText}
+              <span className="hero-line hero-line-primary">Your entire syllabus, decoded into</span>
+              <span className="hero-line hero-line-secondary">
+                <span className="hero-bracketed">
+                  <span className="hero-bracket" aria-hidden="true">[</span>
+                  <span className="typing-container">
+                    <span className="typing-line">
+                      <span className="typing-text" data-text={currentText}>
+                        {currentText}
+                      </span>
+                      <span className="typing-cursor">|</span>
+                    </span>
+                  </span>
+                  <span className="hero-bracket" aria-hidden="true">]</span>
                 </span>
-                <span className="typing-cursor">|</span>
+                <span className="hero-line-tail">.</span>
               </span>
-            </span>
-          </span>
-              <span className="hero-subline">from your materials</span>
             </h1>
             <p className="subtitle">
-              <span className="subtitle-dot" aria-hidden="true">✦</span>
-              any format in, study materials out.
+              From hour long videos to massive textbooks, Iris finds the stuff that actually matters.
             </p>
             
             <div className="cta-group">
@@ -133,9 +188,6 @@ function LandingPage() {
                 Start Learning
               </button>
             </div>
-          </div>
-          <div className="hero-image-wrap">
-            <img className="hero-image" src={new URL('./assets/study1.png', import.meta.url).href} alt="Study illustration" />
           </div>
         </div>
       </section>
@@ -227,6 +279,12 @@ function LandingPage() {
           </svg>
           <span className="ink-marginalia ink-marginalia-star" aria-hidden="true">✶</span>
           <span className="ink-marginalia ink-marginalia-arrow" aria-hidden="true">↘</span>
+          <span className="step-marginalia step-marginalia-1" aria-hidden="true">→ note</span>
+          <span className="step-marginalia step-marginalia-2" aria-hidden="true">∫</span>
+          <span className="step-marginalia step-marginalia-3" aria-hidden="true">✶</span>
+          <span className="step-marginalia step-marginalia-4" aria-hidden="true">Δ</span>
+          <span className="step-marginalia step-marginalia-5" aria-hidden="true">#key</span>
+          <span className="step-marginalia step-marginalia-6" aria-hidden="true">↺</span>
           <div className="step step-ink step-left">
             <div className="step-number-ink" aria-hidden="true"><span>1</span></div>
             <h3>Input Your Materials</h3>
