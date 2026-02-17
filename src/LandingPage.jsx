@@ -176,7 +176,7 @@ function LandingPage() {
                   </span>
                   <span className="hero-bracket" aria-hidden="true">]</span>
                 </span>
-                <span className="hero-line-tail">.</span>
+                <span className="hero-line-tail" aria-hidden="true" />
               </span>
             </h1>
             <p className="subtitle">

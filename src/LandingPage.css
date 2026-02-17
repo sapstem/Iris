@@ -601,13 +601,13 @@
 }
 
 .hero-copy .cta-primary {
-  padding: 14px 34px;
+  padding: 18px 44px;
   border-radius: 10px;
   border: 1px solid #2a5ea9;
   background: linear-gradient(145deg, #2f69bf, #2458a8);
   color: #f7fbff;
-  font-size: 1.02rem;
-  font-weight: 700;
+  font-size: 1.12rem;
+  font-weight: 500;
   box-shadow: 0 10px 24px rgba(36, 75, 164, 0.26);
 }
 
@@ -692,7 +692,7 @@
 }
 
 .hero-bracket {
-  color: #2a469e;
+  color: #1b2f73;
   font-weight: 700;
 }
 
@@ -718,7 +718,7 @@
 }
 
 .typing-text {
-  color: #111;
+  color: #1b2f73;
 }
 
 .typing-cursor {
