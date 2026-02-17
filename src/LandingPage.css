@@ -437,7 +437,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 22px;
+  gap: 30px;
   padding: 14px 0 22px;
   margin: 0 auto 40px;
   border-bottom: 1px solid #e7e3da;
@@ -465,7 +465,7 @@
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 14px;
   font-family: "Trebuchet MS", "Gill Sans", sans-serif;
   font-size: 0.92rem;
   text-transform: none;
@@ -475,35 +475,42 @@
 .nav-links a {
   color: #1f1f1f;
   text-decoration: none;
-  padding: 2px 5px;
+  padding: 8px 12px;
   letter-spacing: 0.01em;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav-links a:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  color: #111;
 }
 
 .nav-auth-actions {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
   margin-left: auto;
 }
 
 .nav-login-link {
   color: #1f1f1f;
   text-decoration: none;
-  padding: 7px 10px;
+  padding: 8px 12px;
   font-family: "Trebuchet MS", "Gill Sans", sans-serif;
   font-size: 0.92rem;
   border: 1px solid transparent;
   border-radius: 8px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav-login-link:hover {
-  border-color: #dbd5ca;
-  background: #f8f5ee;
+  border-color: transparent;
+  background: transparent;
 }
 
 .nav-signup-btn {
@@ -513,16 +520,70 @@
     linear-gradient(145deg, #2f69bf, #2458a8);
   border: 1px solid #2a5ea9;
   border-radius: 8px;
-  padding: 7px 12px;
+  padding: 8px 14px;
   font-family: "Trebuchet MS", "Gill Sans", sans-serif;
   font-size: 0.92rem;
   font-weight: 500;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav-signup-btn:hover {
   background: linear-gradient(145deg, #3b76ca, #2f69bf);
   border-color: #2f69bf;
   color: #f7fbff;
+}
+
+.landing-nav .nav-links a::before,
+.landing-nav .nav-login-link::before,
+.landing-nav .nav-signup-btn::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.16s ease;
+  background:
+    linear-gradient(rgba(17, 17, 17, 0.55), rgba(17, 17, 17, 0.55)) left top / 10px 1px no-repeat,
+    linear-gradient(rgba(17, 17, 17, 0.55), rgba(17, 17, 17, 0.55)) left top / 1px 10px no-repeat,
+    linear-gradient(rgba(17, 17, 17, 0.55), rgba(17, 17, 17, 0.55)) right top / 10px 1px no-repeat,
+    linear-gradient(rgba(17, 17, 17, 0.55), rgba(17, 17, 17, 0.55)) right top / 1px 10px no-repeat,
+    linear-gradient(rgba(17, 17, 17, 0.55), rgba(17, 17, 17, 0.55)) left bottom / 10px 1px no-repeat,
+    linear-gradient(rgba(17, 17, 17, 0.55), rgba(17, 17, 17, 0.55)) left bottom / 1px 10px no-repeat,
+    linear-gradient(rgba(17, 17, 17, 0.55), rgba(17, 17, 17, 0.55)) right bottom / 10px 1px no-repeat,
+    linear-gradient(rgba(17, 17, 17, 0.55), rgba(17, 17, 17, 0.55)) right bottom / 1px 10px no-repeat;
+}
+
+.landing-nav .nav-links a::after,
+.landing-nav .nav-login-link::after,
+.landing-nav .nav-signup-btn::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border: 1px solid rgba(17, 17, 17, 0.16);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.16s ease;
+}
+
+.landing-nav .nav-links a:hover::before,
+.landing-nav .nav-links a:focus-visible::before,
+.landing-nav .nav-login-link:hover::before,
+.landing-nav .nav-login-link:focus-visible::before,
+.landing-nav .nav-signup-btn:hover::before,
+.landing-nav .nav-signup-btn:focus-visible::before {
+  opacity: 1;
+}
+
+.landing-nav .nav-links a:hover::after,
+.landing-nav .nav-links a:focus-visible::after,
+.landing-nav .nav-login-link:hover::after,
+.landing-nav .nav-login-link:focus-visible::after,
+.landing-nav .nav-signup-btn:hover::after,
+.landing-nav .nav-signup-btn:focus-visible::after {
+  opacity: 1;
 }
 
 .landing-page .cta-primary {
@@ -2001,7 +2062,7 @@
 
   .landing-nav {
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
   }
 
   .nav-brand {
@@ -2010,12 +2071,13 @@
 
   .nav-links {
     justify-content: center;
-    gap: 8px;
+    gap: 12px;
   }
 
   .nav-auth-actions {
     width: 100%;
     justify-content: center;
+    gap: 12px;
   }
 
   .hero-section {
