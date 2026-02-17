@@ -600,6 +600,23 @@
   box-shadow: none;
 }
 
+.hero-copy .cta-primary {
+  padding: 14px 34px;
+  border-radius: 10px;
+  border: 1px solid #2a5ea9;
+  background: linear-gradient(145deg, #2f69bf, #2458a8);
+  color: #f7fbff;
+  font-size: 1.02rem;
+  font-weight: 700;
+  box-shadow: 0 10px 24px rgba(36, 75, 164, 0.26);
+}
+
+.hero-copy .cta-primary:hover {
+  background: linear-gradient(145deg, #3b76ca, #2f69bf);
+  border-color: #2f69bf;
+  box-shadow: 0 12px 26px rgba(36, 75, 164, 0.3);
+}
+
 .hero-section {
   margin: 0 auto 72px;
   padding: 0;
