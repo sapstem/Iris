@@ -145,7 +145,7 @@ function LandingPage() {
         </Link>
         <nav className="nav-links" aria-label="Primary">
           <a href="#quiz-demo">Features</a>
-          <a href="#how-it-works">How it works</a>
+          <Link to="/how-it-works">How it works</Link>
           <a href="#faq">FAQ</a>
         </nav>
         <div className="nav-auth-actions">
@@ -180,7 +180,7 @@ function LandingPage() {
               </span>
             </h1>
             <p className="subtitle">
-              From hour long videos to massive textbooks, Iris finds the stuff that actually matters.
+              From hour long videos to massive textbooks, Iris finds the things that actually matter.
             </p>
             
             <div className="cta-group">

@@ -8,17 +8,17 @@ import LinkModal from './LinkModal'
 import PasteModal from './PasteModal'
 import irisLogo from './assets/irislogo.png'
 import {
-  ArrowLeftIcon,
   ArrowRightIcon,
+  ChatIcon,
   ChevronDownIcon,
   CloseIcon,
   ClipboardIcon,
   HomeIcon,
   LinkIcon,
-  MenuIcon,
   MicIcon,
+  NotesIcon,
   PlusIcon,
-  SendIcon,
+  RefreshIcon,
   SettingsIcon,
   UploadIcon
 } from './Icons'
@@ -37,7 +37,7 @@ const fetchJson = async (path, options = {}) => {
   let data = null
   try {
     data = await response.json()
-  } catch (error) {
+  } catch {
     data = null
   }
 
@@ -65,7 +65,6 @@ function SummarizerPage() {
   const [showLinkModal, setShowLinkModal] = useState(false)
   const [showPasteModal, setShowPasteModal] = useState(false)
   const [spaces, setSpaces] = useState([])
-  const [activeSpace, setActiveSpace] = useState(null)
   const [showCreateSpace, setShowCreateSpace] = useState(false)
   const [newSpaceName, setNewSpaceName] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
@@ -73,7 +72,9 @@ function SummarizerPage() {
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [theme, setTheme] = useState('dark')
   const [profileLoaded, setProfileLoaded] = useState(false)
+  const recentSectionRef = useRef(null)
   const userMenuRef = useRef(null)
+  const activeSpace = null
 
   useEffect(() => {
     let mounted = true
@@ -154,22 +155,9 @@ function SummarizerPage() {
     }
   }
 
-  const filteredSummaries = activeSpace
-    ? savedSummaries.filter((summary) => summary.space_id === activeSpace)
-    : savedSummaries.filter((summary) => summary.space_id === null)
+  const filteredSummaries = savedSummaries
 
   const normalizedSearch = searchQuery.trim().toLowerCase()
-
-  const visibleSpaces = normalizedSearch
-    ? spaces.filter((space) => {
-        const inSpaceName = (space.name || '').toLowerCase().includes(normalizedSearch)
-        if (inSpaceName) return true
-        return savedSummaries.some((summary) =>
-          summary.space_id === space.id &&
-          `${summary.title || ''} ${summary.content || ''}`.toLowerCase().includes(normalizedSearch)
-        )
-      })
-    : spaces
 
   const visibleRecent = normalizedSearch
     ? filteredSummaries.filter((item) =>
@@ -303,6 +291,33 @@ ${noteText}`
     setNoteText(text)
   }
 
+  const scrollToSection = (ref) => {
+    if (!ref.current) return
+    ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  const lastSession = savedSummaries.reduce((latest, item) => {
+    const itemTime = new Date(item.updated_at || item.created_at || 0).getTime()
+    const latestTime = latest ? new Date(latest.updated_at || latest.created_at || 0).getTime() : -Infinity
+    return itemTime > latestTime ? item : latest
+  }, null)
+
+  const getSourceType = (item) => {
+    const explicitSource = (item?.source_type || '').toLowerCase()
+    if (explicitSource.includes('youtube') || explicitSource.includes('video')) return 'youtube'
+    if (explicitSource.includes('pdf') || explicitSource.includes('document')) return 'pdf'
+    const text = `${item?.title || ''} ${item?.content || ''}`.toLowerCase()
+    if (text.includes('youtube.com') || text.includes('youtu.be')) return 'youtube'
+    if (text.includes('.pdf')) return 'pdf'
+    return 'notes'
+  }
+
+  const sourceMeta = {
+    youtube: { label: 'YouTube', icon: <LinkIcon /> },
+    pdf: { label: 'PDF', icon: <UploadIcon /> },
+    notes: { label: 'Notes', icon: <ClipboardIcon /> }
+  }
+
   return (
     <div
       className={`studio-shell ${theme === 'dark' ? 'theme-dark' : 'theme-light'} ${
@@ -338,7 +353,6 @@ ${noteText}`
             className="studio-link"
             type="button"
             onClick={() => {
-              setActiveSpace(null)
               navigate('/summarizer')
             }}
           >
@@ -346,65 +360,21 @@ ${noteText}`
             <span className="studio-text">Dashboard</span>
           </button>
           <button className="studio-link" type="button">
+            <span className="studio-icon"><NotesIcon /></span>
+            <span className="studio-text">Projects</span>
+          </button>
+          <button className="studio-link" type="button" onClick={() => navigate('/conversations')}>
+            <span className="studio-icon"><ChatIcon /></span>
+            <span className="studio-text">Conversations</span>
+          </button>
+          <button className="studio-link" type="button" onClick={() => scrollToSection(recentSectionRef)}>
+            <span className="studio-icon"><RefreshIcon /></span>
+            <span className="studio-text">Recent</span>
+          </button>
+          <button className="studio-link" type="button">
             <span className="studio-icon"><SettingsIcon /></span>
             <span className="studio-text">Settings</span>
           </button>
-        </div>
-
-        <div className="studio-section">
-          <button
-            className="studio-link active add-content"
-            onClick={() => {
-              setNoteText('')
-              setOverview('')
-              setTakeaways([])
-              setKeywords([])
-            }}
-          >
-            <span className="studio-icon"><PlusIcon /></span>
-            <span className="studio-text">Add content</span>
-          </button>
-        </div>
-
-        <div className="studio-section">
-          <p className="studio-label">Projects</p>
-          <button 
-            className="studio-link create-space"
-            onClick={() => setShowCreateSpace(true)}
-          >
-            <span className="studio-icon"><PlusIcon /></span>
-            <span className="studio-text">Create Space</span>
-          </button>
-          {spaces.map((space) => (
-            <button
-              key={space.id}
-              className={`studio-link space-item ${activeSpace === space.id ? 'active' : ''}`}
-              onClick={() => {
-                navigate(`/project/${space.id}`)
-              }}
-            >
-              <span className="studio-text">{space.name}</span>
-            </button>
-          ))}
-        </div>
-
-        <div className="studio-section">
-          <p className="studio-label">Recent Activity</p>
-          {visibleRecent.slice(0, 4).map((item) => (
-            <button
-              key={item.id}
-              className="studio-link recent-item"
-              onClick={() => navigate(`/conversation/${item.id}`)}
-            >
-              <span className="studio-text recent-title">{(item.title || item.content || 'Summary').slice(0, 22)}</span>
-              <span className="recent-meta">{getRecentContext(item)}</span>
-            </button>
-          ))}
-          {visibleRecent.length === 0 && (
-            <p className="studio-empty">
-              {normalizedSearch ? 'No activity matches your search' : 'No recent conversations'}
-            </p>
-          )}
         </div>
 
         </div>
@@ -448,36 +418,37 @@ ${noteText}`
 
       <main className="studio-main">
         <div className="workspace-top">
-          {activeSpace ? (
-            <div className="workspace-title-wrap">
-              <button className="all-notes-btn"
-                onClick={() => {
-                  setActiveSpace(null)
-                }}
-              >
-                <span className="all-notes-icon"><ArrowLeftIcon /></span>
-                All Notes
-              </button>
-              <h1 className="workspace-title">
-                {spaces.find(s => s.id === activeSpace)?.name || 'Space'}
-              </h1>
+          <h1 className="workspace-title">Dashboard</h1>
+          <div className="workspace-actions">
+            <div className="workspace-search">
+              <input
+                type="text"
+                placeholder="Search projects or notes"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
-          ) : (
-            <h1 className="workspace-title">{displayName}'s Study Workspace</h1>
-          )}
-          <div className="workspace-search">
-            <input
-              type="text"
-              placeholder="Search projects or notes"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
           </div>
         </div>
 
         <div className="studio-hero">
-
           <div className="action-row">
+            <div
+              className="action-tile"
+              onClick={() => {
+                setNoteText('')
+                setOverview('')
+                setTakeaways([])
+                setKeywords([])
+                setStatus('Started a blank note.')
+              }}
+            >
+              <div className="icon"><NotesIcon /></div>
+              <div>
+                <p className="title">Blank Note</p>
+                <p className="sub">Start from scratch</p>
+              </div>
+            </div>
             <div className="action-tile" onClick={() => setShowUploadModal(true)}>
               <div className="icon"><UploadIcon /></div>
               <div>
@@ -492,13 +463,6 @@ ${noteText}`
                 <p className="sub">YouTube, Website</p>
               </div>
             </div>
-            <div className="action-tile" onClick={() => setShowPasteModal(true)}>
-              <div className="icon"><ClipboardIcon /></div>
-              <div>
-                <p className="title">Paste</p>
-                <p className="sub">Copied Text</p>
-              </div>
-            </div>
             <div className="action-tile" onClick={() => setShowRecordModal(true)}>
               <div className="icon"><MicIcon /></div>
               <div>
@@ -509,49 +473,68 @@ ${noteText}`
           </div>
         </div>
 
-        <div className="spaces-area">
-          <div className="spaces-header">
-            <h2>Projects</h2>
-            <span className="muted">Newest <ChevronDownIcon /></span>
-          </div>
-          <div className="spaces-grid">
-            <div
-              className="space-card dashed"
-              onClick={() => setShowCreateSpace(true)}
-            >
-              <PlusIcon />
-            </div>
-            {visibleSpaces.map((space) => {
-              const spaceConvos = savedSummaries.filter(
-                (summary) => summary.space_id === space.id
-              )
-              const recentConvo = spaceConvos[0]
-              return (
-                <div 
-                  key={space.id} 
-                  className="space-card"
-                  onClick={() => {
-                    navigate(`/project/${space.id}`)
-                  }}
+        <section className="continue-learning-bar">
+          <p className="resume-label">Continue Learning</p>
+          {lastSession ? (
+            <>
+              <h2>{lastSession.title || 'Untitled Conversation'}</h2>
+              <p className="resume-preview">{(lastSession.content || '').slice(0, 160)}</p>
+              <div className="resume-actions">
+                <button
+                  type="button"
+                  className="resume-open-btn"
+                  onClick={() => navigate(`/conversation/${lastSession.id}`)}
                 >
-                  <p className="space-title">{space.name}</p>
-                  <p className="space-sub">
-                    {spaceConvos.length} conversation{spaceConvos.length !== 1 ? 's' : ''}
-                  </p>
-                  {recentConvo && (
-                    <p className="space-preview">{(recentConvo.content || '').slice(0, 50)}...</p>
-                  )}
-                </div>
-              )
-            })}
-            {visibleSpaces.length === 0 && normalizedSearch && (
-              <div className="space-card">
-                <p className="space-title">No projects found</p>
-                <p className="space-sub">Try a different search term.</p>
+                  Continue where you left off
+                </button>
+                <span className="resume-meta">{getRecentContext(lastSession)}</span>
+              </div>
+            </>
+          ) : (
+            <>
+              <h2>No previous session yet</h2>
+              <p className="resume-preview">Add content to start your first project and conversation.</p>
+            </>
+          )}
+        </section>
+
+        <section className="recent-sessions-table" ref={recentSectionRef}>
+          <div className="recent-table-head">
+            <h2>Recent Sessions</h2>
+            <button
+              type="button"
+              className="view-all-link"
+              onClick={() => navigate('/conversations')}
+            >
+              View all
+            </button>
+          </div>
+          <div className="recent-table-list">
+            {visibleRecent.slice(0, 12).map((item) => {
+              const source = sourceMeta[getSourceType(item)]
+              return (
+              <button
+                key={item.id}
+                className="recent-table-row"
+                onClick={() => navigate(`/conversation/${item.id}`)}
+              >
+                <span className="recent-source">
+                  {source.icon}
+                </span>
+                <span className="recent-title">{item.title || item.content || 'Conversation'}</span>
+                <span className="recent-source-label">{source.label}</span>
+                <span className="recent-meta">{getRecentContext(item)}</span>
+              </button>
+            )})}
+            {visibleRecent.length === 0 && (
+              <div className="recent-table-empty">
+                <p className="recent-title">
+                  {normalizedSearch ? 'No recent matches' : 'No recent conversations yet'}
+                </p>
               </div>
             )}
           </div>
-        </div>
+        </section>
 
         <div className="capture-panel">
           <div className="prompt-bar">

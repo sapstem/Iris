@@ -620,6 +620,29 @@
 .hero-section {
   margin: 0 auto 72px;
   padding: 0;
+  position: relative;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -48px;
+  transform: translateX(-50%);
+  width: min(980px, 98vw);
+  height: 500px;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    linear-gradient(rgba(26, 77, 143, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26, 77, 143, 0.055) 1px, transparent 1px),
+    radial-gradient(circle at 50% 62%, rgba(26, 77, 143, 0.1), rgba(26, 77, 143, 0) 70%);
+  background-size:
+    56px 56px,
+    56px 56px,
+    100% 100%;
+  mask-image: radial-gradient(ellipse at 50% 48%, rgba(0, 0, 0, 0.95) 42%, rgba(0, 0, 0, 0.45) 70%, transparent 90%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 48%, rgba(0, 0, 0, 0.95) 42%, rgba(0, 0, 0, 0.45) 70%, transparent 90%);
 }
 
 .hero-layout {
@@ -628,6 +651,8 @@
   align-items: center;
   gap: 20px;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-copy {
@@ -2099,6 +2124,15 @@
 
   .hero-section {
     padding: 0;
+  }
+
+  .hero-section::before {
+    top: -34px;
+    height: 420px;
+    background-size:
+      44px 44px,
+      44px 44px,
+      100% 100%;
   }
 
   .hero-bloom {

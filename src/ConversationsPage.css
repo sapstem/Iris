@@ -1,0 +1,165 @@
+.conversations-page {
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 8% 10%, rgba(26, 77, 143, 0.08), transparent 36%),
+    radial-gradient(circle at 92% 88%, rgba(26, 77, 143, 0.07), transparent 34%),
+    #f7f3ea;
+  padding: 22px 16px 40px;
+}
+
+.conversations-shell {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  border: 1px solid #ddd7ca;
+  border-radius: 14px;
+  background: #fffdf9;
+  box-shadow: 8px 8px 0 #ece6d9;
+  padding: 18px;
+}
+
+.conversations-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  border-bottom: 1px solid #e7e1d5;
+  padding-bottom: 14px;
+}
+
+.conversations-kicker {
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.74rem;
+  color: #6f685b;
+}
+
+.conversations-head h1 {
+  margin: 0;
+  font-family: "Crimson Pro", "Merriweather", serif;
+  font-size: clamp(1.8rem, 3.4vw, 2.4rem);
+  color: #1d1d1d;
+}
+
+.conversations-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.conversations-actions input {
+  width: min(320px, 50vw);
+  border: 1px solid #ddd7ca;
+  border-radius: 10px;
+  background: #fffdf9;
+  color: #1f1f1f;
+  padding: 10px 12px;
+}
+
+.conversations-actions button {
+  border: 1px solid #2a5ea9;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #2f69bf, #2458a8);
+  color: #f7fbff;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.conversations-grid {
+  margin-top: 16px;
+  display: grid;
+  gap: 0;
+}
+
+.conversations-period {
+  margin: 0;
+  padding: 0 10px 8px;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6f685b;
+}
+
+.conversation-card {
+  border: none;
+  border-top: 1px solid #ece7dc;
+  background: transparent;
+  text-align: left;
+  padding: 12px 10px;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr) 120px;
+  gap: 12px;
+  align-items: center;
+}
+
+.conversation-card:hover {
+  background: #f9f5ec;
+}
+
+.conversation-project {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: #1a4d8f;
+  text-transform: uppercase;
+}
+
+.conversation-title {
+  margin: 0;
+  font-size: 0.94rem;
+  font-weight: 600;
+  color: #1f1f1f;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conversation-preview {
+  margin: 0;
+  color: #525252;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conversation-time {
+  margin: 0;
+  font-size: 0.76rem;
+  text-align: right;
+  color: #777064;
+}
+
+.conversation-empty {
+  border: 1px dashed #c9c1b2;
+  border-radius: 10px;
+  padding: 20px;
+  color: #5e584c;
+}
+
+@media (max-width: 760px) {
+  .conversations-head {
+    flex-direction: column;
+  }
+
+  .conversations-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .conversations-actions input,
+  .conversations-actions button {
+    width: 100%;
+  }
+
+  .conversation-card {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .conversation-time {
+    text-align: left;
+  }
+}

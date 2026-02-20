@@ -1,73 +1,292 @@
-.how-page {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 48px 20px;
-  background: #f7f5f1;
-  color: #151515;
+.how-ink-page {
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 8% 12%, rgba(26, 77, 143, 0.09), transparent 36%),
+    radial-gradient(circle at 92% 88%, rgba(26, 77, 143, 0.08), transparent 34%),
+    #f7f3ea;
+  color: #1e1e1e;
+  padding: 18px 16px 58px;
+  position: relative;
 }
 
-.how-card {
-  width: min(760px, 100%);
-  border: 1px solid #d9d4cc;
+.how-marginalia {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.how-doodle {
+  position: absolute;
+  color: rgba(26, 77, 143, 0.23);
+  font-family: "Homemade Apple", "Merriweather", serif;
+  line-height: 1;
+  user-select: none;
+}
+
+.doodle-eq { top: 120px; left: 18px; transform: rotate(-8deg); }
+.doodle-int { top: 290px; right: 28px; transform: rotate(8deg); }
+.doodle-stars { top: 520px; left: 30px; transform: rotate(-5deg); }
+.doodle-note { top: 760px; right: 40px; transform: rotate(6deg); }
+.doodle-arrow { bottom: 280px; left: 24px; transform: rotate(-10deg); }
+.doodle-pi { bottom: 140px; right: 36px; transform: rotate(8deg); }
+
+.how-shell {
+  width: min(1080px, 100%);
+  margin: 0 auto;
+  border: 1px solid #ddd7ca;
+  border-radius: 16px;
   background: #fffdf9;
-  padding: 36px 32px;
+  box-shadow: 8px 8px 0 #ece6d9;
+  padding: 12px 18px 28px;
+  position: relative;
+  z-index: 1;
+}
+
+.how-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 4px 16px;
+  border-bottom: 1px solid #e8e2d7;
+}
+
+.how-brand {
+  color: #1c1c1c;
+  text-decoration: none;
+  font-size: 1.9rem;
+  font-family: "Crimson Pro", "Merriweather", serif;
+}
+
+.how-nav-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.how-nav-link,
+.how-nav-cta {
+  text-decoration: none;
+  border-radius: 9px;
+  font-size: 0.92rem;
+  padding: 8px 13px;
+}
+
+.how-nav-link {
+  color: #1d1d1d;
+  border: 1px solid #d8d2c5;
+  background: #fffdf8;
+}
+
+.how-nav-link:hover {
+  border-color: #1a4d8f;
+  color: #1a4d8f;
+}
+
+.how-nav-cta {
+  color: #f7fbff;
+  border: 1px solid #2a5ea9;
+  background: linear-gradient(145deg, #2f69bf, #2458a8);
+}
+
+.how-nav-cta:hover {
+  border-color: #2f69bf;
+  background: linear-gradient(145deg, #3b76ca, #2f69bf);
+}
+
+.how-hero {
+  text-align: center;
+  padding: 30px 8px 14px;
 }
 
 .how-label {
   margin: 0 0 10px;
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
+  color: #6f685b;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #6b6459;
 }
 
-.how-card h1 {
-  margin: 0 0 24px;
-  font-size: clamp(1.8rem, 3vw, 2.2rem);
-  line-height: 1.2;
-  font-family: "Garamond", "Times New Roman", serif;
-}
-
-.how-steps {
+.how-hero h1 {
   margin: 0;
-  padding-left: 20px;
+  font-family: "Crimson Pro", "Merriweather", serif;
+  font-size: clamp(2rem, 5vw, 3.1rem);
+  line-height: 1.1;
 }
 
-.how-steps li {
-  margin-bottom: 18px;
+.how-intro {
+  margin: 12px auto 0;
+  color: #4e4a42;
+  max-width: 64ch;
+  line-height: 1.58;
 }
 
-.how-steps h2 {
+.how-section-title {
+  margin: 0 0 14px;
+  font-family: "Crimson Pro", "Merriweather", serif;
+  font-size: clamp(1.45rem, 3vw, 2rem);
+}
+
+.how-flow,
+.how-features,
+.how-rhythm {
+  margin-top: 28px;
+}
+
+.how-steps-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.how-step-card {
+  width: min(690px, 100%);
+  border: 1px solid #ddd7ca;
+  border-radius: 10px;
+  background: #fffefb;
+  box-shadow: 3px 3px 0 #efebe2;
+  padding: 16px 16px 14px 56px;
+  position: relative;
+  text-align: left;
+}
+
+.how-step-card.left {
+  justify-self: start;
+}
+
+.how-step-card.right {
+  justify-self: end;
+}
+
+.how-step-number {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: 1px solid rgba(26, 77, 143, 0.36);
+  background: rgba(26, 77, 143, 0.12);
+  color: #1a4d8f;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.how-step-card h3 {
   margin: 0 0 6px;
-  font-size: 1.05rem;
-}
-
-.how-steps p {
-  margin: 0;
-  line-height: 1.6;
-  color: #2f2f2f;
-}
-
-.how-links {
-  display: flex;
-  gap: 18px;
-  margin-top: 10px;
-}
-
-.how-link {
+  font-size: 1.08rem;
   color: #1f1f1f;
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 
-.how-link:hover {
-  color: #000;
+.how-step-card p {
+  margin: 0;
+  color: #4a4a4a;
+  line-height: 1.56;
 }
 
-@media (max-width: 640px) {
-  .how-card {
-    padding: 28px 22px;
+.how-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.how-feature-card {
+  border: 1px solid #ddd7ca;
+  border-radius: 12px;
+  background: #fffdf9;
+  box-shadow: 3px 3px 0 #efebe2;
+  padding: 16px 14px;
+  text-align: left;
+}
+
+.how-feature-tag {
+  margin: 0 0 8px;
+  color: #1a4d8f;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.74rem;
+}
+
+.how-feature-card h3 {
+  margin: 0 0 9px;
+  font-size: 1.16rem;
+}
+
+.how-feature-card ul {
+  margin: 0;
+  padding-left: 18px;
+  color: #444;
+  line-height: 1.5;
+}
+
+.how-feature-card li + li {
+  margin-top: 8px;
+}
+
+.how-rhythm-card {
+  border: 1px dashed rgba(26, 77, 143, 0.42);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(26, 77, 143, 0.05), rgba(26, 77, 143, 0.01));
+  padding: 14px;
+}
+
+.how-rhythm-card p {
+  margin: 0;
+  color: #303b4b;
+  line-height: 1.55;
+}
+
+.how-rhythm-card p + p {
+  margin-top: 7px;
+}
+
+@media (max-width: 920px) {
+  .how-feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .how-step-card {
+    width: 100%;
+  }
+
+  .how-step-card.right {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 720px) {
+  .how-doodle {
+    display: none;
+  }
+
+  .how-shell {
+    padding: 10px 12px 18px;
+    border-radius: 12px;
+    box-shadow: 5px 5px 0 #ece6d9;
+  }
+
+  .how-nav {
+    flex-direction: column;
+    align-items: stretch;
+    padding-bottom: 12px;
+  }
+
+  .how-nav-links {
+    width: 100%;
+  }
+
+  .how-nav-link,
+  .how-nav-cta {
+    flex: 1;
+    text-align: center;
+  }
+
+  .how-hero {
+    padding-top: 22px;
+  }
+
+  .how-intro {
+    font-size: 0.95rem;
   }
 }

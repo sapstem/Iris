@@ -1,8 +1,9 @@
-import { BrowserRouter, Routes, Route, Link, Navigate, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import LandingPage from './LandingPage'
 import AuthPage from './AuthPage'
 import SummarizerPage from './SummarizerPage'
+import ConversationsPage from './ConversationsPage'
 import About from './pages/About'
 import HowitWorks from './pages/HowitWorks'
 import ProjectWorkspacePage from './ProjectWorkspacePage'
@@ -37,9 +38,6 @@ function RequireAuth({ children }) {
 }
 
 function AppFrame() {
-  const location = useLocation()
-  const isSummarizer = location.pathname.startsWith('/summarizer')
-
   return (
     <>
       <Routes>
@@ -49,6 +47,12 @@ function AppFrame() {
         <Route path="/summarizer" element={(
           <RequireAuth>
             <SummarizerPage />
+          </RequireAuth>
+        )}
+        />
+        <Route path="/conversations" element={(
+          <RequireAuth>
+            <ConversationsPage />
           </RequireAuth>
         )}
         />
