@@ -10,6 +10,7 @@ import irisLogo from './assets/irislogo.png'
 import {
   ArrowRightIcon,
   ChatIcon,
+  ClockIcon,
   ChevronDownIcon,
   CloseIcon,
   ClipboardIcon,
@@ -369,11 +370,15 @@ ${noteText}`
           </button>
           <button className="studio-link" type="button" onClick={() => navigate('/conversations')}>
             <span className="studio-icon"><ChatIcon /></span>
-            <span className="studio-text">Conversations</span>
+            <span className="studio-text">Notes</span>
           </button>
           <button className="studio-link" type="button" onClick={() => scrollToSection(recentSectionRef)}>
             <span className="studio-icon"><RefreshIcon /></span>
             <span className="studio-text">Recent</span>
+          </button>
+          <button className="studio-link" type="button" onClick={() => navigate('/pomodoro')}>
+            <span className="studio-icon"><ClockIcon /></span>
+            <span className="studio-text">Pomodoro</span>
           </button>
           <button className="studio-link" type="button">
             <span className="studio-icon"><SettingsIcon /></span>
@@ -500,7 +505,7 @@ ${noteText}`
 
         <section className="recent-sessions-table" ref={recentSectionRef}>
           <div className="recent-table-head">
-            <h2>Recent Sessions</h2>
+            <h2>Recent Documents</h2>
             <button
               type="button"
               className="view-all-link"
@@ -529,7 +534,7 @@ ${noteText}`
             {visibleRecent.length === 0 && (
               <div className="recent-table-empty">
                 <p className="recent-title">
-                  {normalizedSearch ? 'No recent matches' : 'No recent conversations yet'}
+                  {normalizedSearch ? 'No recent matches' : 'No recent notes yet'}
                 </p>
               </div>
             )}

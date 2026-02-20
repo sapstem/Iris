@@ -1,0 +1,138 @@
+.pomodoro-main {
+  padding: 28px 32px 40px;
+}
+
+.pomodoro-header {
+  margin-bottom: 24px;
+}
+
+.pomodoro-subtitle {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
+.pomodoro-card {
+  max-width: 760px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 26px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+}
+
+.pomodoro-mode-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pomodoro-mode-btn {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.pomodoro-mode-btn.active {
+  background: #4f6ef7;
+  border-color: #4f6ef7;
+  color: #fff;
+}
+
+.pomodoro-label {
+  margin: 22px 0 0;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.pomodoro-time {
+  margin: 2px 0 0;
+  font-size: clamp(3rem, 10vw, 5.4rem);
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.pomodoro-actions {
+  margin-top: 18px;
+  display: flex;
+  gap: 10px;
+}
+
+.pomodoro-primary,
+.pomodoro-secondary {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pomodoro-primary {
+  background: #4f6ef7;
+  border-color: #4f6ef7;
+  color: #fff;
+}
+
+.pomodoro-secondary {
+  background: transparent;
+  color: var(--text);
+}
+
+.pomodoro-sessions {
+  margin: 14px 0 0;
+  color: var(--muted);
+}
+
+.pomodoro-settings {
+  margin-top: 20px;
+  max-width: 760px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 22px 26px;
+}
+
+.pomodoro-settings h2 {
+  margin: 0 0 14px;
+}
+
+.pomodoro-input-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.pomodoro-input-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.pomodoro-input-grid input {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-2);
+  color: var(--text);
+  padding: 10px 12px;
+  outline: none;
+}
+
+.pomodoro-input-grid input:focus {
+  border-color: #4f6ef7;
+  box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.2);
+}
+
+@media (max-width: 860px) {
+  .pomodoro-main {
+    padding: 18px;
+  }
+
+  .pomodoro-input-grid {
+    grid-template-columns: 1fr;
+  }
+}

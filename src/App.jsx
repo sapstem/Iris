@@ -5,6 +5,7 @@ import AuthPage from './AuthPage'
 import SummarizerPage from './SummarizerPage'
 import ConversationsPage from './ConversationsPage'
 import BlankNotePage from './BlankNotePage'
+import PomodoroPage from './PomodoroPage'
 import About from './pages/About'
 import HowitWorks from './pages/HowitWorks'
 import ProjectWorkspacePage from './ProjectWorkspacePage'
@@ -33,7 +34,13 @@ function RequireAuth({ children }) {
     }
   }, [])
 
-  if (status === 'loading') return null
+  if (status === 'loading') {
+    return (
+      <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center' }}>
+        Loading...
+      </div>
+    )
+  }
   return status === 'authed' ? children : <Navigate to="/auth" replace />
 }
 
@@ -65,6 +72,12 @@ function AppFrame() {
         <Route path="/conversations" element={(
           <RequireAuth>
             <ConversationsPage />
+          </RequireAuth>
+        )}
+        />
+        <Route path="/pomodoro" element={(
+          <RequireAuth>
+            <PomodoroPage />
           </RequireAuth>
         )}
         />

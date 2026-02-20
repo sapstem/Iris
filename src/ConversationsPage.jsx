@@ -41,7 +41,7 @@ function ConversationsPage() {
         setSpaces(Array.isArray(spacesData) ? spacesData : [])
       })
       .catch((error) => {
-        console.error('Failed to load conversations:', error)
+        console.error('Failed to load notes:', error)
       })
     return () => {
       mounted = false
@@ -78,13 +78,13 @@ function ConversationsPage() {
       <div className="conversations-shell">
         <header className="conversations-head">
           <div>
-            <p className="conversations-kicker">Conversations</p>
-            <h1>All study conversations</h1>
+            <p className="conversations-kicker">Notes</p>
+            <h1>All Notes</h1>
           </div>
           <div className="conversations-actions">
             <input
               type="text"
-              placeholder="Search conversations"
+              placeholder="Search notes"
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
             />
