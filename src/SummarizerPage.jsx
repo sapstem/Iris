@@ -436,11 +436,7 @@ ${noteText}`
             <div
               className="action-tile"
               onClick={() => {
-                setNoteText('')
-                setOverview('')
-                setTakeaways([])
-                setKeywords([])
-                setStatus('Started a blank note.')
+                navigate('/blank-note')
               }}
             >
               <div className="icon"><NotesIcon /></div>

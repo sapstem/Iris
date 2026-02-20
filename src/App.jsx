@@ -4,6 +4,7 @@ import LandingPage from './LandingPage'
 import AuthPage from './AuthPage'
 import SummarizerPage from './SummarizerPage'
 import ConversationsPage from './ConversationsPage'
+import BlankNotePage from './BlankNotePage'
 import About from './pages/About'
 import HowitWorks from './pages/HowitWorks'
 import ProjectWorkspacePage from './ProjectWorkspacePage'
@@ -47,6 +48,12 @@ function AppFrame() {
         <Route path="/summarizer" element={(
           <RequireAuth>
             <SummarizerPage />
+          </RequireAuth>
+        )}
+        />
+        <Route path="/blank-note" element={(
+          <RequireAuth>
+            <BlankNotePage />
           </RequireAuth>
         )}
         />

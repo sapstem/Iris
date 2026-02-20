@@ -1,0 +1,215 @@
+.blank-note-page {
+  min-height: 100dvh;
+  padding: 22px 16px 36px 84px;
+  background:
+    radial-gradient(circle at 8% 10%, rgba(26, 77, 143, 0.08), transparent 36%),
+    radial-gradient(circle at 92% 88%, rgba(26, 77, 143, 0.07), transparent 34%),
+    #f7f3ea;
+}
+
+.blank-note-shell {
+  width: min(1020px, 100%);
+  margin: 0 auto;
+  border: 1px solid #ddd7ca;
+  border-radius: 14px;
+  background: #fffdf9;
+  box-shadow: 8px 8px 0 #ece6d9;
+  padding: 16px;
+}
+
+.blank-note-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 68px;
+  height: 100vh;
+  border-right: 1px solid #ddd7ca;
+  background: #fffdf9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 8px;
+  z-index: 4;
+}
+
+.blank-note-brand {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.blank-note-logo {
+  width: 34px;
+  height: 34px;
+  object-fit: cover;
+}
+
+.blank-note-tool-list {
+  margin-top: 20px;
+  display: grid;
+  gap: 8px;
+}
+
+.blank-note-tool {
+  width: 40px;
+  height: 40px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: #5b5b58;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.blank-note-tool svg {
+  width: 18px;
+  height: 18px;
+}
+
+.blank-note-tool:hover {
+  background: #f8f4ec;
+  color: #1f1f1f;
+  border-color: #e4ded2;
+}
+
+.blank-note-tool.is-active {
+  background: rgba(26, 77, 143, 0.11);
+  color: #1a3e70;
+  border-color: rgba(26, 77, 143, 0.24);
+}
+
+.blank-note-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  border-bottom: 1px solid #e8e2d7;
+  padding-bottom: 12px;
+}
+
+.blank-note-kicker {
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-size: 0.74rem;
+  color: #1a4d8f;
+}
+
+.blank-note-head h1 {
+  margin: 0;
+  font-family: "Crimson Pro", "Merriweather", serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  color: #1c1c1c;
+}
+
+.blank-note-back {
+  border: 1px solid #d8d2c5;
+  background: #fffdf8;
+  color: #1f1f1f;
+  border-radius: 10px;
+  padding: 9px 12px;
+  cursor: pointer;
+}
+
+.blank-note-back:hover {
+  border-color: #1a4d8f;
+  color: #1a4d8f;
+}
+
+.blank-note-editor-wrap {
+  margin-top: 14px;
+}
+
+.blank-note-tool-banner {
+  margin-top: 12px;
+  border: 1px dashed rgba(26, 77, 143, 0.35);
+  border-radius: 10px;
+  background: rgba(26, 77, 143, 0.04);
+  color: #394558;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  padding: 9px 11px;
+}
+
+.blank-note-hint {
+  margin: 0 0 10px;
+  color: #6f685b;
+  font-size: 0.86rem;
+}
+
+.blank-note-hint code {
+  border: 1px solid #ddd7ca;
+  border-radius: 5px;
+  padding: 1px 6px;
+  background: #f7f4ec;
+  color: #1a4d8f;
+}
+
+.blank-editor-content {
+  min-height: 64vh;
+  border: 1px solid #ddd7ca;
+  border-radius: 12px;
+  background: #fffefb;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  padding: 18px 16px;
+  color: #1f1f1f;
+  line-height: 1.65;
+  font-size: 1rem;
+  outline: none;
+}
+
+.blank-editor-content p {
+  margin: 0 0 0.75em;
+}
+
+.blank-editor-content h2 {
+  margin: 0.2em 0 0.45em;
+  font-family: "Crimson Pro", "Merriweather", serif;
+}
+
+.blank-editor-content ul,
+.blank-editor-content ol {
+  padding-left: 1.5rem;
+}
+
+.blank-editor-content blockquote {
+  margin: 0.8em 0;
+  border-left: 3px solid rgba(26, 77, 143, 0.45);
+  padding-left: 0.9em;
+  color: #555248;
+}
+
+.blank-editor-content hr {
+  border: none;
+  border-top: 1px solid #ddd7ca;
+  margin: 1.2em 0;
+}
+
+@media (max-width: 760px) {
+  .blank-note-page {
+    padding: 16px 12px 24px;
+  }
+
+  .blank-note-sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid #ddd7ca;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    padding: 8px 10px;
+  }
+
+  .blank-note-tool-list {
+    margin-top: 0;
+    grid-auto-flow: column;
+    grid-auto-columns: 40px;
+    gap: 6px;
+  }
+}
