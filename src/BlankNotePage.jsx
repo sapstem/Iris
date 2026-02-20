@@ -3,6 +3,7 @@ import StarterKit from '@tiptap/starter-kit'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import SlashCommand from './editor/SlashCommand'
+import Toolbar from './editor/Toolbar'
 import irisLogo from './assets/irislogo.png'
 import {
   CardsIcon,
@@ -96,6 +97,12 @@ function BlankNotePage() {
         )}
 
         <section className="blank-note-editor-wrap">
+          <Toolbar
+            editor={editor}
+            onIrisAi={() => {
+              editor?.chain().focus().insertContent('Iris AI: ').run()
+            }}
+          />
           <p className="blank-note-hint">
             Type <code>/</code> to open commands
           </p>

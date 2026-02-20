@@ -123,6 +123,74 @@
   margin-top: 14px;
 }
 
+.iris-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #d1c7b7;
+  border-radius: 10px;
+  background: #f5f2ea;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.iris-toolbar-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding-right: 8px;
+  margin-right: 2px;
+  border-right: 1px solid #d1c7b7;
+}
+
+.iris-toolbar-group:last-of-type {
+  border-right: none;
+  padding-right: 0;
+}
+
+.iris-toolbar-btn {
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: #2c2b29;
+  font-family: "Merriweather", "Times New Roman", serif;
+  font-size: 0.8rem;
+  line-height: 1;
+  padding: 8px 9px;
+  cursor: pointer;
+  min-height: 34px;
+}
+
+.iris-toolbar-btn:hover {
+  background: #e8e2d5;
+}
+
+.iris-toolbar-btn.is-active {
+  background: #e8e2d5;
+  outline: 1px solid rgba(45, 45, 45, 0.55);
+}
+
+.iris-toolbar-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.iris-ai-btn {
+  margin-left: auto;
+  border: 1px solid #2a5ea9;
+  border-radius: 8px;
+  background: linear-gradient(145deg, #2f69bf, #2458a8);
+  color: #f7fbff;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.iris-ai-btn:hover {
+  background: linear-gradient(145deg, #3b76ca, #2f69bf);
+}
+
 .blank-note-tool-banner {
   margin-top: 12px;
   border: 1px dashed rgba(26, 77, 143, 0.35);
@@ -211,5 +279,19 @@
     grid-auto-flow: column;
     grid-auto-columns: 40px;
     gap: 6px;
+  }
+
+  .iris-toolbar {
+    padding: 7px;
+  }
+
+  .iris-toolbar-group {
+    border-right: none;
+    padding-right: 0;
+  }
+
+  .iris-ai-btn {
+    width: 100%;
+    margin-left: 0;
   }
 }
