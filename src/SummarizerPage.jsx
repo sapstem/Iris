@@ -161,7 +161,7 @@ function SummarizerPage() {
 
   const visibleRecent = normalizedSearch
     ? filteredSummaries.filter((item) =>
-        `${item.title || ''} ${item.content || ''}`.toLowerCase().includes(normalizedSearch)
+        `${item.notes_title || item.title || ''} ${item.content || ''}`.toLowerCase().includes(normalizedSearch)
       )
     : filteredSummaries
 
@@ -477,7 +477,7 @@ ${noteText}`
           <p className="resume-label">Continue Learning</p>
           {lastSession ? (
             <>
-              <h2>{lastSession.title || 'Untitled Conversation'}</h2>
+              <h2>{lastSession.notes_title || lastSession.title || 'Untitled Conversation'}</h2>
               <p className="resume-preview">{(lastSession.content || '').slice(0, 160)}</p>
               <div className="resume-actions">
                 <button
@@ -521,7 +521,7 @@ ${noteText}`
                 <span className="recent-source">
                   {source.icon}
                 </span>
-                <span className="recent-title">{item.title || item.content || 'Conversation'}</span>
+                <span className="recent-title">{item.notes_title || item.title || item.content || 'Conversation'}</span>
                 <span className="recent-source-label">{source.label}</span>
                 <span className="recent-meta">{getRecentContext(item)}</span>
               </button>
