@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import LandingPage from './LandingPage'
 import AuthPage from './AuthPage'
@@ -6,6 +6,8 @@ import SummarizerPage from './SummarizerPage'
 import ConversationsPage from './ConversationsPage'
 import BlankNotePage from './BlankNotePage'
 import PomodoroPage from './PomodoroPage'
+import MiniTimer from './MiniTimer'
+import { PomodoroProvider } from './PomodoroContext'
 import About from './pages/About'
 import HowitWorks from './pages/HowitWorks'
 import ProjectWorkspacePage from './ProjectWorkspacePage'
@@ -96,7 +98,10 @@ function AppFrame() {
 function App() {
   return (
     <BrowserRouter>
-      <AppFrame />
+      <PomodoroProvider>
+        <MiniTimer />
+        <AppFrame />
+      </PomodoroProvider>
     </BrowserRouter>
   )
 }

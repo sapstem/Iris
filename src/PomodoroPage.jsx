@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './SummarizerPage.css'
 import './PomodoroPage.css'
 import irisLogo from './assets/irislogo.png'
+import { usePomodoro } from './usePomodoro'
 import {
   ChatIcon,
   ClockIcon,
@@ -39,7 +40,6 @@ const fetchJson = async (path, options = {}) => {
 function PomodoroPage() {
   const navigate = useNavigate()
   const userMenuRef = useRef(null)
-  const intervalRef = useRef(null)
 
   const [displayName, setDisplayName] = useState('Guest')
   const [avatarUrl, setAvatarUrl] = useState('')
@@ -48,13 +48,20 @@ function PomodoroPage() {
   const [theme, setTheme] = useState('dark')
   const [profileLoaded, setProfileLoaded] = useState(false)
 
-  const [focusMinutes, setFocusMinutes] = useState(25)
-  const [shortBreakMinutes, setShortBreakMinutes] = useState(5)
-  const [longBreakMinutes, setLongBreakMinutes] = useState(15)
-  const [mode, setMode] = useState('focus')
-  const [secondsLeft, setSecondsLeft] = useState(25 * 60)
-  const [isRunning, setIsRunning] = useState(false)
-  const [sessionCount, setSessionCount] = useState(0)
+  const {
+    mode,
+    minutes,
+    seconds,
+    isActive,
+    focusDuration,
+    breakDuration,
+    completedFocusSessions,
+    setFocusDuration,
+    setBreakDuration,
+    setTimerMode,
+    toggleTimer,
+    resetTimer
+  } = usePomodoro()
 
   useEffect(() => {
     let mounted = true
@@ -99,88 +106,15 @@ function PomodoroPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  useEffect(() => {
-    if (!isRunning) {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-        intervalRef.current = null
-      }
-      return
-    }
-
-    intervalRef.current = setInterval(() => {
-      setSecondsLeft((prev) => (prev > 0 ? prev - 1 : 0))
-    }, 1000)
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-        intervalRef.current = null
-      }
-    }
-  }, [isRunning])
-
-  useEffect(() => {
-    if (secondsLeft > 0) return
-    const timer = setTimeout(() => {
-      setIsRunning(false)
-
-      if (mode === 'focus') {
-        const nextSessionCount = sessionCount + 1
-        setSessionCount(nextSessionCount)
-        if (nextSessionCount % 4 === 0) {
-          setMode('longBreak')
-          setSecondsLeft(longBreakMinutes * 60)
-        } else {
-          setMode('shortBreak')
-          setSecondsLeft(shortBreakMinutes * 60)
-        }
-        return
-      }
-
-      setMode('focus')
-      setSecondsLeft(focusMinutes * 60)
-    }, 0)
-
-    return () => clearTimeout(timer)
-  }, [secondsLeft, mode, sessionCount, focusMinutes, shortBreakMinutes, longBreakMinutes])
-
-  const applyModeTime = (nextMode) => {
-    setMode(nextMode)
-    setIsRunning(false)
-    if (nextMode === 'focus') setSecondsLeft(focusMinutes * 60)
-    if (nextMode === 'shortBreak') setSecondsLeft(shortBreakMinutes * 60)
-    if (nextMode === 'longBreak') setSecondsLeft(longBreakMinutes * 60)
-  }
-
-  const onMinutesChange = (setter, value) => {
-    const parsed = Number(value)
-    if (Number.isNaN(parsed)) return
-    const clamped = Math.max(1, Math.min(90, parsed))
-    setter(clamped)
-  }
-
-  const handleReset = () => {
-    setIsRunning(false)
-    if (mode === 'focus') setSecondsLeft(focusMinutes * 60)
-    if (mode === 'shortBreak') setSecondsLeft(shortBreakMinutes * 60)
-    if (mode === 'longBreak') setSecondsLeft(longBreakMinutes * 60)
-  }
-
   const handleLogout = () => {
     fetchJson('/api/auth/logout', { method: 'POST' })
       .catch((error) => console.error('Failed to logout:', error))
       .finally(() => navigate('/auth'))
   }
 
-  const formattedTime = useMemo(() => {
-    const mins = Math.floor(secondsLeft / 60)
-    const secs = secondsLeft % 60
-    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
-  }, [secondsLeft])
+  const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
 
-  const modeLabel =
-    mode === 'focus' ? 'Focus' : mode === 'shortBreak' ? 'Short Break' : 'Long Break'
+  const modeLabel = mode === 'focus' ? 'Focus' : 'Break'
 
   return (
     <div
@@ -284,23 +218,16 @@ function PomodoroPage() {
             <button
               type="button"
               className={`pomodoro-mode-btn ${mode === 'focus' ? 'active' : ''}`}
-              onClick={() => applyModeTime('focus')}
+              onClick={() => setTimerMode('focus')}
             >
               Focus
             </button>
             <button
               type="button"
-              className={`pomodoro-mode-btn ${mode === 'shortBreak' ? 'active' : ''}`}
-              onClick={() => applyModeTime('shortBreak')}
+              className={`pomodoro-mode-btn ${mode === 'break' ? 'active' : ''}`}
+              onClick={() => setTimerMode('break')}
             >
-              Short Break
-            </button>
-            <button
-              type="button"
-              className={`pomodoro-mode-btn ${mode === 'longBreak' ? 'active' : ''}`}
-              onClick={() => applyModeTime('longBreak')}
-            >
-              Long Break
+              Break
             </button>
           </div>
 
@@ -308,15 +235,15 @@ function PomodoroPage() {
           <p className="pomodoro-time">{formattedTime}</p>
 
           <div className="pomodoro-actions">
-            <button type="button" className="pomodoro-primary" onClick={() => setIsRunning((prev) => !prev)}>
-              {isRunning ? 'Pause' : 'Start'}
+            <button type="button" className="pomodoro-primary" onClick={toggleTimer}>
+              {isActive ? 'Pause' : 'Start'}
             </button>
-            <button type="button" className="pomodoro-secondary" onClick={handleReset}>
+            <button type="button" className="pomodoro-secondary" onClick={resetTimer}>
               Reset
             </button>
           </div>
 
-          <p className="pomodoro-sessions">Completed focus sessions: {sessionCount}</p>
+          <p className="pomodoro-sessions">Completed focus sessions: {completedFocusSessions}</p>
         </section>
 
         <section className="pomodoro-settings">
@@ -328,28 +255,18 @@ function PomodoroPage() {
                 type="number"
                 min="1"
                 max="90"
-                value={focusMinutes}
-                onChange={(event) => onMinutesChange(setFocusMinutes, event.target.value)}
+                value={focusDuration}
+                onChange={(event) => setFocusDuration(event.target.value)}
               />
             </label>
             <label>
-              Short break (minutes)
+              Break (minutes)
               <input
                 type="number"
                 min="1"
                 max="90"
-                value={shortBreakMinutes}
-                onChange={(event) => onMinutesChange(setShortBreakMinutes, event.target.value)}
-              />
-            </label>
-            <label>
-              Long break (minutes)
-              <input
-                type="number"
-                min="1"
-                max="90"
-                value={longBreakMinutes}
-                onChange={(event) => onMinutesChange(setLongBreakMinutes, event.target.value)}
+                value={breakDuration}
+                onChange={(event) => setBreakDuration(event.target.value)}
               />
             </label>
           </div>
