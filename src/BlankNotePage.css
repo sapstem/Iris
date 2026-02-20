@@ -103,6 +103,40 @@
   letter-spacing: -0.01em;
 }
 
+.blank-note-header-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.blank-note-save-state {
+  font-size: 0.78rem;
+  color: #9ea8bd;
+}
+
+.blank-note-save-state.error {
+  color: #ff9c9c;
+}
+
+.blank-note-title-input {
+  border: 1px solid transparent;
+  background: transparent;
+  color: #f2f5fb;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  padding: 2px 6px;
+  border-radius: 8px;
+  min-width: min(56vw, 560px);
+}
+
+.blank-note-title-input:focus {
+  outline: none;
+  border-color: #3a4150;
+  background: rgba(255, 255, 255, 0.02);
+}
+
 .blank-note-back {
   border: 1px solid #5338d9;
   background: linear-gradient(145deg, #7048ff, #5a33ea);
@@ -129,6 +163,7 @@
 
 .blank-note-editor-wrap {
   margin-top: 12px;
+  min-height: calc(100dvh - 140px);
 }
 
 .iris-toolbar {
@@ -262,7 +297,7 @@
   padding: 16px;
   color: #e6eaf3;
   line-height: 1.65;
-  font-size: 1rem;
+  font-size: var(--editor-font-size, 16px);
   outline: none;
   caret-color: #8c73ff;
 }
@@ -293,6 +328,183 @@
   border: none;
   border-top: 1px solid #313748;
   margin: 1.2em 0;
+}
+
+.blank-tool-panel {
+  border: 1px solid #2a2f3b;
+  border-radius: 10px;
+  background: #121620;
+  min-height: 76vh;
+  padding: 14px;
+}
+
+.blank-empty-copy {
+  margin: 0;
+  color: #98a1b5;
+}
+
+.blank-chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: calc(76vh - 74px);
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.blank-chat-message {
+  border: 1px solid #2a3040;
+  border-radius: 10px;
+  background: #171d2a;
+  padding: 10px 12px;
+  color: #e8ecf8;
+}
+
+.blank-chat-message.user {
+  border-color: #364465;
+  background: #1a253f;
+}
+
+.blank-chat-role {
+  margin: 0 0 6px;
+  color: #9eabca;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.blank-chat-message p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.blank-chat-input-bar {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.blank-chat-input-bar input {
+  width: 100%;
+  border: 1px solid #30394c;
+  border-radius: 8px;
+  background: #0f141f;
+  color: #e8ecf8;
+  padding: 9px 10px;
+}
+
+.blank-chat-input-bar input:focus {
+  outline: none;
+  border-color: #5f6f9f;
+}
+
+.blank-chat-input-bar button {
+  width: 40px;
+  border: 1px solid #4e60a2;
+  border-radius: 8px;
+  background: #2c3f76;
+  color: #f1f5ff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.blank-chat-input-bar button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.blank-chat-input-bar button svg {
+  width: 17px;
+  height: 17px;
+}
+
+.blank-quiz-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.blank-quiz-head h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: #e8ecf8;
+}
+
+.blank-quiz-head button,
+.blank-quiz-footer button {
+  border: 1px solid #4d5d99;
+  background: #273b71;
+  color: #edf1ff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.blank-quiz-head button:disabled,
+.blank-quiz-footer button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.blank-quiz-card {
+  border: 1px solid #2b3241;
+  background: #171d2a;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.blank-quiz-progress {
+  margin: 0 0 8px;
+  color: #a1abbe;
+  font-size: 0.82rem;
+}
+
+.blank-quiz-card h3 {
+  margin: 0 0 12px;
+  color: #f3f6ff;
+  font-size: 1.05rem;
+}
+
+.blank-quiz-options {
+  display: grid;
+  gap: 8px;
+}
+
+.blank-quiz-option {
+  text-align: left;
+  border: 1px solid #31394a;
+  background: #101624;
+  color: #e8ecf8;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.blank-quiz-option.correct {
+  border-color: #2f7e57;
+  background: rgba(53, 153, 101, 0.2);
+}
+
+.blank-quiz-option.wrong {
+  border-color: #9b3a4f;
+  background: rgba(155, 58, 79, 0.22);
+}
+
+.blank-quiz-footer {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.blank-quiz-footer p {
+  margin: 0;
+  color: #a7b1c4;
 }
 
 @media (max-width: 760px) {
@@ -333,5 +545,13 @@
   .iris-ai-btn {
     width: 100%;
     margin-left: 0;
+  }
+
+  .blank-note-editor-wrap {
+    min-height: 0;
+  }
+
+  .blank-tool-panel {
+    min-height: 60vh;
   }
 }

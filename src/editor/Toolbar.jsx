@@ -13,7 +13,7 @@ function ToolbarButton({ onClick, active, label, children, disabled = false }) {
   )
 }
 
-function Toolbar({ editor, onIrisAi }) {
+function Toolbar({ editor, fontSize = 16, onDecreaseFontSize, onIncreaseFontSize }) {
   if (!editor) return null
 
   return (
@@ -21,9 +21,9 @@ function Toolbar({ editor, onIrisAi }) {
       <div className="iris-toolbar-main">
         <div className="iris-toolbar-font-select">Clarika</div>
         <div className="iris-toolbar-size">
-          <button type="button" className="iris-toolbar-size-btn" aria-label="Decrease size">-</button>
-          <span className="iris-toolbar-size-value">12</span>
-          <button type="button" className="iris-toolbar-size-btn" aria-label="Increase size">+</button>
+          <button type="button" className="iris-toolbar-size-btn" aria-label="Decrease size" onClick={onDecreaseFontSize}>-</button>
+          <span className="iris-toolbar-size-value">{fontSize}</span>
+          <button type="button" className="iris-toolbar-size-btn" aria-label="Increase size" onClick={onIncreaseFontSize}>+</button>
         </div>
       </div>
 
@@ -59,70 +59,7 @@ function Toolbar({ editor, onIrisAi }) {
         >
           <span style={{ textDecoration: 'underline' }}>U</span>
         </ToolbarButton>
-        <ToolbarButton
-          label="Heading 2"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          active={editor.isActive('heading', { level: 2 })}
-        >
-          H2
-        </ToolbarButton>
-        <ToolbarButton
-          label="Heading 3"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          active={editor.isActive('heading', { level: 3 })}
-        >
-          H3
-        </ToolbarButton>
       </div>
-
-      <div className="iris-toolbar-group">
-        <ToolbarButton
-          label="Image placeholder"
-          onClick={() => {}}
-          active={false}
-        >
-          Img
-        </ToolbarButton>
-        <ToolbarButton
-          label="Table placeholder"
-          onClick={() => {}}
-          active={false}
-        >
-          Tbl
-        </ToolbarButton>
-      </div>
-
-      <div className="iris-toolbar-group">
-        <ToolbarButton
-          label="Bullet list"
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          active={editor.isActive('bulletList')}
-        >
-          ≡
-        </ToolbarButton>
-        <ToolbarButton
-          label="Numbered list"
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          active={editor.isActive('orderedList')}
-        >
-          1≡
-        </ToolbarButton>
-        <ToolbarButton
-          label="Quote"
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          active={editor.isActive('blockquote')}
-        >
-          "
-        </ToolbarButton>
-      </div>
-
-      <button
-        type="button"
-        className="iris-ai-btn"
-        onClick={onIrisAi}
-      >
-        Iris AI
-      </button>
     </div>
   )
 }

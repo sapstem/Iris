@@ -9,7 +9,6 @@ import About from './pages/About'
 import HowitWorks from './pages/HowitWorks'
 import ProjectWorkspacePage from './ProjectWorkspacePage'
 import './App.css'
-import ConversationView from './ConversationView'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5175'
 
@@ -57,6 +56,12 @@ function AppFrame() {
           </RequireAuth>
         )}
         />
+        <Route path="/blank-note/:id" element={(
+          <RequireAuth>
+            <BlankNotePage />
+          </RequireAuth>
+        )}
+        />
         <Route path="/conversations" element={(
           <RequireAuth>
             <ConversationsPage />
@@ -66,12 +71,6 @@ function AppFrame() {
         <Route path="/project/:spaceId" element={(
           <RequireAuth>
             <ProjectWorkspacePage />
-          </RequireAuth>
-        )}
-        />
-        <Route path="/conversation/:id" element={(
-          <RequireAuth>
-            <ConversationView />
           </RequireAuth>
         )}
         />

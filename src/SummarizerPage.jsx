@@ -229,7 +229,7 @@ ${noteText}`
       setTakeaways(newItem.takeaways || [])
       setKeywords(newItem.keywords || [])
       setSavedSummaries([newItem, ...savedSummaries])
-      navigate(`/conversation/${newItem.id}`)
+      navigate(`/blank-note/${newItem.id}`)
     } catch (error) {
       console.error(error)
       setStatus('Failed to summarize.')
@@ -316,6 +316,10 @@ ${noteText}`
     youtube: { label: 'YouTube', icon: <LinkIcon /> },
     pdf: { label: 'PDF', icon: <UploadIcon /> },
     notes: { label: 'Notes', icon: <ClipboardIcon /> }
+  }
+
+  const getConversationRoute = (item) => {
+    return `/blank-note/${item.id}`
   }
 
   return (
@@ -479,7 +483,7 @@ ${noteText}`
                 <button
                   type="button"
                   className="resume-open-btn"
-                  onClick={() => navigate(`/conversation/${lastSession.id}`)}
+                  onClick={() => navigate(getConversationRoute(lastSession))}
                 >
                   Continue where you left off
                 </button>
@@ -512,7 +516,7 @@ ${noteText}`
               <button
                 key={item.id}
                 className="recent-table-row"
-                onClick={() => navigate(`/conversation/${item.id}`)}
+                onClick={() => navigate(getConversationRoute(item))}
               >
                 <span className="recent-source">
                   {source.icon}

@@ -15,7 +15,7 @@ const fetchJson = async (path, options = {}) => {
   let data = null
   try {
     data = await response.json()
-  } catch (error) {
+  } catch {
     data = null
   }
 
@@ -212,7 +212,7 @@ function ProjectWorkspacePage() {
                     key={item.id}
                     type="button"
                     className="project-doc-card"
-                    onClick={() => navigate(`/conversation/${item.id}`)}
+                    onClick={() => navigate(`/blank-note/${item.id}`)}
                   >
                     <p className="project-doc-card-title">{item.title || 'Untitled Document'}</p>
                     <p className="project-doc-card-meta">{formatDate(item.updated_at || item.created_at)}</p>

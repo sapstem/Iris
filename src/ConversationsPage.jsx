@@ -69,6 +69,10 @@ function ConversationsPage() {
     return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
   }
 
+  const getConversationRoute = (item) => {
+    return `/blank-note/${item.id}`
+  }
+
   return (
     <main className="conversations-page">
       <div className="conversations-shell">
@@ -97,7 +101,7 @@ function ConversationsPage() {
               key={item.id}
               type="button"
               className="conversation-card"
-              onClick={() => navigate(`/conversation/${item.id}`)}
+              onClick={() => navigate(getConversationRoute(item))}
             >
               <span className="conversation-project">{spaceNameById.get(item.space_id) || 'General'}</span>
               <span className="conversation-title">{item.title || 'Untitled Conversation'}</span>
