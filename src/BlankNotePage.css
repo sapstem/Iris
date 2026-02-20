@@ -1,20 +1,7 @@
 .blank-note-page {
   min-height: 100dvh;
-  padding: 22px 16px 36px 84px;
-  background:
-    radial-gradient(circle at 8% 10%, rgba(26, 77, 143, 0.08), transparent 36%),
-    radial-gradient(circle at 92% 88%, rgba(26, 77, 143, 0.07), transparent 34%),
-    #f7f3ea;
-}
-
-.blank-note-shell {
-  width: min(1020px, 100%);
-  margin: 0 auto;
-  border: 1px solid #ddd7ca;
-  border-radius: 14px;
-  background: #fffdf9;
-  box-shadow: 8px 8px 0 #ece6d9;
-  padding: 16px;
+  padding: 8px 10px 10px 78px;
+  background: #0b0d12;
 }
 
 .blank-note-sidebar {
@@ -23,8 +10,8 @@
   top: 0;
   width: 68px;
   height: 100vh;
-  border-right: 1px solid #ddd7ca;
-  background: #fffdf9;
+  border-right: 1px solid #222734;
+  background: #07090d;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -54,10 +41,10 @@
 .blank-note-tool {
   width: 40px;
   height: 40px;
-  border: 1px solid transparent;
+  border: 1px solid #1f2430;
   border-radius: 10px;
-  background: transparent;
-  color: #5b5b58;
+  background: #0f131b;
+  color: #b8c0d0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -70,15 +57,24 @@
 }
 
 .blank-note-tool:hover {
-  background: #f8f4ec;
-  color: #1f1f1f;
-  border-color: #e4ded2;
+  background: #191f2a;
+  color: #f0f4ff;
+  border-color: #2c3442;
 }
 
 .blank-note-tool.is-active {
-  background: rgba(26, 77, 143, 0.11);
-  color: #1a3e70;
-  border-color: rgba(26, 77, 143, 0.24);
+  background: rgba(112, 82, 255, 0.26);
+  color: #eef2ff;
+  border-color: rgba(144, 118, 255, 0.72);
+}
+
+.blank-note-shell {
+  width: 100%;
+  min-height: calc(100dvh - 18px);
+  border: 1px solid #252b38;
+  border-radius: 10px;
+  background: #11151e;
+  padding: 12px 14px 10px;
 }
 
 .blank-note-head {
@@ -86,7 +82,7 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: 12px;
-  border-bottom: 1px solid #e8e2d7;
+  border-bottom: 1px solid #242a37;
   padding-bottom: 12px;
 }
 
@@ -94,33 +90,45 @@
   margin: 0 0 8px;
   text-transform: uppercase;
   letter-spacing: 0.09em;
-  font-size: 0.74rem;
-  color: #1a4d8f;
+  font-size: 0.72rem;
+  color: #8892a3;
 }
 
 .blank-note-head h1 {
   margin: 0;
-  font-family: "Crimson Pro", "Merriweather", serif;
-  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
-  color: #1c1c1c;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  color: #f2f5fb;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .blank-note-back {
-  border: 1px solid #d8d2c5;
-  background: #fffdf8;
-  color: #1f1f1f;
+  border: 1px solid #5338d9;
+  background: linear-gradient(145deg, #7048ff, #5a33ea);
+  color: #f7f8ff;
   border-radius: 10px;
-  padding: 9px 12px;
+  padding: 8px 12px;
   cursor: pointer;
 }
 
 .blank-note-back:hover {
-  border-color: #1a4d8f;
-  color: #1a4d8f;
+  background: linear-gradient(145deg, #7e59ff, #6844f0);
+}
+
+.blank-note-tool-banner {
+  margin-top: 12px;
+  border: 1px dashed rgba(128, 139, 255, 0.45);
+  border-radius: 10px;
+  background: rgba(128, 139, 255, 0.08);
+  color: #c0c8dc;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  padding: 9px 11px;
 }
 
 .blank-note-editor-wrap {
-  margin-top: 14px;
+  margin-top: 12px;
 }
 
 .iris-toolbar {
@@ -128,11 +136,56 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
-  border: 1px solid #d1c7b7;
+  border: 1px solid #313846;
   border-radius: 10px;
-  background: #f5f2ea;
+  background: #171b24;
   padding: 8px;
   margin-bottom: 10px;
+}
+
+.iris-toolbar-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 8px;
+  margin-right: 2px;
+  border-right: 1px solid #313846;
+}
+
+.iris-toolbar-font-select {
+  color: #f0f3fa;
+  border: 1px solid #3a4150;
+  background: #1f2430;
+  border-radius: 9px;
+  padding: 7px 10px;
+  font-size: 0.82rem;
+  min-width: 96px;
+}
+
+.iris-toolbar-size {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.iris-toolbar-size-btn {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #3a4150;
+  border-radius: 8px;
+  background: #1f2430;
+  color: #e4e8f1;
+  cursor: pointer;
+}
+
+.iris-toolbar-size-value {
+  min-width: 34px;
+  text-align: center;
+  color: #f0f3fa;
+  border: 1px solid #3a4150;
+  background: #1f2430;
+  border-radius: 8px;
+  padding: 6px 0;
 }
 
 .iris-toolbar-group {
@@ -141,7 +194,7 @@
   gap: 4px;
   padding-right: 8px;
   margin-right: 2px;
-  border-right: 1px solid #d1c7b7;
+  border-right: 1px solid #313846;
 }
 
 .iris-toolbar-group:last-of-type {
@@ -150,11 +203,11 @@
 }
 
 .iris-toolbar-btn {
-  border: 1px solid transparent;
+  border: 1px solid #2b3140;
   border-radius: 7px;
-  background: transparent;
-  color: #2c2b29;
-  font-family: "Merriweather", "Times New Roman", serif;
+  background: #1b202b;
+  color: #d7ddec;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
   font-size: 0.8rem;
   line-height: 1;
   padding: 8px 9px;
@@ -163,70 +216,55 @@
 }
 
 .iris-toolbar-btn:hover {
-  background: #e8e2d5;
+  background: #242b38;
+  border-color: #3a4252;
 }
 
 .iris-toolbar-btn.is-active {
-  background: #e8e2d5;
-  outline: 1px solid rgba(45, 45, 45, 0.55);
-}
-
-.iris-toolbar-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+  background: rgba(123, 139, 255, 0.2);
+  border-color: rgba(134, 146, 255, 0.78);
 }
 
 .iris-ai-btn {
   margin-left: auto;
-  border: 1px solid #2a5ea9;
+  border: 1px solid #5137d8;
   border-radius: 8px;
-  background: linear-gradient(145deg, #2f69bf, #2458a8);
-  color: #f7fbff;
+  background: linear-gradient(145deg, #6f46ff, #5932e8);
+  color: #f6f7ff;
   padding: 8px 12px;
   font-size: 0.8rem;
   cursor: pointer;
 }
 
 .iris-ai-btn:hover {
-  background: linear-gradient(145deg, #3b76ca, #2f69bf);
-}
-
-.blank-note-tool-banner {
-  margin-top: 12px;
-  border: 1px dashed rgba(26, 77, 143, 0.35);
-  border-radius: 10px;
-  background: rgba(26, 77, 143, 0.04);
-  color: #394558;
-  font-size: 0.86rem;
-  line-height: 1.45;
-  padding: 9px 11px;
+  background: linear-gradient(145deg, #7a54ff, #6641ef);
 }
 
 .blank-note-hint {
   margin: 0 0 10px;
-  color: #6f685b;
-  font-size: 0.86rem;
+  color: #8e97a8;
+  font-size: 0.84rem;
 }
 
 .blank-note-hint code {
-  border: 1px solid #ddd7ca;
+  border: 1px solid #373e4d;
   border-radius: 5px;
   padding: 1px 6px;
-  background: #f7f4ec;
-  color: #1a4d8f;
+  background: #191d27;
+  color: #9db2ff;
 }
 
 .blank-editor-content {
-  min-height: 64vh;
-  border: 1px solid #ddd7ca;
-  border-radius: 12px;
-  background: #fffefb;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  padding: 18px 16px;
-  color: #1f1f1f;
+  min-height: 76vh;
+  border: 1px solid #2a2f3b;
+  border-radius: 10px;
+  background: #121620;
+  padding: 16px;
+  color: #e6eaf3;
   line-height: 1.65;
   font-size: 1rem;
   outline: none;
+  caret-color: #8c73ff;
 }
 
 .blank-editor-content p {
@@ -235,7 +273,8 @@
 
 .blank-editor-content h2 {
   margin: 0.2em 0 0.45em;
-  font-family: "Crimson Pro", "Merriweather", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  color: #f2f6ff;
 }
 
 .blank-editor-content ul,
@@ -245,20 +284,20 @@
 
 .blank-editor-content blockquote {
   margin: 0.8em 0;
-  border-left: 3px solid rgba(26, 77, 143, 0.45);
+  border-left: 3px solid rgba(123, 139, 255, 0.65);
   padding-left: 0.9em;
-  color: #555248;
+  color: #b9c2d6;
 }
 
 .blank-editor-content hr {
   border: none;
-  border-top: 1px solid #ddd7ca;
+  border-top: 1px solid #313748;
   margin: 1.2em 0;
 }
 
 @media (max-width: 760px) {
   .blank-note-page {
-    padding: 16px 12px 24px;
+    padding: 10px;
   }
 
   .blank-note-sidebar {
@@ -266,11 +305,11 @@
     width: 100%;
     height: auto;
     border-right: none;
-    border-bottom: 1px solid #ddd7ca;
+    border-bottom: 1px solid #252b38;
     flex-direction: row;
     justify-content: space-between;
     margin-bottom: 10px;
-    border-radius: 12px;
+    border-radius: 10px;
     padding: 8px 10px;
   }
 
@@ -285,6 +324,7 @@
     padding: 7px;
   }
 
+  .iris-toolbar-main,
   .iris-toolbar-group {
     border-right: none;
     padding-right: 0;

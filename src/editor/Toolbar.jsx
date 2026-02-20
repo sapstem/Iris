@@ -18,6 +18,15 @@ function Toolbar({ editor, onIrisAi }) {
 
   return (
     <div className="iris-toolbar">
+      <div className="iris-toolbar-main">
+        <div className="iris-toolbar-font-select">Clarika</div>
+        <div className="iris-toolbar-size">
+          <button type="button" className="iris-toolbar-size-btn" aria-label="Decrease size">-</button>
+          <span className="iris-toolbar-size-value">12</span>
+          <button type="button" className="iris-toolbar-size-btn" aria-label="Increase size">+</button>
+        </div>
+      </div>
+
       <div className="iris-toolbar-group">
         <ToolbarButton
           label="Bold"
@@ -44,11 +53,11 @@ function Toolbar({ editor, onIrisAi }) {
 
       <div className="iris-toolbar-group">
         <ToolbarButton
-          label="Paragraph"
+          label="Underline style"
           onClick={() => editor.chain().focus().setParagraph().run()}
-          active={editor.isActive('paragraph')}
+          active={false}
         >
-          P
+          <span style={{ textDecoration: 'underline' }}>U</span>
         </ToolbarButton>
         <ToolbarButton
           label="Heading 2"
@@ -68,18 +77,35 @@ function Toolbar({ editor, onIrisAi }) {
 
       <div className="iris-toolbar-group">
         <ToolbarButton
+          label="Image placeholder"
+          onClick={() => {}}
+          active={false}
+        >
+          Img
+        </ToolbarButton>
+        <ToolbarButton
+          label="Table placeholder"
+          onClick={() => {}}
+          active={false}
+        >
+          Tbl
+        </ToolbarButton>
+      </div>
+
+      <div className="iris-toolbar-group">
+        <ToolbarButton
           label="Bullet list"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           active={editor.isActive('bulletList')}
         >
-          • List
+          ≡
         </ToolbarButton>
         <ToolbarButton
           label="Numbered list"
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           active={editor.isActive('orderedList')}
         >
-          1. List
+          1≡
         </ToolbarButton>
         <ToolbarButton
           label="Quote"
@@ -87,16 +113,6 @@ function Toolbar({ editor, onIrisAi }) {
           active={editor.isActive('blockquote')}
         >
           "
-        </ToolbarButton>
-      </div>
-
-      <div className="iris-toolbar-group">
-        <ToolbarButton
-          label="Horizontal divider"
-          onClick={() => editor.chain().focus().setHorizontalRule().run()}
-          active={false}
-        >
-          ---
         </ToolbarButton>
       </div>
 
