@@ -6,6 +6,7 @@ import SummarizerPage from './SummarizerPage'
 import ConversationsPage from './ConversationsPage'
 import BlankNotePage from './BlankNotePage'
 import PomodoroPage from './PomodoroPage'
+import FlashcardsPage from './FlashcardsPage'
 import MiniTimer from './MiniTimer'
 import { PomodoroProvider } from './PomodoroContext'
 import About from './pages/About'
@@ -80,6 +81,12 @@ function AppFrame() {
         <Route path="/pomodoro" element={(
           <RequireAuth>
             <PomodoroPage />
+          </RequireAuth>
+        )}
+        />
+        <Route path="/flashcards" element={(
+          <RequireAuth>
+            <FlashcardsPage />
           </RequireAuth>
         )}
         />

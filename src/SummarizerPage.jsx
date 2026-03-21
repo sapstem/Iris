@@ -1,31 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { GoogleGenerativeAI } from '@google/generative-ai'
-import RecordModal from './RecordModal'
 import './SummarizerPage.css'
 import UploadModal from './UploadModal'
-import LinkModal from './LinkModal'
-import PasteModal from './PasteModal'
+import RecordModal from './RecordModal'
 import irisLogo from './assets/irislogo.png'
 import {
-  ArrowRightIcon,
   ChatIcon,
   ClockIcon,
-  ChevronDownIcon,
-  CloseIcon,
-  ClipboardIcon,
   HomeIcon,
-  LinkIcon,
   MicIcon,
   NotesIcon,
   PlusIcon,
+  QuizIcon,
   RefreshIcon,
-  SettingsIcon,
   UploadIcon
 } from './Icons'
 
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
-const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5175'
 
 const fetchJson = async (path, options = {}) => {
@@ -50,66 +40,80 @@ const fetchJson = async (path, options = {}) => {
   return data
 }
 
+const quickActions = [
+  { id: 'note',       title: 'New Note',             subtitle: 'Write and organize',      icon: <NotesIcon /> },
+  { id: 'flashcards', title: 'Flashcards',            subtitle: 'Generate from notes',     icon: <QuizIcon /> },
+  { id: 'tutor',      title: 'AI Tutor',              subtitle: 'Get instant help',        icon: <ChatIcon /> },
+  { id: 'upload',     title: 'Upload',                subtitle: 'Summarize content',       icon: <UploadIcon /> },
+  { id: 'record',     title: 'Record Lecture',        subtitle: 'Capture and transcribe',  icon: <MicIcon /> },
+  { id: 'quiz',       title: 'Pomodoro',              subtitle: 'Focus timer',             icon: <ClockIcon /> },
+]
+
 function SummarizerPage() {
   const navigate = useNavigate()
-  const [displayName, setDisplayName] = useState('Guest')
+  const userMenuRef = useRef(null)
+  const recentSectionRef = useRef(null)
+  const [displayName, setDisplayName] = useState('there')
   const [avatarUrl, setAvatarUrl] = useState('')
-  const [noteText, setNoteText] = useState('')
-  const [savedSummaries, setSavedSummaries] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [status, setStatus] = useState('')
-  const [overview, setOverview] = useState('')
-  const [takeaways, setTakeaways] = useState([])
-  const [keywords, setKeywords] = useState([])
-  const [showRecordModal, setShowRecordModal] = useState(false)
-  const [showUploadModal, setShowUploadModal] = useState(false)
-  const [showLinkModal, setShowLinkModal] = useState(false)
-  const [showPasteModal, setShowPasteModal] = useState(false)
-  const [spaces, setSpaces] = useState([])
-  const [showCreateSpace, setShowCreateSpace] = useState(false)
-  const [newSpaceName, setNewSpaceName] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
-  const [theme, setTheme] = useState('dark')
+  const [theme, setTheme] = useState('light')
   const [profileLoaded, setProfileLoaded] = useState(false)
-  const recentSectionRef = useRef(null)
-  const userMenuRef = useRef(null)
-  const activeSpace = null
+  const [showRecordModal, setShowRecordModal] = useState(false)
+  const [showUploadModal, setShowUploadModal] = useState(false)
+  const [conversations, setConversations] = useState([])
+  const [flashcardCounts, setFlashcardCounts] = useState({})
+  const [dashboardLoaded, setDashboardLoaded] = useState(false)
+
+  const hour = new Date().getHours()
+  const timeOfDay = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening'
 
   useEffect(() => {
     let mounted = true
+    Promise.all([fetchJson('/api/auth/me'), fetchJson('/api/conversations')])
+      .then(([result, conversationData]) => {
+        if (!mounted) return
+        const name = result.user?.display_name || result.user?.email || 'there'
+        setDisplayName(name.split(' ')[0])
+        setAvatarUrl(result.user?.avatar_url || '')
+        setTheme(result.user?.theme || 'light')
+        const nextConversations = Array.isArray(conversationData) ? conversationData : []
+        setConversations(nextConversations)
+        if (nextConversations.length === 0) setFlashcardCounts({})
+        setProfileLoaded(true)
+      })
+      .catch((error) => {
+        console.error('Failed to load dashboard profile:', error)
+      })
+      .finally(() => {
+        if (!mounted) return
+        setDashboardLoaded(true)
+      })
 
-    const loadProfile = async () => {
-      const result = await fetchJson('/api/auth/me')
+    return () => { mounted = false }
+  }, [])
+
+  useEffect(() => {
+    let mounted = true
+    if (conversations.length === 0) return () => { mounted = false }
+
+    Promise.all(
+      conversations.slice(0, 24).map(async (item) => {
+        try {
+          const cards = await fetchJson(`/api/flashcards/${item.id}`)
+          return [item.id, Array.isArray(cards) ? cards.length : 0]
+        } catch {
+          return [item.id, 0]
+        }
+      })
+    ).then((entries) => {
       if (!mounted) return
-      const name = result.user?.display_name || result.user?.email || 'Guest'
-      setDisplayName(name.split(' ')[0])
-      setAvatarUrl(result.user?.avatar_url || '')
-      setTheme(result.user?.theme || 'dark')
-      setProfileLoaded(true)
-    }
-
-    const loadSpaces = async () => {
-      const data = await fetchJson('/api/spaces')
-      if (!mounted) return
-      setSpaces(Array.isArray(data) ? data : [])
-    }
-
-    const loadConversations = async () => {
-      const data = await fetchJson('/api/conversations')
-      if (!mounted) return
-      setSavedSummaries(Array.isArray(data) ? data : [])
-    }
-
-    Promise.all([loadProfile(), loadSpaces(), loadConversations()]).catch((error) => {
-      console.error('Failed to load dashboard data:', error)
+      setFlashcardCounts(Object.fromEntries(entries))
     })
 
-    return () => {
-      mounted = false
-    }
-  }, [])
+    return () => { mounted = false }
+  }, [conversations])
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme
@@ -125,9 +129,7 @@ function SummarizerPage() {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!userMenuRef.current) return
-      if (!userMenuRef.current.contains(event.target)) {
-        setUserMenuOpen(false)
-      }
+      if (!userMenuRef.current.contains(event.target)) setUserMenuOpen(false)
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
@@ -139,254 +141,117 @@ function SummarizerPage() {
       .finally(() => navigate('/auth'))
   }
 
-  const createSpace = async () => {
-    if (!newSpaceName.trim()) return
-
-    try {
-      const newSpace = await fetchJson('/api/spaces', {
-        method: 'POST',
-        body: JSON.stringify({ name: newSpaceName.trim() })
-      })
-      setSpaces([newSpace, ...spaces])
-      setNewSpaceName('')
-      setShowCreateSpace(false)
-    } catch (error) {
-      console.error('Failed to create space:', error)
-      setStatus('Failed to create space.')
-    }
+  const formatDate = (value) => {
+    if (!value) return 'Recently'
+    const date = new Date(value)
+    if (Number.isNaN(date.getTime())) return 'Recently'
+    return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
   }
 
-  const filteredSummaries = savedSummaries
+  const query = searchQuery.trim().toLowerCase()
 
-  const normalizedSearch = searchQuery.trim().toLowerCase()
+  const recentItems = conversations.map((item) => {
+    const flashcardCount = flashcardCounts[item.id] || 0
+    const title = item.notes_title || item.title || 'Untitled note'
+    const subtitle = flashcardCount > 0
+      ? `${flashcardCount} flashcards`
+      : (item.summary ? 'Summary available' : 'No summary yet')
+    const icon = flashcardCount > 0 ? <NotesIcon /> : <UploadIcon />
+    return { id: item.id, icon, title, subtitle, timestamp: formatDate(item.updated_at || item.created_at) }
+  })
 
-  const visibleRecent = normalizedSearch
-    ? filteredSummaries.filter((item) =>
-        `${item.notes_title || item.title || ''} ${item.content || ''}`.toLowerCase().includes(normalizedSearch)
-      )
-    : filteredSummaries
+  const filteredRecent = query
+    ? recentItems.filter((item) => `${item.title} ${item.subtitle}`.toLowerCase().includes(query))
+    : recentItems
 
-  const formatRelativeTime = (value) => {
-    if (!value) return 'Updated recently'
-    const time = new Date(value).getTime()
-    if (Number.isNaN(time)) return 'Updated recently'
-    const diffMs = Date.now() - time
-    const diffMin = Math.floor(diffMs / 60000)
-    if (diffMin < 1) return 'Just now'
-    if (diffMin < 60) return `Edited ${diffMin}m ago`
-    const diffHr = Math.floor(diffMin / 60)
-    if (diffHr < 24) return `Edited ${diffHr}h ago`
-    const diffDay = Math.floor(diffHr / 24)
-    return `Edited ${diffDay}d ago`
-  }
+  const totalFlashcards = Object.values(flashcardCounts).reduce((sum, n) => sum + n, 0)
+  const activeDays = new Set(
+    conversations.map((item) => {
+      const d = new Date(item.updated_at || item.created_at)
+      return Number.isNaN(d.getTime()) ? null : d.toISOString().slice(0, 10)
+    }).filter(Boolean)
+  ).size
 
-  const getRecentContext = (item) => {
-    const cardCount = Array.isArray(item?.flashcards) ? item.flashcards.length : 0
-    if (cardCount > 0) {
-      return `${cardCount} cards ready`
-    }
-    if (Array.isArray(item?.takeaways) && item.takeaways.length > 0) {
-      return `${item.takeaways.length} key points`
-    }
-    return formatRelativeTime(item?.updated_at || item?.created_at)
-  }
+  const hasStudyData = totalFlashcards > 0
 
-  const runSummarize = async () => {
-    if (!noteText.trim()) {
-      setStatus('Enter some text first.')
-      return
-    }
-    if (!genAI) {
-      setStatus('Missing API key.')
-      return
-    }
-    setLoading(true)
-    setStatus('')
-    try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
-      const prompt = `
-You are a study assistant. Read the notes and produce JSON:
-{ "overview": "2-3 sentences", "takeaways": ["bullet1","bullet2","bullet3"], "keywords": ["k1","k2","k3"] }
-Notes:
-${noteText}`
-      const result = await model.generateContent(prompt)
-      const response = await result.response
-      const raw = response.text().replace(/```json|```/g, '').trim()
-      const parsed = JSON.parse(raw)
+  const stats = [
+    { id: 'streak',   label: 'Active days',     value: hasStudyData ? `${activeDays}` : '—',              icon: <RefreshIcon /> },
+    { id: 'reviewed', label: 'Flashcards',       value: hasStudyData ? `${totalFlashcards}` : '—',         icon: <NotesIcon /> },
+    { id: 'score',    label: 'Avg quiz score',   value: '—',                                               icon: <QuizIcon /> },
+    { id: 'time',     label: 'Study time',       value: '—',                                               icon: <ClockIcon /> },
+  ]
 
-      const newItem = await fetchJson('/api/conversations', {
-        method: 'POST',
-        body: JSON.stringify({
-          title: 'New Conversation',
-          content: noteText.trim(),
-          summary: parsed.overview || '',
-          takeaways: Array.isArray(parsed.takeaways) ? parsed.takeaways : [],
-          keywords: Array.isArray(parsed.keywords) ? parsed.keywords : [],
-          spaceId: activeSpace
-        })
-      })
+  const aiInsights = hasStudyData
+    ? [
+        { id: 'library',     label: 'Flashcard Library', description: `${totalFlashcards} cards generated from your notes.`,              cta: 'Open notes' },
+        { id: 'consistency', label: 'Consistency',       description: `Studied across ${activeDays} day${activeDays === 1 ? '' : 's'}.`,   cta: 'Keep going' },
+        { id: 'next',        label: 'Next Step',         description: 'Run a quiz to start collecting score insights.',                     cta: 'Start quiz' },
+      ]
+    : []
 
-      setOverview(newItem.summary || '')
-      setTakeaways(newItem.takeaways || [])
-      setKeywords(newItem.keywords || [])
-      setSavedSummaries([newItem, ...savedSummaries])
-      navigate(`/blank-note/${newItem.id}`)
-    } catch (error) {
-      console.error(error)
-      setStatus('Failed to summarize.')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  // HANDLERS
-  const handleUpload = (content, filename) => {
-    setNoteText(content)
-    setStatus(`Loaded: ${filename}`)
-  }
-
-  const handleLink = async (url) => {
-  setLoading(true);
-  setStatus('Processing link...');
-  
-  try {
-    const isYouTube = url.includes('youtube.com') || url.includes('youtu.be');
-    let finalContent = '';
-
-    if (isYouTube) {
-      setStatus('Extracting YouTube transcript...');
-      // Using a specialized transcript fetcher (this is a public tool)
-      // Note: In a production app, you'd use a dedicated backend or RapidAPI for this.
-      const transcriptUrl = `https://api.scrapetube.com/transcript?url=${encodeURIComponent(url)}`;
-      const proxyUrl = 'https://corsproxy.io/?';
-      
-      const response = await fetch(proxyUrl + encodeURIComponent(transcriptUrl));
-      const data = await response.json();
-      
-      // Combine transcript segments into one block of text
-      finalContent = data.segments.map(s => s.text).join(' ');
-    } else {
-      setStatus('Fetching website content...');
-      const jinaUrl = `https://r.jina.ai/${url}`;
-      const proxyUrl = 'https://corsproxy.io/?';
-      
-      const response = await fetch(proxyUrl + encodeURIComponent(jinaUrl));
-      finalContent = await response.text();
-    }
-
-    if (finalContent && finalContent.length > 50) {
-      setNoteText(finalContent);
-      setStatus(`Loaded ${isYouTube ? 'transcript' : 'content'} from: ${url}`);
-    } else {
-      throw new Error('Content too short or unavailable.');
-    }
-  } catch (error) {
-    console.error('Fetch error:', error);
-    setStatus('Failed to fetch. The site might be protected. Please paste text manually.');
-  } finally {
-    setLoading(false);
-  }
-};
-
-  const handlePaste = (text) => {
-    setNoteText(text)
-  }
-
-  const scrollToSection = (ref) => {
-    if (!ref.current) return
-    ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
-  const lastSession = savedSummaries.reduce((latest, item) => {
-    const itemTime = new Date(item.updated_at || item.created_at || 0).getTime()
-    const latestTime = latest ? new Date(latest.updated_at || latest.created_at || 0).getTime() : -Infinity
-    return itemTime > latestTime ? item : latest
-  }, null)
-
-  const getSourceType = (item) => {
-    const explicitSource = (item?.source_type || '').toLowerCase()
-    if (explicitSource.includes('youtube') || explicitSource.includes('video')) return 'youtube'
-    if (explicitSource.includes('pdf') || explicitSource.includes('document')) return 'pdf'
-    const text = `${item?.title || ''} ${item?.content || ''}`.toLowerCase()
-    if (text.includes('youtube.com') || text.includes('youtu.be')) return 'youtube'
-    if (text.includes('.pdf')) return 'pdf'
-    return 'notes'
-  }
-
-  const sourceMeta = {
-    youtube: { label: 'YouTube', icon: <LinkIcon /> },
-    pdf: { label: 'PDF', icon: <UploadIcon /> },
-    notes: { label: 'Notes', icon: <ClipboardIcon /> }
-  }
-
-  const getConversationRoute = (item) => {
-    return `/blank-note/${item.id}`
+  const handleQuickAction = (actionId) => {
+    if (actionId === 'flashcards') { navigate('/flashcards'); return }
+    if (actionId === 'note')       { navigate('/blank-note'); return }
+    if (actionId === 'quiz')       { navigate('/pomodoro');   return }
+    if (actionId === 'tutor')      { navigate('/conversations'); return }
+    if (actionId === 'record')     { setShowRecordModal(true); return }
+    if (actionId === 'upload')     { setShowUploadModal(true) }
   }
 
   return (
-    <div
-      className={`studio-shell ${theme === 'dark' ? 'theme-dark' : 'theme-light'} ${
-        sidebarCollapsed ? 'sidebar-collapsed' : ''
-      }`}
-    >
+    <div className={`studio-shell ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+
+      {/* ── Sidebar ─────────────────────────────────── */}
       <aside className={`studio-rail ${sidebarCollapsed ? 'collapsed' : ''}`}>
         <div className="studio-rail-scroll">
-        <div className="studio-header">
-          <button className="logo-button" type="button" onClick={() => navigate('/summarizer')}>
-            <img className="logo-mark" src={irisLogo} alt="Iris logo" />
-            <span className="logo-name">Iris</span>
-          </button>
-          <button
-            className="sidebar-toggle"
-            type="button"
-            onClick={() => setSidebarCollapsed((prev) => !prev)}
-            aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          >
-            <span
-              className={`material-symbols-outlined sidebar-toggle-glyph ${
-                sidebarCollapsed ? '' : 'is-open'
-              }`}
-              aria-hidden="true"
+          <div className="studio-header">
+            <button className="logo-button" type="button" onClick={() => navigate('/summarizer')}>
+              <img className="logo-mark" src={irisLogo} alt="Iris" />
+              <span className="logo-name">Iris</span>
+            </button>
+            <button
+              className="sidebar-toggle"
+              type="button"
+              onClick={() => setSidebarCollapsed((prev) => !prev)}
+              aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
             >
-              chevron_right
-            </span>
-          </button>
+              <span
+                className={`material-symbols-outlined sidebar-toggle-glyph ${sidebarCollapsed ? '' : 'is-open'}`}
+                aria-hidden="true"
+              >
+                chevron_right
+              </span>
+            </button>
+          </div>
+
+          <div className="studio-section">
+            <button className="studio-link primary-session-btn" type="button" onClick={() => navigate('/blank-note')}>
+              <span className="studio-icon"><PlusIcon /></span>
+              <span className="studio-text">New session</span>
+            </button>
+            <button className="studio-link active" type="button" onClick={() => navigate('/summarizer')}>
+              <span className="studio-icon"><HomeIcon /></span>
+              <span className="studio-text">Dashboard</span>
+            </button>
+            <button className="studio-link" type="button" onClick={() => navigate('/flashcards')}>
+              <span className="studio-icon"><NotesIcon /></span>
+              <span className="studio-text">Flashcards</span>
+            </button>
+            <button className="studio-link" type="button" onClick={() => navigate('/conversations')}>
+              <span className="studio-icon"><ChatIcon /></span>
+              <span className="studio-text">Notes</span>
+            </button>
+            <button className="studio-link" type="button" onClick={() => recentSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+              <span className="studio-icon"><RefreshIcon /></span>
+              <span className="studio-text">Recent</span>
+            </button>
+            <button className="studio-link" type="button" onClick={() => navigate('/pomodoro')}>
+              <span className="studio-icon"><ClockIcon /></span>
+              <span className="studio-text">Pomodoro</span>
+            </button>
+          </div>
         </div>
 
-        <div className="studio-section">
-          <button
-            className="studio-link"
-            type="button"
-            onClick={() => {
-              navigate('/summarizer')
-            }}
-          >
-            <span className="studio-icon"><HomeIcon /></span>
-            <span className="studio-text">Dashboard</span>
-          </button>
-          <button className="studio-link" type="button">
-            <span className="studio-icon"><NotesIcon /></span>
-            <span className="studio-text">Projects</span>
-          </button>
-          <button className="studio-link" type="button" onClick={() => navigate('/conversations')}>
-            <span className="studio-icon"><ChatIcon /></span>
-            <span className="studio-text">Notes</span>
-          </button>
-          <button className="studio-link" type="button" onClick={() => scrollToSection(recentSectionRef)}>
-            <span className="studio-icon"><RefreshIcon /></span>
-            <span className="studio-text">Recent</span>
-          </button>
-          <button className="studio-link" type="button" onClick={() => navigate('/pomodoro')}>
-            <span className="studio-icon"><ClockIcon /></span>
-            <span className="studio-text">Pomodoro</span>
-          </button>
-          <button className="studio-link" type="button">
-            <span className="studio-icon"><SettingsIcon /></span>
-            <span className="studio-text">Settings</span>
-          </button>
-        </div>
-
-        </div>
         <div className="user-profile" ref={userMenuRef}>
           <button
             className="user-profile-button"
@@ -396,245 +261,149 @@ ${noteText}`
           >
             <div className="user-avatar">
               {avatarUrl && (
-                <img
-                  className="user-avatar-img"
-                  src={avatarUrl}
-                  alt=""
-                  referrerPolicy="no-referrer"
-                />
+                <img className="user-avatar-img" src={avatarUrl} alt="" referrerPolicy="no-referrer" />
               )}
             </div>
             <span className="user-name">{displayName}</span>
+            <span className="user-settings-dot" aria-hidden="true" />
           </button>
           {userMenuOpen && (
             <div className="user-menu">
-              <button className="user-menu-item" type="button">
-                Account
-              </button>
-              <button className="user-menu-item" type="button" onClick={() => setTheme('light')}>
-                Theme: Light
-              </button>
-              <button className="user-menu-item" type="button" onClick={() => setTheme('dark')}>
-                Theme: Dark
-              </button>
-              <button className="user-menu-item logout" type="button" onClick={handleLogout}>
-                Log out
-              </button>
+              <button className="user-menu-item" type="button" onClick={() => setTheme('light')}>Theme: Light</button>
+              <button className="user-menu-item" type="button" onClick={() => setTheme('dark')}>Theme: Dark</button>
+              <button className="user-menu-item logout" type="button" onClick={handleLogout}>Log out</button>
             </div>
           )}
         </div>
       </aside>
 
-      <main className="studio-main">
-        <div className="workspace-top">
-          <h1 className="workspace-title">Dashboard</h1>
-          <div className="workspace-actions">
-            <div className="workspace-search">
-              <input
-                type="text"
-                placeholder="Search projects or notes"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-          </div>
-        </div>
+      {/* ── Main ────────────────────────────────────── */}
+      <main className="dash-main">
 
-        <div className="studio-hero">
-          <div className="action-row">
-            <div
-              className="action-tile"
-              onClick={() => {
-                navigate('/blank-note')
-              }}
-            >
-              <div className="icon"><NotesIcon /></div>
-              <div>
-                <p className="title">Blank Note</p>
-                <p className="sub">Start from scratch</p>
-              </div>
-            </div>
-            <div className="action-tile" onClick={() => setShowUploadModal(true)}>
-              <div className="icon"><UploadIcon /></div>
-              <div>
-                <p className="title">Upload</p>
-                <p className="sub">File, Audio, Video</p>
-              </div>
-            </div>
-            <div className="action-tile" onClick={() => setShowLinkModal(true)}>
-              <div className="icon"><LinkIcon /></div>
-              <div>
-                <p className="title">Link</p>
-                <p className="sub">YouTube, Website</p>
-              </div>
-            </div>
-            <div className="action-tile" onClick={() => setShowRecordModal(true)}>
-              <div className="icon"><MicIcon /></div>
-              <div>
-                <p className="title">Record</p>
-                <p className="sub">Record Lecture</p>
-              </div>
-            </div>
+        {/* Header */}
+        <header className="dash-header">
+          <div>
+            <h1 className="dash-greeting">Good {timeOfDay}, {displayName}</h1>
+            <p className="dash-tagline">
+              {hasStudyData
+                ? `You have ${totalFlashcards} flashcards ready — keep the momentum.`
+                : 'What are we studying today?'}
+            </p>
           </div>
-        </div>
+          <input
+            className="dash-search"
+            type="text"
+            placeholder="Search notes…"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </header>
 
-        <section className="continue-learning-bar">
-          <p className="resume-label">Continue Learning</p>
-          {lastSession ? (
-            <>
-              <h2>{lastSession.notes_title || lastSession.title || 'Untitled Conversation'}</h2>
-              <p className="resume-preview">{(lastSession.content || '').slice(0, 160)}</p>
-              <div className="resume-actions">
-                <button
-                  type="button"
-                  className="resume-open-btn"
-                  onClick={() => navigate(getConversationRoute(lastSession))}
-                >
-                  Continue where you left off
-                </button>
-                <span className="resume-meta">{getRecentContext(lastSession)}</span>
-              </div>
-            </>
-          ) : (
-            <>
-              <h2>No previous session yet</h2>
-              <p className="resume-preview">Add content to start your first project and conversation.</p>
-            </>
-          )}
-        </section>
-
-        <section className="recent-sessions-table" ref={recentSectionRef}>
-          <div className="recent-table-head">
-            <h2>Recent Documents</h2>
-            <button
-              type="button"
-              className="view-all-link"
-              onClick={() => navigate('/conversations')}
-            >
-              View all
-            </button>
-          </div>
-          <div className="recent-table-list">
-            {visibleRecent.slice(0, 12).map((item) => {
-              const source = sourceMeta[getSourceType(item)]
-              return (
+        {/* Quick Actions */}
+        <section className="dash-actions">
+          <p className="dash-section-label">Quick actions</p>
+          <div className="dash-action-grid">
+            {quickActions.map((item) => (
               <button
                 key={item.id}
-                className="recent-table-row"
-                onClick={() => navigate(getConversationRoute(item))}
+                type="button"
+                className="dac"
+                onClick={() => handleQuickAction(item.id)}
               >
-                <span className="recent-source">
-                  {source.icon}
-                </span>
-                <span className="recent-title">{item.notes_title || item.title || item.content || 'Conversation'}</span>
-                <span className="recent-source-label">{source.label}</span>
-                <span className="recent-meta">{getRecentContext(item)}</span>
+                <span className="dac-icon">{item.icon}</span>
+                <span className="dac-title">{item.title}</span>
+                <span className="dac-sub">{item.subtitle}</span>
               </button>
-            )})}
-            {visibleRecent.length === 0 && (
-              <div className="recent-table-empty">
-                <p className="recent-title">
-                  {normalizedSearch ? 'No recent matches' : 'No recent notes yet'}
-                </p>
-              </div>
-            )}
+            ))}
           </div>
         </section>
 
-        <div className="capture-panel">
-          <div className="prompt-bar">
-            <input
-              type="text"
-              placeholder="Quick capture: paste notes and press enter"
-              value={noteText}
-              onChange={(e) => setNoteText(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && runSummarize()}
-            />
-            <button className="send-btn" onClick={runSummarize} disabled={loading}>
-              <ArrowRightIcon className="send-icon" />
-            </button>
-          </div>
-          {status && <p className="muted">{status}</p>}
+        {/* Content area */}
+        <div className="dash-content" ref={recentSectionRef}>
 
-          {(overview || takeaways.length > 0 || keywords.length > 0) && (
-            <div className="summary-output">
-              {overview && <p className="summary-overview">{overview}</p>}
-              <div className="summary-grid">
-                {takeaways.length > 0 && (
-                  <div>
-                    <p className="summary-heading">Takeaways</p>
-                    <ul>
-                      {takeaways.map((t, i) => <li key={i}>{t}</li>)}
-                    </ul>
-                  </div>
-                )}
-                {keywords.length > 0 && (
-                  <div>
-                    <p className="summary-heading">Keywords</p>
-                    <div className="keyword-chips">
-                      {keywords.map((k, i) => <span key={i} className="chip">{k}</span>)}
+          {/* Recent notes */}
+          <section className="dash-panel">
+            <div className="dash-panel-head">
+              <h2>Recent notes</h2>
+              <button type="button" className="dash-view-all" onClick={() => navigate('/conversations')}>
+                View all
+              </button>
+            </div>
+            <div className="dash-note-list">
+              {filteredRecent.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  className="dash-note-row"
+                  onClick={() => navigate(`/blank-note/${item.id}`)}
+                >
+                  <span className="dnr-icon">{item.icon}</span>
+                  <span className="dnr-copy">
+                    <span className="dnr-title">{item.title}</span>
+                    <span className="dnr-sub">{item.subtitle}</span>
+                  </span>
+                  <span className="dnr-time">{item.timestamp}</span>
+                </button>
+              ))}
+              {filteredRecent.length === 0 && (
+                <p className="dash-empty">
+                  {dashboardLoaded ? 'No notes yet — create your first one above.' : 'Loading…'}
+                </p>
+              )}
+            </div>
+          </section>
+
+          {/* Right column */}
+          <aside className="dash-side">
+
+            {/* Stats */}
+            {hasStudyData && (
+              <section className="dash-panel">
+                <div className="dash-panel-head"><h2>Stats</h2></div>
+                <div className="dash-stats-grid">
+                  {stats.map((item) => (
+                    <div key={item.id} className="dash-stat">
+                      <span className="ds-icon">{item.icon}</span>
+                      <span className="ds-value">{item.value}</span>
+                      <span className="ds-label">{item.label}</span>
                     </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* AI Insights */}
+            <section className="dash-panel">
+              <div className="dash-panel-head"><h2>AI Insights</h2></div>
+              <div className="dash-insights">
+                {aiInsights.length === 0 ? (
+                  <div className="dash-insight">
+                    <p className="di-label">No insights yet</p>
+                    <p className="di-desc">Complete quizzes or generate flashcards to unlock insights here.</p>
+                    <button type="button" className="di-cta" onClick={() => navigate('/blank-note')}>
+                      Create first note
+                    </button>
                   </div>
+                ) : (
+                  aiInsights.map((item) => (
+                    <div key={item.id} className="dash-insight">
+                      <p className="di-label">{item.label}</p>
+                      <p className="di-desc">{item.description}</p>
+                      <button type="button" className="di-cta" onClick={() => navigate('/conversations')}>
+                        {item.cta}
+                      </button>
+                    </div>
+                  ))
                 )}
               </div>
-            </div>
-          )}
+            </section>
+
+          </aside>
         </div>
       </main>
 
-      <UploadModal 
-        isOpen={showUploadModal} 
-        onClose={() => setShowUploadModal(false)}
-        onUpload={handleUpload}
-      />
-
-      <LinkModal 
-        isOpen={showLinkModal} 
-        onClose={() => setShowLinkModal(false)}
-        onSubmit={handleLink}
-      />
-
-      <PasteModal 
-        isOpen={showPasteModal} 
-        onClose={() => setShowPasteModal(false)}
-        onPaste={handlePaste}
-      />
-
-      <RecordModal 
-        isOpen={showRecordModal} 
-        onClose={() => setShowRecordModal(false)} 
-      />
-
-      {/* Create Space Modal */}
-      {showCreateSpace && (
-        <div className="modal-overlay" onClick={() => setShowCreateSpace(false)}>
-          <div className="create-space-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>Create Project</h2>
-              <button className="close-btn" onClick={() => setShowCreateSpace(false)}>
-                <CloseIcon />
-              </button>
-            </div>
-            <div className="create-space-body">
-              <input
-                type="text"
-                placeholder="Space name (e.g., Computer Science, History)"
-                value={newSpaceName}
-                onChange={(e) => setNewSpaceName(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && createSpace()}
-                className="create-space-input"
-              />
-              <button
-                onClick={createSpace}
-                disabled={!newSpaceName.trim()}
-                className="create-space-submit"
-              >
-                Create Space
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <UploadModal isOpen={showUploadModal} onClose={() => setShowUploadModal(false)} onUpload={() => {}} />
+      <RecordModal isOpen={showRecordModal} onClose={() => setShowRecordModal(false)} />
     </div>
   )
 }

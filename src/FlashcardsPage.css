@@ -1,0 +1,183 @@
+/* ─── Flashcards Page ────────────────────────────────────── */
+.fc-main {
+  background: #f5f5f7;
+}
+
+.fc-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.fc-title {
+  margin: 0 0 4px;
+  font-size: clamp(1.6rem, 2.4vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #1d1d1f;
+}
+
+.fc-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: #6e6e73;
+}
+
+.fc-generate-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #007aff;
+  border: none;
+  border-radius: 12px;
+  color: #ffffff;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+.fc-generate-btn:hover { background: #0071e3; }
+.fc-generate-btn svg { width: 15px; height: 15px; }
+
+/* Section */
+.fc-section { margin-bottom: 32px; }
+
+.fc-section-label {
+  margin: 0 0 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #aeaeb2;
+}
+
+/* Folder cards */
+.fc-folder-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.fc-folder-card {
+  border: none;
+  border-radius: 16px;
+  min-height: 160px;
+  padding: 20px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: opacity 0.15s, transform 0.15s;
+  font-family: inherit;
+}
+.fc-folder-card:hover { opacity: 0.85; transform: translateY(-1px); }
+
+.fc-folder-icon {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.fc-folder-icon svg { width: 20px; height: 20px; }
+
+.fc-folder-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  line-height: 1.2;
+  flex: 1;
+}
+
+.fc-folder-count {
+  font-size: 13px;
+  color: #6e6e73;
+  font-weight: 500;
+}
+
+/* Recent list */
+.fc-recent-list {
+  background: #ffffff;
+  border: 1px solid #e8e8ed;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.fc-recent-row {
+  display: grid;
+  grid-template-columns: 36px minmax(0,1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 18px;
+  border-top: 1px solid #f5f5f7;
+}
+.fc-recent-row:first-child { border-top: none; }
+
+.fc-recent-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(0,122,255,0.08);
+  color: #007aff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.fc-recent-icon svg { width: 15px; height: 15px; }
+
+.fc-recent-copy { display: grid; gap: 2px; overflow: hidden; }
+
+.fc-recent-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1d1d1f;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fc-recent-meta { font-size: 12px; color: #8e8e93; }
+
+.fc-study-btn {
+  background: #007aff;
+  border: none;
+  border-radius: 10px;
+  color: #ffffff;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.fc-study-btn:hover { background: #0071e3; }
+
+.fc-empty {
+  background: #ffffff;
+  border: 1px solid #e8e8ed;
+  border-radius: 14px;
+  padding: 24px;
+  color: #8e8e93;
+  font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .fc-folder-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+
+@media (max-width: 760px) {
+  .fc-header { flex-direction: column; }
+  .fc-folder-grid { grid-template-columns: 1fr; }
+  .fc-recent-row { grid-template-columns: 36px minmax(0,1fr); }
+  .fc-study-btn { display: none; }
+}

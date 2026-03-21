@@ -1,16 +1,17 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './SummarizerPage.css'
-import './PomodoroPage.css'
+import './FlashcardsPage.css'
 import irisLogo from './assets/irislogo.png'
-import { usePomodoro } from './usePomodoro'
 import {
   ChatIcon,
   ClockIcon,
   HomeIcon,
   NotesIcon,
   PlusIcon,
-  RefreshIcon
+  QuizIcon,
+  RefreshIcon,
+  UploadIcon
 } from './Icons'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5175'
@@ -27,38 +28,50 @@ const fetchJson = async (path, options = {}) => {
   return data
 }
 
-function PomodoroPage() {
+function FlashcardsPage() {
   const navigate = useNavigate()
   const userMenuRef = useRef(null)
   const [displayName, setDisplayName] = useState('Guest')
   const [avatarUrl, setAvatarUrl] = useState('')
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
-  const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [theme, setTheme] = useState('light')
   const [profileLoaded, setProfileLoaded] = useState(false)
-
-  const {
-    mode, minutes, seconds, isActive,
-    focusDuration, breakDuration,
-    completedFocusSessions,
-    setFocusDuration, setBreakDuration,
-    setTimerMode, toggleTimer, resetTimer
-  } = usePomodoro()
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const [conversations, setConversations] = useState([])
+  const [flashcardCounts, setFlashcardCounts] = useState({})
 
   useEffect(() => {
     let mounted = true
-    fetchJson('/api/auth/me')
-      .then((result) => {
+    Promise.all([fetchJson('/api/auth/me'), fetchJson('/api/conversations')])
+      .then(([profile, conversationData]) => {
         if (!mounted) return
-        const name = result.user?.display_name || result.user?.email || 'Guest'
+        const name = profile.user?.display_name || profile.user?.email || 'Guest'
         setDisplayName(name.split(' ')[0])
-        setAvatarUrl(result.user?.avatar_url || '')
-        setTheme(result.user?.theme || 'light')
+        setAvatarUrl(profile.user?.avatar_url || '')
+        setTheme(profile.user?.theme || 'light')
         setProfileLoaded(true)
+        setConversations(Array.isArray(conversationData) ? conversationData : [])
       })
-      .catch((error) => console.error('Failed to load profile:', error))
+      .catch((error) => console.error('Failed to load flashcards page:', error))
     return () => { mounted = false }
   }, [])
+
+  useEffect(() => {
+    let mounted = true
+    if (conversations.length === 0) return () => { mounted = false }
+    Promise.all(
+      conversations.slice(0, 40).map(async (item) => {
+        try {
+          const cards = await fetchJson(`/api/flashcards/${item.id}`)
+          return [item.id, Array.isArray(cards) ? cards.length : 0]
+        } catch { return [item.id, 0] }
+      })
+    ).then((entries) => {
+      if (!mounted) return
+      setFlashcardCounts(Object.fromEntries(entries))
+    })
+    return () => { mounted = false }
+  }, [conversations])
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme
@@ -81,11 +94,33 @@ function PomodoroPage() {
       .finally(() => navigate('/auth'))
   }
 
-  const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
-  const progress = mode === 'focus'
-    ? 1 - (minutes * 60 + seconds) / (focusDuration * 60)
-    : 1 - (minutes * 60 + seconds) / (breakDuration * 60)
-  const circumference = 2 * Math.PI * 88
+  const formatDate = (value) => {
+    if (!value) return 'Recently'
+    const date = new Date(value)
+    if (Number.isNaN(date.getTime())) return 'Recently'
+    return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+  }
+
+  const flashcardSets = useMemo(
+    () => conversations
+      .map((item) => ({
+        id: item.id,
+        title: item.notes_title || item.title || 'Untitled set',
+        cards: flashcardCounts[item.id] || 0,
+        updatedAt: item.updated_at || item.created_at
+      }))
+      .filter((item) => item.cards > 0)
+      .sort((a, b) => b.cards - a.cards),
+    [conversations, flashcardCounts]
+  )
+
+  const folderCards = flashcardSets.slice(0, 4)
+  const recentSets = [...flashcardSets]
+    .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+    .slice(0, 8)
+
+  const folderAccents = ['#dbeafe', '#ede9fe', '#fef3c7', '#dcfce7']
+  const folderTextColors = ['#1e40af', '#6d28d9', '#92400e', '#166534']
 
   return (
     <div className={`studio-shell ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
@@ -120,7 +155,7 @@ function PomodoroPage() {
               <span className="studio-icon"><HomeIcon /></span>
               <span className="studio-text">Dashboard</span>
             </button>
-            <button className="studio-link" type="button" onClick={() => navigate('/flashcards')}>
+            <button className="studio-link active" type="button">
               <span className="studio-icon"><NotesIcon /></span>
               <span className="studio-text">Flashcards</span>
             </button>
@@ -132,7 +167,7 @@ function PomodoroPage() {
               <span className="studio-icon"><RefreshIcon /></span>
               <span className="studio-text">Recent</span>
             </button>
-            <button className="studio-link active" type="button">
+            <button className="studio-link" type="button" onClick={() => navigate('/pomodoro')}>
               <span className="studio-icon"><ClockIcon /></span>
               <span className="studio-text">Pomodoro</span>
             </button>
@@ -163,91 +198,73 @@ function PomodoroPage() {
       </aside>
 
       {/* ── Main ────────────────────────────────────── */}
-      <main className="studio-main pom-main">
-        <div className="pom-layout">
+      <main className="studio-main fc-main">
+        <header className="fc-header">
+          <div>
+            <h1 className="fc-title">Flashcards</h1>
+            <p className="fc-subtitle">Review and create flashcard sets from your notes</p>
+          </div>
+          <button type="button" className="fc-generate-btn" onClick={() => navigate('/blank-note')}>
+            <PlusIcon />
+            Generate flashcards
+          </button>
+        </header>
 
-          {/* Timer card */}
-          <section className="pom-card">
-            {/* Mode tabs */}
-            <div className="pom-tabs">
-              <button
-                type="button"
-                className={`pom-tab ${mode === 'focus' ? 'active' : ''}`}
-                onClick={() => setTimerMode('focus')}
-              >Focus</button>
-              <button
-                type="button"
-                className={`pom-tab ${mode === 'break' ? 'active' : ''}`}
-                onClick={() => setTimerMode('break')}
-              >Break</button>
-            </div>
+        {/* Folders */}
+        <section className="fc-section">
+          <p className="fc-section-label">Folders</p>
+          <div className="fc-folder-grid">
+            {folderCards.length === 0 ? (
+              <div className="fc-empty">No flashcard sets yet — create a note and generate flashcards.</div>
+            ) : (
+              folderCards.map((item, i) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  className="fc-folder-card"
+                  style={{ background: folderAccents[i % folderAccents.length] }}
+                  onClick={() => navigate(`/blank-note/${item.id}?tab=flashcards`)}
+                >
+                  <span className="fc-folder-icon" style={{ color: folderTextColors[i % folderTextColors.length] }}>
+                    <QuizIcon />
+                  </span>
+                  <span className="fc-folder-title">{item.title}</span>
+                  <span className="fc-folder-count">{item.cards} cards</span>
+                </button>
+              ))
+            )}
+          </div>
+        </section>
 
-            {/* Ring + time */}
-            <div className="pom-ring-wrap">
-              <svg className="pom-ring" viewBox="0 0 200 200">
-                <circle className="pom-ring-track" cx="100" cy="100" r="88" />
-                <circle
-                  className="pom-ring-fill"
-                  cx="100" cy="100" r="88"
-                  strokeDasharray={circumference}
-                  strokeDashoffset={circumference * (1 - progress)}
-                />
-              </svg>
-              <div className="pom-ring-inner">
-                <span className="pom-mode-label">{mode === 'focus' ? 'Focus' : 'Break'}</span>
-                <span className="pom-time">{formattedTime}</span>
-                <span className="pom-sessions">{completedFocusSessions} sessions</span>
-              </div>
-            </div>
-
-            {/* Controls */}
-            <div className="pom-controls">
-              <button type="button" className="pom-btn-secondary" onClick={resetTimer}>Reset</button>
-              <button type="button" className="pom-btn-primary" onClick={toggleTimer}>
-                {isActive ? 'Pause' : 'Start'}
-              </button>
-            </div>
-          </section>
-
-          {/* Settings card */}
-          <section className="pom-settings-card">
-            <h2 className="pom-settings-title">Timer lengths</h2>
-            <div className="pom-settings-grid">
-              <label className="pom-setting-label">
-                Focus
-                <div className="pom-input-row">
-                  <input
-                    type="number"
-                    min="1"
-                    max="90"
-                    value={focusDuration}
-                    onChange={(e) => setFocusDuration(e.target.value)}
-                    className="pom-input"
-                  />
-                  <span className="pom-input-unit">min</span>
+        {/* Recent sets */}
+        <section className="fc-section">
+          <p className="fc-section-label">Recent sets</p>
+          <div className="fc-recent-list">
+            {recentSets.length === 0 ? (
+              <div className="fc-empty">Recent sets will appear here after you generate flashcards.</div>
+            ) : (
+              recentSets.map((item) => (
+                <div key={item.id} className="fc-recent-row">
+                  <span className="fc-recent-icon"><UploadIcon /></span>
+                  <span className="fc-recent-copy">
+                    <span className="fc-recent-title">{item.title}</span>
+                    <span className="fc-recent-meta">{item.cards} cards · {formatDate(item.updatedAt)}</span>
+                  </span>
+                  <button
+                    type="button"
+                    className="fc-study-btn"
+                    onClick={() => navigate(`/blank-note/${item.id}?tab=flashcards`)}
+                  >
+                    Study
+                  </button>
                 </div>
-              </label>
-              <label className="pom-setting-label">
-                Break
-                <div className="pom-input-row">
-                  <input
-                    type="number"
-                    min="1"
-                    max="90"
-                    value={breakDuration}
-                    onChange={(e) => setBreakDuration(e.target.value)}
-                    className="pom-input"
-                  />
-                  <span className="pom-input-unit">min</span>
-                </div>
-              </label>
-            </div>
-          </section>
-
-        </div>
+              ))
+            )}
+          </div>
+        </section>
       </main>
     </div>
   )
 }
 
-export default PomodoroPage
+export default FlashcardsPage

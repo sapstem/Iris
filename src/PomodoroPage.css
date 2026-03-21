@@ -1,138 +1,219 @@
-.pomodoro-main {
-  padding: 28px 32px 40px;
-}
-
-.pomodoro-header {
-  margin-bottom: 24px;
-}
-
-.pomodoro-subtitle {
-  margin: 8px 0 0;
-  color: var(--muted);
-}
-
-.pomodoro-card {
-  max-width: 760px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  padding: 26px;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
-}
-
-.pomodoro-mode-row {
+/* ─── Pomodoro Page ──────────────────────────────────────── */
+.pom-main {
+  background: #f5f5f7;
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
 }
 
-.pomodoro-mode-btn {
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--text);
-  padding: 8px 14px;
-  cursor: pointer;
-}
-
-.pomodoro-mode-btn.active {
-  background: #4f6ef7;
-  border-color: #4f6ef7;
-  color: #fff;
-}
-
-.pomodoro-label {
-  margin: 22px 0 0;
-  font-size: 0.95rem;
-  color: var(--muted);
-}
-
-.pomodoro-time {
-  margin: 2px 0 0;
-  font-size: clamp(3rem, 10vw, 5.4rem);
-  line-height: 1;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-}
-
-.pomodoro-actions {
-  margin-top: 18px;
+.pom-layout {
+  width: 100%;
+  max-width: 440px;
   display: flex;
-  gap: 10px;
-}
-
-.pomodoro-primary,
-.pomodoro-secondary {
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 10px 16px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.pomodoro-primary {
-  background: #4f6ef7;
-  border-color: #4f6ef7;
-  color: #fff;
-}
-
-.pomodoro-secondary {
-  background: transparent;
-  color: var(--text);
-}
-
-.pomodoro-sessions {
-  margin: 14px 0 0;
-  color: var(--muted);
-}
-
-.pomodoro-settings {
-  margin-top: 20px;
-  max-width: 760px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  padding: 22px 26px;
-}
-
-.pomodoro-settings h2 {
-  margin: 0 0 14px;
-}
-
-.pomodoro-input-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  flex-direction: column;
   gap: 14px;
 }
 
-.pomodoro-input-grid label {
+/* Timer card */
+.pom-card {
+  background: #ffffff;
+  border: 1px solid #e8e8ed;
+  border-radius: 24px;
+  padding: 32px 28px 28px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Mode tabs */
+.pom-tabs {
+  display: flex;
+  gap: 6px;
+  background: #f5f5f7;
+  border-radius: 12px;
+  padding: 4px;
+  width: 100%;
+}
+
+.pom-tab {
+  flex: 1;
+  border: none;
+  background: transparent;
+  border-radius: 9px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6e6e73;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  font-family: inherit;
+}
+.pom-tab.active {
+  background: #ffffff;
+  color: #1d1d1f;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Ring */
+.pom-ring-wrap {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.pom-ring {
+  width: 200px;
+  height: 200px;
+  transform: rotate(-90deg);
+}
+
+.pom-ring-track {
+  fill: none;
+  stroke: #f0f0f5;
+  stroke-width: 8;
+}
+
+.pom-ring-fill {
+  fill: none;
+  stroke: #007aff;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.pom-ring-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.pom-mode-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #007aff;
+}
+
+.pom-time {
+  font-size: 2.6rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #1d1d1f;
+  line-height: 1;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+}
+
+.pom-sessions {
+  font-size: 12px;
+  color: #aeaeb2;
+}
+
+/* Controls */
+.pom-controls {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.pom-btn-primary {
+  flex: 1;
+  background: #007aff;
+  border: none;
+  border-radius: 14px;
+  color: #ffffff;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-family: inherit;
+}
+.pom-btn-primary:hover { background: #0071e3; }
+
+.pom-btn-secondary {
+  background: #f5f5f7;
+  border: none;
+  border-radius: 14px;
+  color: #1d1d1f;
+  padding: 14px 20px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-family: inherit;
+}
+.pom-btn-secondary:hover { background: #eaeaec; }
+
+/* Settings card */
+.pom-settings-card {
+  background: #ffffff;
+  border: 1px solid #e8e8ed;
+  border-radius: 18px;
+  padding: 20px 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.pom-settings-title {
+  margin: 0 0 16px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1d1d1f;
+  letter-spacing: -0.01em;
+}
+
+.pom-settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.pom-setting-label {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  font-size: 0.9rem;
-  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  color: #6e6e73;
 }
 
-.pomodoro-input-grid input {
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: var(--surface-2);
-  color: var(--text);
-  padding: 10px 12px;
+.pom-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f5f5f7;
+  border: 1px solid #e8e8ed;
+  border-radius: 10px;
+  padding: 0 12px;
+}
+
+.pom-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 10px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1d1d1f;
   outline: none;
+  width: 60px;
+  font-family: inherit;
 }
 
-.pomodoro-input-grid input:focus {
-  border-color: #4f6ef7;
-  box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.2);
+.pom-input-unit {
+  font-size: 13px;
+  color: #aeaeb2;
 }
 
-@media (max-width: 860px) {
-  .pomodoro-main {
-    padding: 18px;
-  }
-
-  .pomodoro-input-grid {
-    grid-template-columns: 1fr;
-  }
+/* Responsive */
+@media (max-width: 760px) {
+  .pom-main { padding: 20px 16px 40px; }
+  .pom-layout { max-width: 100%; }
 }
