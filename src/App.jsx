@@ -7,7 +7,6 @@ import ConversationsPage from './ConversationsPage'
 import BlankNotePage from './BlankNotePage'
 import PomodoroPage from './PomodoroPage'
 import FlashcardsPage from './FlashcardsPage'
-import MiniTimer from './MiniTimer'
 import { PomodoroProvider } from './PomodoroContext'
 import About from './pages/About'
 import HowitWorks from './pages/HowitWorks'
@@ -106,7 +105,6 @@ function App() {
   return (
     <BrowserRouter>
       <PomodoroProvider>
-        <MiniTimer />
         <AppFrame />
       </PomodoroProvider>
     </BrowserRouter>

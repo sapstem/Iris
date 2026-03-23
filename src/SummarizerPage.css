@@ -317,17 +317,16 @@
 .dash-actions { margin-bottom: 28px; }
 
 .dash-section-label {
-  margin: 0 0 10px;
-  font-size: 11px;
+  margin: 0 0 12px;
+  font-size: 13px;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: #aeaeb2;
+  color: #1d1d1f;
+  letter-spacing: -0.01em;
 }
 
 .dash-action-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
 }
 
@@ -556,6 +555,41 @@
 }
 .di-cta:hover { text-decoration: underline; }
 
+/* ─── AI Tutor FAB ───────────────────────────────────────── */
+.ai-tutor-fab {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #007aff;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 18px 12px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,122,255,0.35), 0 1px 4px rgba(0,0,0,0.1);
+  transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+  font-family: inherit;
+}
+.ai-tutor-fab:hover {
+  background: #0071e3;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,122,255,0.4), 0 2px 6px rgba(0,0,0,0.12);
+}
+.ai-tutor-fab-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+.ai-tutor-fab-icon svg { width: 18px; height: 18px; }
+
 /* ─── Modal utility ──────────────────────────────────────── */
 .close-btn {
   background: none;
@@ -575,7 +609,7 @@
 
 /* ─── Responsive ─────────────────────────────────────────── */
 @media (max-width: 1280px) {
-  .dash-action-grid { grid-template-columns: repeat(3, 1fr); }
+  .dash-action-grid { grid-template-columns: repeat(2, 1fr); }
   .dash-content { grid-template-columns: minmax(0,1fr) 260px; }
 }
 
@@ -592,5 +626,6 @@
   .dash-search { width: 100%; }
   .dash-action-grid { grid-template-columns: repeat(2, 1fr); }
   .dash-content { grid-template-columns: 1fr; }
+  .ai-tutor-fab { bottom: 20px; right: 16px; }
   .dash-side { grid-template-columns: 1fr; }
 }

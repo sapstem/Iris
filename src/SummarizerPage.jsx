@@ -41,12 +41,10 @@ const fetchJson = async (path, options = {}) => {
 }
 
 const quickActions = [
-  { id: 'note',       title: 'New Note',             subtitle: 'Write and organize',      icon: <NotesIcon /> },
-  { id: 'flashcards', title: 'Flashcards',            subtitle: 'Generate from notes',     icon: <QuizIcon /> },
-  { id: 'tutor',      title: 'AI Tutor',              subtitle: 'Get instant help',        icon: <ChatIcon /> },
-  { id: 'upload',     title: 'Upload',                subtitle: 'Summarize content',       icon: <UploadIcon /> },
-  { id: 'record',     title: 'Record Lecture',        subtitle: 'Capture and transcribe',  icon: <MicIcon /> },
-  { id: 'quiz',       title: 'Pomodoro',              subtitle: 'Focus timer',             icon: <ClockIcon /> },
+  { id: 'note',       title: 'New Note',        subtitle: 'Write and organize',     icon: <NotesIcon /> },
+  { id: 'flashcards', title: 'Flashcards',       subtitle: 'Generate from notes',    icon: <QuizIcon /> },
+  { id: 'upload',     title: 'Upload',           subtitle: 'Summarize content',      icon: <UploadIcon /> },
+  { id: 'record',     title: 'Record Lecture',   subtitle: 'Capture and transcribe', icon: <MicIcon /> },
 ]
 
 function SummarizerPage() {
@@ -175,10 +173,10 @@ function SummarizerPage() {
   const hasStudyData = totalFlashcards > 0
 
   const stats = [
-    { id: 'streak',   label: 'Active days',     value: hasStudyData ? `${activeDays}` : '—',              icon: <RefreshIcon /> },
-    { id: 'reviewed', label: 'Flashcards',       value: hasStudyData ? `${totalFlashcards}` : '—',         icon: <NotesIcon /> },
-    { id: 'score',    label: 'Avg quiz score',   value: '—',                                               icon: <QuizIcon /> },
-    { id: 'time',     label: 'Study time',       value: '—',                                               icon: <ClockIcon /> },
+    { id: 'streak',   label: 'Active days',    value: hasStudyData ? `${activeDays}` : '0',    icon: <RefreshIcon /> },
+    { id: 'reviewed', label: 'Flashcards',      value: hasStudyData ? `${totalFlashcards}` : '0', icon: <NotesIcon /> },
+    { id: 'score',    label: 'Avg quiz score',  value: '0%',                                     icon: <QuizIcon /> },
+    { id: 'time',     label: 'Study time',      value: '0m',                                     icon: <ClockIcon /> },
   ]
 
   const aiInsights = hasStudyData
@@ -286,7 +284,7 @@ function SummarizerPage() {
             <h1 className="dash-greeting">Good {timeOfDay}, {displayName}</h1>
             <p className="dash-tagline">
               {hasStudyData
-                ? `You have ${totalFlashcards} flashcards ready — keep the momentum.`
+                ? `You have ${totalFlashcards} flashcards ready. Keep the momentum.`
                 : 'What are we studying today?'}
             </p>
           </div>
@@ -347,7 +345,7 @@ function SummarizerPage() {
               ))}
               {filteredRecent.length === 0 && (
                 <p className="dash-empty">
-                  {dashboardLoaded ? 'No notes yet — create your first one above.' : 'Loading…'}
+                  {dashboardLoaded ? 'No notes yet. Create your first one above.' : 'Loading…'}
                 </p>
               )}
             </div>
@@ -404,6 +402,17 @@ function SummarizerPage() {
 
       <UploadModal isOpen={showUploadModal} onClose={() => setShowUploadModal(false)} onUpload={() => {}} />
       <RecordModal isOpen={showRecordModal} onClose={() => setShowRecordModal(false)} />
+
+      {/* Floating AI Tutor bubble */}
+      <button
+        type="button"
+        className="ai-tutor-fab"
+        onClick={() => navigate('/conversations')}
+        aria-label="Open AI Tutor"
+      >
+        <span className="ai-tutor-fab-icon"><ChatIcon /></span>
+        <span className="ai-tutor-fab-label">Ask Iris</span>
+      </button>
     </div>
   )
 }
