@@ -5,6 +5,12 @@ import irisLogo from './assets/Pin_by_Linnéa_Eklöf_on_Pins_av_dig___Stippling_
 
 const ROTATING_WORDS = ['practice exams', 'flashcard decks', 'key concepts', 'study guides']
 
+const SUBJECTS = [
+  'Biology', 'Chemistry', 'Physics', 'History', 'Computer Science',
+  'Mathematics', 'Economics', 'Psychology', 'Literature', 'Political Science',
+  'Medicine', 'Engineering', 'Philosophy', 'Sociology', 'Law'
+]
+
 function LandingPage() {
   const navigate = useNavigate()
   const [currentWordIndex, setCurrentWordIndex] = useState(0)
@@ -139,118 +145,153 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* Features */}
+      {/* ── Subject ticker ──────────────────────────── */}
+      <div className="lp-ticker-wrap">
+        <p className="lp-ticker-label">Works across every subject</p>
+        <div className="lp-ticker">
+          <div className="lp-ticker-track">
+            {[...SUBJECTS, ...SUBJECTS].map((s, i) => (
+              <span key={i} className="lp-ticker-pill">{s}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Features ────────────────────────────────── */}
       <section className="lp-features" id="features">
         <p className="lp-eyebrow">What Iris does</p>
-        <h2 className="lp-h2">Turn any material into a complete study toolkit</h2>
-        <div className="lp-feature-grid">
-          <div className="lp-feature-card">
-            <div className="lp-feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                <polyline points="14,2 14,8 20,8"/>
-                <line x1="16" y1="13" x2="8" y2="13"/>
-                <line x1="16" y1="17" x2="8" y2="17"/>
-                <line x1="10" y1="9" x2="8" y2="9"/>
-              </svg>
+        <h2 className="lp-h2">Everything you need to go from notes to mastery</h2>
+        <div className="lp-bento">
+
+          {/* Summaries — wide */}
+          <div className="lp-bento-card lp-bento-wide">
+            <div className="lp-bento-copy">
+              <span className="lp-bento-badge">Summaries</span>
+              <h3>Hours of reading, distilled in seconds</h3>
+              <p>Paste a lecture transcript, a chapter, or an article. Iris identifies what matters and builds clean, structured notes you can actually use.</p>
             </div>
-            <h3>Instant Summaries</h3>
-            <p>Paste a lecture, article, or chapter. Iris distills it into clear, structured notes in seconds.</p>
+            <div className="lp-mock lp-mock-summary" aria-hidden="true">
+              <div className="mock-doc-header">
+                <span className="mock-doc-tag">Summary</span>
+                <span className="mock-doc-lines"><span/><span/></span>
+              </div>
+              <div className="mock-doc-body">
+                <div className="mock-line mock-line-heading" />
+                <div className="mock-line" />
+                <div className="mock-line mock-line-short" />
+                <div className="mock-spacer" />
+                <div className="mock-line mock-line-heading" />
+                <div className="mock-line" />
+                <div className="mock-line mock-line-med" />
+                <div className="mock-line mock-line-short" />
+              </div>
+            </div>
           </div>
 
-          <div className="lp-feature-card">
-            <div className="lp-feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="4" width="20" height="14" rx="2"/>
-                <path d="M8 20h8M12 16v4"/>
-                <line x1="7" y1="10" x2="17" y2="10"/>
-                <line x1="7" y1="13" x2="13" y2="13"/>
-              </svg>
+          {/* Flashcards — narrow */}
+          <div className="lp-bento-card lp-bento-narrow">
+            <span className="lp-bento-badge">Flashcards</span>
+            <h3>Smart decks, built from your own material</h3>
+            <p>Auto-generated term–definition pairs ready for spaced repetition.</p>
+            <div className="lp-mock lp-mock-card" aria-hidden="true">
+              <div className="mock-flashcard">
+                <p className="mock-fc-q">What is osmosis?</p>
+                <div className="mock-fc-divider" />
+                <p className="mock-fc-a">Movement of water across a semipermeable membrane from low to high solute concentration.</p>
+              </div>
             </div>
-            <h3>Flashcard Decks</h3>
-            <p>Automatically generate term–definition pairs from your material, ready for spaced repetition.</p>
           </div>
 
-          <div className="lp-feature-card">
-            <div className="lp-feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="12,6 12,12 16,14"/>
-              </svg>
+          {/* Quizzes — narrow */}
+          <div className="lp-bento-card lp-bento-narrow">
+            <span className="lp-bento-badge">Quizzes</span>
+            <h3>Test yourself with questions from your notes</h3>
+            <p>Active recall practice that actually sticks — no generic question banks.</p>
+            <div className="lp-mock lp-mock-quiz" aria-hidden="true">
+              <p className="mock-quiz-q">Which organelle produces ATP?</p>
+              <div className="mock-quiz-opts">
+                <span className="mock-opt">A. Nucleus</span>
+                <span className="mock-opt mock-opt-correct">B. Mitochondria ✓</span>
+                <span className="mock-opt">C. Ribosome</span>
+              </div>
             </div>
-            <h3>Practice Quizzes</h3>
-            <p>Test yourself with AI-generated questions written directly from your notes and readings.</p>
           </div>
 
-          <div className="lp-feature-card">
-            <div className="lp-feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-              </svg>
+          {/* AI Tutor — wide */}
+          <div className="lp-bento-card lp-bento-wide">
+            <div className="lp-bento-copy">
+              <span className="lp-bento-badge">AI Tutor</span>
+              <h3>Ask anything. Get answers grounded in your notes.</h3>
+              <p>The AI tutor reads your uploaded material before responding — so every explanation is specific to what you're actually studying, not generic search results.</p>
             </div>
-            <h3>AI Tutor</h3>
-            <p>Highlight anything confusing and ask Iris to explain, expand, or quiz you on it instantly.</p>
+            <div className="lp-mock lp-mock-chat" aria-hidden="true">
+              <div className="mock-bubble mock-bubble-user">Can you explain the krebs cycle simply?</div>
+              <div className="mock-bubble mock-bubble-ai">Sure. The Krebs cycle is a series of reactions in the mitochondria that breaks down acetyl-CoA to release energy stored as ATP, NADH, and FADH₂.</div>
+              <div className="mock-bubble mock-bubble-user">Generate 5 flashcards on this.</div>
+            </div>
           </div>
+
         </div>
       </section>
 
-      {/* How it works */}
+      {/* ── Statement ───────────────────────────────── */}
+      <div className="lp-statement">
+        <p className="lp-statement-text">Stop re-reading the same chapter.<br/>Start remembering it.</p>
+        <p className="lp-statement-sub">Iris turns passive studying into active recall — the method that actually works.</p>
+      </div>
+
+      {/* ── How it works ────────────────────────────── */}
       <section className="lp-how" id="how-it-works">
-        <p className="lp-eyebrow">The process</p>
-        <h2 className="lp-h2">From raw material to mastery</h2>
+        <div className="lp-how-head">
+          <p className="lp-eyebrow">The process</p>
+          <h2 className="lp-h2">From source material to study-ready in minutes</h2>
+        </div>
         <div className="lp-steps">
           <div className="lp-step">
             <span className="lp-step-num">01</span>
-            <h3>Add your material</h3>
-            <p>Upload notes, paste text, record audio, or drop a link. Iris handles any format.</p>
-          </div>
-          <div className="lp-step-arrow" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"/>
-              <polyline points="12,5 19,12 12,19"/>
-            </svg>
+            <div>
+              <h3>Add your material</h3>
+              <p>Paste text, upload a PDF, drop a YouTube link, or record directly in-app. Iris accepts any format.</p>
+            </div>
           </div>
           <div className="lp-step">
             <span className="lp-step-num">02</span>
-            <h3>Iris synthesizes</h3>
-            <p>Iris reads your source and maps the key concepts, themes, and terminology.</p>
-          </div>
-          <div className="lp-step-arrow" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"/>
-              <polyline points="12,5 19,12 12,19"/>
-            </svg>
+            <div>
+              <h3>Iris processes it</h3>
+              <p>The AI reads your source, identifies core concepts, key terms, and recurring themes — automatically.</p>
+            </div>
           </div>
           <div className="lp-step">
             <span className="lp-step-num">03</span>
-            <h3>Generate study aids</h3>
-            <p>Create summaries, flashcards, and quizzes from your material with one click.</p>
-          </div>
-          <div className="lp-step-arrow" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"/>
-              <polyline points="12,5 19,12 12,19"/>
-            </svg>
+            <div>
+              <h3>Get your toolkit</h3>
+              <p>Summaries, flashcard decks, and practice quizzes — generated and ready to use in under a minute.</p>
+            </div>
           </div>
           <div className="lp-step">
             <span className="lp-step-num">04</span>
-            <h3>Review and retain</h3>
-            <p>Study with active recall and track your progress project by project.</p>
+            <div>
+              <h3>Review and retain</h3>
+              <p>Use the built-in Pomodoro timer, track progress across subjects, and ask the AI tutor anything that's unclear.</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* CTA */}
+      {/* ── CTA ─────────────────────────────────────── */}
       <section className="lp-cta">
-        <h2>Ready to study smarter?</h2>
-        <p>Free to use. No credit card required.</p>
-        <button className="cta-primary" onClick={() => navigate('/auth')}>Get started</button>
+        <p className="lp-cta-kicker">Free to use · No credit card required</p>
+        <h2 className="lp-cta-heading">Your next exam starts here.</h2>
+        <button className="lp-cta-btn" onClick={() => navigate('/auth')}>Get started</button>
       </section>
 
-      {/* FAQ */}
+      {/* ── FAQ ─────────────────────────────────────── */}
       <section className="lp-faq" id="faq">
-        <p className="lp-eyebrow">FAQ</p>
-        <h2 className="lp-h2">Common questions</h2>
+        <div className="lp-faq-head">
+          <p className="lp-eyebrow">FAQ</p>
+          <h2 className="lp-h2">Common questions</h2>
+          <p>Everything you need to know before getting started.</p>
+        </div>
         <div className="lp-faq-list">
           <details className="lp-faq-item">
             <summary>Can I turn lecture notes into summaries and study guides?</summary>
@@ -268,10 +309,14 @@ function LandingPage() {
             <summary>Is Iris free to use?</summary>
             <p>Yes — we're in open testing before our full launch. Sign up and start for free today.</p>
           </details>
+          <details className="lp-faq-item">
+            <summary>What file formats does Iris support?</summary>
+            <p>You can paste plain text, upload PDFs and documents, drop YouTube or web links, or record audio directly. Iris handles the rest.</p>
+          </details>
         </div>
       </section>
 
-      {/* Footer */}
+      {/* ── Footer ──────────────────────────────────── */}
       <footer className="lp-footer">
         <span className="lp-footer-name">Iris</span>
         <nav className="lp-footer-links">
