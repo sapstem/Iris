@@ -151,7 +151,7 @@ function LandingPage() {
         <div className="lp-ticker">
           <div className="lp-ticker-track">
             {[...SUBJECTS, ...SUBJECTS].map((s, i) => (
-              <span key={i} className="lp-ticker-pill">{s}</span>
+              <span key={i} className={`lp-ticker-pill lp-ticker-pill--${(i % 5) + 1}`}>{s}</span>
             ))}
           </div>
         </div>
@@ -236,7 +236,7 @@ function LandingPage() {
 
       {/* ── Statement ───────────────────────────────── */}
       <div className="lp-statement">
-        <p className="lp-statement-text">Stop re-reading the same chapter.<br/>Start remembering it.</p>
+        <p className="lp-statement-text">Stop re-reading. Start remembering.</p>
         <p className="lp-statement-sub">Iris turns passive studying into active recall — the method that actually works.</p>
       </div>
 
