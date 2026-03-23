@@ -147,7 +147,7 @@ function AuthPage() {
 
         <div className="auth-panel-inner">
           <h2 className="auth-panel-heading">
-            Study smarter,<br />not harder.
+            Study smarter, not harder.
           </h2>
           <p className="auth-panel-sub">
             Iris turns your lectures, textbooks, and notes into tools you can actually study with.
